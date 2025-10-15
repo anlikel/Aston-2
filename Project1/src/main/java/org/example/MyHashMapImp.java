@@ -79,7 +79,16 @@ public class MyHashMapImp<K,V> implements Map<K,V> {
 
     @Override
     public V remove(Object key) {
-        return null;
+        if(size==0){
+            return null;
+        }
+        int hash=getHashCode(key);
+        int index=getIndex(hash);
+        V resVal=null;
+        if(table[index]!=null){
+            resVal=removeNode(index,hash,key);
+        }
+        return resVal;
     }
 
     @Override
@@ -150,6 +159,31 @@ public class MyHashMapImp<K,V> implements Map<K,V> {
                 break;
             }
                 currentNode = currentNode.next;
+        }
+        return resVal;
+    }
+
+    private V removeNode(int index,int hash,Object key) {
+        V resVal = null;
+        K newKey=(K)key;
+        Node<K, V> currentNode = table[index];
+        Node<K, V> lastNode = null;
+
+        while (currentNode != null) {
+            if (currentNode.hash == hash &&
+                    (currentNode.key == newKey || (newKey != null && newKey.equals(currentNode.key)))) {
+                resVal = currentNode.value;
+                size--;
+                break;
+            }
+            lastNode = currentNode;
+            currentNode = currentNode.next;
+        }
+        if(resVal!=null && lastNode!=null && currentNode!=null){
+        lastNode.next=currentNode.next;
+        }
+        else if(resVal!=null && lastNode==null){
+            table[index]=currentNode.next;
         }
         return resVal;
     }
