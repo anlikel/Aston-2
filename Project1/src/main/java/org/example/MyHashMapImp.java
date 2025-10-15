@@ -44,15 +44,22 @@ public class MyHashMapImp<K,V> implements Map<K,V> {
         if(size==0){
             return false;
         }
-
+        return checkKey(key);
     }
 
     @Override
     public boolean containsValue(Object value) {
+        boolean result=false;
         if(size==0){
             return false;
         }
-        return false;
+        for(int i=0;i<capacity;i++){
+            if(table[i]!=null){
+                result=checkValue(table[i],value);
+            }
+            if(result){break;}
+        }
+        return result;
     }
 
     @Override
@@ -166,11 +173,10 @@ public class MyHashMapImp<K,V> implements Map<K,V> {
 
     private V getNode(int index,int hash,Object key) {
         V resVal=null;
-        K newKey=(K)key;
         Node<K, V> currentNode = table[index];
         while(currentNode!=null){
             if (currentNode.hash == hash &&
-                    (currentNode.key == newKey || (newKey != null && newKey.equals(currentNode.key)))){
+                    (currentNode.key == key || (key != null && key.equals(currentNode.key)))){
                 resVal=currentNode.value;
                 break;
             }
@@ -181,13 +187,12 @@ public class MyHashMapImp<K,V> implements Map<K,V> {
 
     private V removeNode(int index,int hash,Object key) {
         V resVal = null;
-        K newKey=(K)key;
         Node<K, V> currentNode = table[index];
         Node<K, V> lastNode = null;
 
         while (currentNode != null) {
             if (currentNode.hash == hash &&
-                    (currentNode.key == newKey || (newKey != null && newKey.equals(currentNode.key)))) {
+                    (currentNode.key == key || (key != null && key.equals(currentNode.key)))) {
                 resVal = currentNode.value;
                 size--;
                 break;
@@ -202,5 +207,35 @@ public class MyHashMapImp<K,V> implements Map<K,V> {
             table[index]=currentNode.next;
         }
         return resVal;
+    }
+
+    private boolean checkKey(Object key) {
+        int hash=getHashCode(key);
+        int index=getIndex(hash);
+        boolean result=false;
+        if(table[index]!=null) {
+            Node<K, V> currentNode = table[index];
+            while (currentNode != null) {
+                if (currentNode.hash == hash &&
+                        (currentNode.key == key || (key != null && key.equals(currentNode.key)))) {
+                    result=true;
+                    break;
+                }
+                currentNode = currentNode.next;
+            }
+        }
+        return result;
+    }
+
+    private boolean checkValue(Node<K,V>node,Object value){
+        boolean result=false;
+        while (node != null) {
+            if (value == null ? node.value == null : value.equals(node.value)) {
+                result=true;
+                break;
+            }
+            node = node.next;
+        }
+        return result;
     }
 }
