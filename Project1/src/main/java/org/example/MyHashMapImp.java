@@ -15,12 +15,17 @@ public class MyHashMapImp<K,V> implements Map<K,V> {
         capacity=DEFAULT_CAPACITY;
     }
 
-    private static class Node<V>{
+    private static class Node<K,V>{
+        int hash;
+        K key;
         V value;
         Node next;
 
-        Node(V value){
+        Node(int hash,K key,V value, Node next){
+            this.hash=hash;
+            this.key=key;
             this.value=value;
+            this.next=next;
         }
     }
 
@@ -53,7 +58,16 @@ public class MyHashMapImp<K,V> implements Map<K,V> {
     public V put(K key, V value) {
         int hash=getHashCode(key);
         int index=getIndex(hash);
-        return null;
+        V resVal=null;
+
+        if(table[index]==null){
+            Node <K,V>newNode=new Node(hash,key,value,null);
+            table[index]=newNode;
+        }
+        else {
+            resVal=addNode(index,hash,key,value);
+        }
+        return resVal;
     }
 
     @Override
@@ -94,5 +108,26 @@ public class MyHashMapImp<K,V> implements Map<K,V> {
 
     private int getIndex(int hash){
         return hash & (capacity-1);
+    }
+
+    private V addNode(int index,int hash,K key,V value){
+        V resVal=null;
+        Node<K, V> currentNode = table[index];
+        Node<K, V> lastNode = null;
+
+        while (currentNode != null) {
+            if (currentNode.hash == hash &&
+                    (currentNode.key == key || (key != null && key.equals(currentNode.key)))) {
+                resVal = currentNode.value;
+                currentNode.value = value;
+                break;
+            }
+            lastNode = currentNode;
+            currentNode = currentNode.next;
+        }
+        if(lastNode.next==null && resVal==null) {
+            lastNode.next = new Node<>(hash, key, value, null);
+        }
+        return resVal;
     }
 }
