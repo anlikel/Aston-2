@@ -51,7 +51,13 @@ public class MyHashMapImp<K,V> implements Map<K,V> {
 
     @Override
     public V get(Object key) {
-        return null;
+        int hash=getHashCode(key);
+        int index=getIndex(hash);
+        V resVal=null;
+        if(table[index]!=null){
+            resVal=getNode(index,hash,key);
+        }
+        return resVal;
     }
 
     @Override
@@ -63,6 +69,7 @@ public class MyHashMapImp<K,V> implements Map<K,V> {
         if(table[index]==null){
             Node <K,V>newNode=new Node(hash,key,value,null);
             table[index]=newNode;
+            size++;
         }
         else {
             resVal=addNode(index,hash,key,value);
@@ -87,17 +94,17 @@ public class MyHashMapImp<K,V> implements Map<K,V> {
 
     @Override
     public Set<K> keySet() {
-        return Set.of();
+        return Collections.EMPTY_SET;
     }
 
     @Override
     public Collection<V> values() {
-        return List.of();
+        return Collections.EMPTY_LIST;
     }
 
     @Override
     public Set<Entry<K, V>> entrySet() {
-        return Set.of();
+        return Collections.EMPTY_SET;
     }
 
     //дополнительные утильные методы для работы мапы
@@ -125,8 +132,24 @@ public class MyHashMapImp<K,V> implements Map<K,V> {
             lastNode = currentNode;
             currentNode = currentNode.next;
         }
-        if(lastNode.next==null && resVal==null) {
+        if(resVal == null && lastNode != null && lastNode.next == null) {
             lastNode.next = new Node<>(hash, key, value, null);
+            size++;
+        }
+        return resVal;
+    }
+
+    private V getNode(int index,int hash,Object key) {
+        V resVal=null;
+        K newKey=(K)key;
+        Node<K, V> currentNode = table[index];
+        while(currentNode!=null){
+            if (currentNode.hash == hash &&
+                    (currentNode.key == newKey || (newKey != null && newKey.equals(currentNode.key)))){
+                resVal=currentNode.value;
+                break;
+            }
+                currentNode = currentNode.next;
         }
         return resVal;
     }
