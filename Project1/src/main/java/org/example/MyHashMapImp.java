@@ -93,12 +93,19 @@ public class MyHashMapImp<K,V> implements Map<K,V> {
 
     @Override
     public void putAll(Map<? extends K, ? extends V> m) {
-
+    Set<? extends K>keys=m.keySet();
+    for(K key:keys){
+        V value=m.get(key);
+        this.put(key,value);
+    }
     }
 
     @Override
     public void clear() {
-
+    for(int i=0;i<capacity;i++){
+        table[i]=null;
+    }
+    size=0;
     }
 
     @Override
