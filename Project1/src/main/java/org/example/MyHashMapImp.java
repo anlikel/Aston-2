@@ -41,16 +41,25 @@ public class MyHashMapImp<K,V> implements Map<K,V> {
 
     @Override
     public boolean containsKey(Object key) {
-        return false;
+        if(size==0){
+            return false;
+        }
+
     }
 
     @Override
     public boolean containsValue(Object value) {
+        if(size==0){
+            return false;
+        }
         return false;
     }
 
     @Override
     public V get(Object key) {
+        if(size==0){
+            return null;
+        }
         int hash=getHashCode(key);
         int index=getIndex(hash);
         V resVal=null;
