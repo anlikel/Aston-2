@@ -126,17 +126,44 @@ public class MyHashMapImp<K,V> implements Map<K,V> {
 
     @Override
     public Set<K> keySet() {
-        return Collections.EMPTY_SET;
+        if(size==0){
+            return Collections.emptySet();
+        }
+        Set<K>keys=new HashSet<>();
+        for(int i=0;i<capacity;i++){
+            if(table[i]!=null){
+            addKeys(table[i],keys);
+            }
+        }
+        return keys;
     }
 
     @Override
     public Collection<V> values() {
-        return Collections.EMPTY_LIST;
+        if(size==0){
+            return Collections.emptySet();
+        }
+        Set<V>values=new HashSet<>();
+        Set<K>keys=keySet();
+        for(K key:keys){
+            values.add(get(key));
+        }
+        return values;
     }
 
     @Override
     public Set<Entry<K, V>> entrySet() {
-        return Collections.EMPTY_SET;
+        if(size==0){
+            return Collections.emptySet();
+        }
+        Set<Entry<K,V>>entries=new HashSet<>();
+        Set<K>keys=keySet();
+        for(K key:keys){
+            V value=get(key);
+            Entry<K,V>entry=new AbstractMap.SimpleEntry(key,value);
+            entries.add(entry);
+        }
+        return entries;
     }
 
     //дополнительные утильные методы для работы мапы
@@ -237,5 +264,12 @@ public class MyHashMapImp<K,V> implements Map<K,V> {
             node = node.next;
         }
         return result;
+    }
+
+    void addKeys(Node<K,V>node,Set<K>set){
+        while(node!=null) {
+            set.add(node.key);
+            node = node.next;
+        }
     }
 }
