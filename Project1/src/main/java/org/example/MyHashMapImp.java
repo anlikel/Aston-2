@@ -90,6 +90,7 @@ public class MyHashMapImp<K,V> implements Map<K,V> {
         else {
             resVal=addNode(index,hash,key,value);
         }
+        resize();
         return resVal;
     }
 
@@ -104,6 +105,7 @@ public class MyHashMapImp<K,V> implements Map<K,V> {
         if(table[index]!=null){
             resVal=removeNode(index,hash,key);
         }
+        resize();
         return resVal;
     }
 
@@ -271,5 +273,74 @@ public class MyHashMapImp<K,V> implements Map<K,V> {
             set.add(node.key);
             node = node.next;
         }
+    }
+
+    private void resize(){
+        if(size>=capacity*loadFactor){
+            int oldCapacity=capacity;
+            int newCapacity=(int)(capacity*1.5);
+            Node[]oldTable=table;
+            table=new Node[newCapacity];
+            capacity=newCapacity;
+            addAllNodes(oldTable,oldCapacity);
+        }
+        else if(size<((capacity/1.5)*loadFactor-1) && capacity>16){
+            int oldCapacity=capacity;
+            int newCapacity=(int)(capacity/1.5);
+            Node[]oldTable=table;
+            table=new Node[newCapacity];
+            capacity=newCapacity;
+            addAllNodes(oldTable,oldCapacity);
+        }
+    }
+
+    private void addAllNodes(Node[]oldTable,int oldCapacity){
+        for(int i=0;i<oldCapacity;i++){
+            if(oldTable[i]!=null){
+                Node<K,V>currentNode=oldTable[i];
+                while(currentNode!=null) {
+                    this.putResize(currentNode.key, currentNode.value);
+                    currentNode=currentNode.next;
+                }
+            }
+        }
+    }
+
+    public void putResize(K key, V value) {
+        int hash=getHashCode(key);
+        int index=getIndex(hash);
+
+        if(table[index]==null){
+            Node <K,V>newNode=new Node(hash,key,value,null);
+            table[index]=newNode;
+        }
+        else {
+            addNodeResize(index,hash,key,value);
+        }
+    }
+
+    private void addNodeResize(int index,int hash,K key,V value){
+        Node<K, V> currentNode = table[index];
+        Node<K, V> lastNode = null;
+        int flag=0;
+        while (currentNode != null) {
+            if (currentNode.hash == hash &&
+                    (currentNode.key == key || (key != null && key.equals(currentNode.key)))) {
+                currentNode.value = value;
+                flag=1;
+                break;
+            }
+            lastNode = currentNode;
+            currentNode = currentNode.next;
+        }
+        if(flag==0 && lastNode != null && lastNode.next == null) {
+            lastNode.next = new Node<>(hash, key, value, null);
+        }
+    }
+
+    //утильный метод для проверки метода resize
+
+    public int getTableSize(){
+        return table.length;
     }
 }
