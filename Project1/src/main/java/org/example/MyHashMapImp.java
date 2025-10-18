@@ -5,7 +5,7 @@ import java.util.*;
 public class MyHashMapImp<K,V> implements Map<K,V> {
     private static final int DEFAULT_CAPACITY=16;
     private int capacity;
-    private double loadFactor=0.8;
+    private double loadFactor=0.8;//фактор загрузки, используется при перерасчете значения capacity
     private int size;
     private Node [] table;
 
@@ -15,6 +15,7 @@ public class MyHashMapImp<K,V> implements Map<K,V> {
         capacity=DEFAULT_CAPACITY;
     }
 
+    //вложенный класс Node для хранения значений
     private static class Node<K,V>{
         int hash;
         K key;
@@ -170,14 +171,19 @@ public class MyHashMapImp<K,V> implements Map<K,V> {
 
     //дополнительные утильные методы для работы мапы
 
+
+    //рассчитать хешкод
     private <K> int getHashCode(K key){
         return Objects.hashCode(key);
     }
 
+    //рассчитать адрес ячейки в массиве tables
     private int getIndex(int hash){
         return hash & (capacity-1);
     }
 
+
+    //создать ноду с нужным значением и добавить если можно
     private V addNode(int index,int hash,K key,V value){
         V resVal=null;
         Node<K, V> currentNode = table[index];
@@ -200,6 +206,7 @@ public class MyHashMapImp<K,V> implements Map<K,V> {
         return resVal;
     }
 
+    //сравнить и получить значение из ноды
     private V getNode(int index,int hash,Object key) {
         V resVal=null;
         Node<K, V> currentNode = table[index];
@@ -238,6 +245,7 @@ public class MyHashMapImp<K,V> implements Map<K,V> {
         return resVal;
     }
 
+    //проверка существования ключа
     private boolean checkKey(Object key) {
         int hash=getHashCode(key);
         int index=getIndex(hash);
@@ -256,6 +264,7 @@ public class MyHashMapImp<K,V> implements Map<K,V> {
         return result;
     }
 
+    //проверка существования значения
     private boolean checkValue(Node<K,V>node,Object value){
         boolean result=false;
         while (node != null) {
@@ -275,6 +284,7 @@ public class MyHashMapImp<K,V> implements Map<K,V> {
         }
     }
 
+    //перерасчет размер tables в зависимости от размера size
     private void resize(){
         if(size>=capacity*loadFactor){
             int oldCapacity=capacity;
@@ -294,6 +304,8 @@ public class MyHashMapImp<K,V> implements Map<K,V> {
         }
     }
 
+    //утильный метод для использования в resize, передобавляет все значения заново
+    //в учетом изменения размера tables
     private void addAllNodes(Node[]oldTable,int oldCapacity){
         for(int i=0;i<oldCapacity;i++){
             if(oldTable[i]!=null){
@@ -306,6 +318,8 @@ public class MyHashMapImp<K,V> implements Map<K,V> {
         }
     }
 
+
+    //утильные метод put для resize
     public void putResize(K key, V value) {
         int hash=getHashCode(key);
         int index=getIndex(hash);
@@ -319,6 +333,7 @@ public class MyHashMapImp<K,V> implements Map<K,V> {
         }
     }
 
+    //утильный метод создания ноды и добавления значения в новый tables пр resize
     private void addNodeResize(int index,int hash,K key,V value){
         Node<K, V> currentNode = table[index];
         Node<K, V> lastNode = null;
@@ -338,8 +353,7 @@ public class MyHashMapImp<K,V> implements Map<K,V> {
         }
     }
 
-    //утильный метод для проверки метода resize
-
+    //утильный метод для проверки метода resize, используется в тестах
     public int getTableSize(){
         return table.length;
     }
