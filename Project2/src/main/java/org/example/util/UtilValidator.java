@@ -35,4 +35,15 @@ public class UtilValidator {
             return false;
         }
     }
+
+    public static boolean isValidId(String id) {
+        if (id == null || id.trim().isEmpty()) { return false; }
+
+        try {
+            int idInt = Integer.parseInt(id.trim());
+            return idInt >= 1 && idInt<Integer.MAX_VALUE;
+        } catch (NumberFormatException e) {
+            return false;
+        }
+    }
 }

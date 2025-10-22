@@ -5,5 +5,6 @@ public enum Action {
     CREATE,
     READ,
     UPDATE,
-    DELETE
+    DELETE,
+    READ_ALL
 }

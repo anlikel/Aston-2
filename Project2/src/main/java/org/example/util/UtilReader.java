@@ -74,4 +74,21 @@ public class UtilReader {
         }
     }
 
+    public static int readId() throws MyCustomException{
+        while (true) {
+            try {
+                String id = bufferedReader.readLine();
+                if(id.equals("exit")){throw new MyCustomException("вышли в основное меню");}
+                if (UtilValidator.isValidId(id)) {
+                    return Integer.valueOf(id);
+                } else {
+                    throw new IOException("некорректное число");
+                }
+            } catch (IOException e) {
+                UtilReader.writeMessage("исключение: неправильный ввод данных повторите");
+                UtilReader.writeMessage("id >= 1");
+            }
+        }
+    }
+
 }
