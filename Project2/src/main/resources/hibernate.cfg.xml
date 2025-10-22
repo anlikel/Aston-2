@@ -6,9 +6,9 @@
     <session-factory>
         <!-- PostgreSQL connection settings -->
         <property name="connection.driver_class">org.postgresql.Driver</property>
-        <property name="connection.url">jdbc:postgresql://localhost:5432/your_database</property>
-        <property name="connection.username">your_username</property>
-        <property name="connection.password">your_password</property>
+        <property name="connection.url">jdbc:postgresql://localhost:5432/postgres</property>
+        <property name="connection.username">user</property>
+        <property name="connection.password">1234</property>
 
         <!-- JDBC connection pool settings -->
         <property name="connection.pool_size">10</property>

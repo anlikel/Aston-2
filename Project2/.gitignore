@@ -37,3 +37,20 @@ build/
 
 ### Mac OS ###
 .DS_Store
+
+# Logs
+*.log
+logs/
+
+# Mac OS
+.DS_Store
+
+# Windows
+Thumbs.db
+ehthumbs.db
+
+*.db
+*.sqlite
+.h2/
+
+docker-compose.override.yml
