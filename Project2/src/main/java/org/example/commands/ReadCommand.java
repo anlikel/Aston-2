@@ -16,6 +16,6 @@ public class ReadCommand implements Command{
         if(user==null){
             throw new MyCustomException("no user with current id");
         }
-        UtilReader.writeMessage("find user+\n"+user);
+        UtilReader.writeMessage("find user\n"+user);
     }
 }

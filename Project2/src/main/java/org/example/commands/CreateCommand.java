@@ -15,8 +15,7 @@ public class CreateCommand implements Command{
             UserRepository userRepository = new UserRepository();
             EntityBuilder<User> entityBuilder = EntityBuilderFactory.getBuilder(ClassTag.USER);
             User user = entityBuilder.build();
-            Long userId = userRepository.saveUser(user);
-            UtilReader.writeMessage("create user with id="+userId);
+            userRepository.saveUser(user);
         }
         catch(MyCustomException e){
             throw new MyCustomException(e.getMessage());

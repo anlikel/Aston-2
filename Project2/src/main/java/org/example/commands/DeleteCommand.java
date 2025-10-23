@@ -9,11 +9,10 @@ public class DeleteCommand implements Command {
     @Override
     public void execute() {
         UserRepository userRepository = new UserRepository();
-        Long userId = UtilReader.readId();
         try {
+            Long userId = UtilReader.readId();
             userRepository.deleteUserById(userId);
-        }
-        catch(MyCustomException e){
+        } catch (MyCustomException e) {
             throw new MyCustomException(e.getMessage());
         }
     }
