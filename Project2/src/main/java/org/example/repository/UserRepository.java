@@ -14,24 +14,24 @@ public class UserRepository implements UserDao {
     private static final Logger logger=LoggerFactory.getLogger(UserRepository.class);
 
     public Long saveUser(User user) {
-        logger.info("DB event:try to saveUser{}", user.getName());
+        logger.info("DB event:try to saveUser {}", user.getName());
         return TransactionManager.executeInTransaction((Session session) -> {
             Long userId = (Long) session.save(user);
             UtilReader.writeMessage("create user with id: " + userId);
-            logger.info("DB event:success saveUser{}", user.getName());
+            logger.info("DB event:success saveUser {}", user.getName());
             return userId;
         });
     }
 
     public User getUserById(Long id) {
-        logger.info("DB event:try to findUser{}", id);
+        logger.info("DB event:try to findUser id={}", id);
         return TransactionManager.executeInTransaction((Session session) -> {
             User user = session.get(User.class, id);
             if (user == null) {
-                logger.error("DB event:failed to findUser{}", id);
+                logger.error("DB event:failed to findUser id={}", id);
                 throw new MyCustomException("user with id " + id + " not found");
             }
-            logger.info("DB event:success findUser{}", id);
+            logger.info("DB event:success findUser id={}", id);
             return user;
         });
     }
@@ -45,25 +45,25 @@ public class UserRepository implements UserDao {
     }
 
     public void updateUser(User user) {
-        logger.info("DB event:try to updateUser{}", user.getId());
+        logger.info("DB event:try to updateUser id={}", user.getId());
         TransactionManager.executeInTransaction((Session session) -> {
             session.update(user);
             UtilReader.writeMessage("User updated successfully");
-            logger.info("DB event:success updateUser{}", user.getId());
+            logger.info("DB event:success updateUser id={}", user.getId());
         });
     }
 
     public void deleteUserById(Long id) {
-        logger.info("DB event:try to deleteUser{}", id);
+        logger.info("DB event:try to deleteUser id={}", id);
         TransactionManager.executeInTransaction((Session session) -> {
             User user = session.get(User.class, id);
             if (user == null) {
-                logger.error("DB event:failed to deleteUser{}", id);
+                logger.error("DB event:failed to deleteUser id={}", id);
                 throw new MyCustomException("User with id " + id + " not found");
             }
             session.delete(user);
             UtilReader.writeMessage("User deleted successfully");
-            logger.info("DB event:success deleteUser{}", id);
+            logger.info("DB event:success deleteUser id={}", id);
         });
     }
 }

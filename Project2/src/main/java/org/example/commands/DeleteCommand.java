@@ -1,11 +1,16 @@
 package org.example.commands;
 
-import org.example.entities.User;
 import org.example.exceptions.MyCustomException;
 import org.example.repository.UserRepository;
 import org.example.util.UtilReader;
 
+/**
+ * Команда удаления пользователя
+ */
 public class DeleteCommand implements Command {
+    /**
+     * Удаляет пользователя по ID
+     */
     @Override
     public void execute() {
         UserRepository userRepository = new UserRepository();

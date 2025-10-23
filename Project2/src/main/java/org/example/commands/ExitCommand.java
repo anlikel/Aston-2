@@ -2,7 +2,13 @@ package org.example.commands;
 
 import org.example.util.UtilReader;
 
-public class ExitCommand implements Command{
+/**
+ * Команда выхода из приложения
+ */
+public class ExitCommand implements Command {
+    /**
+     * Завершает работу приложения
+     */
     @Override
     public void execute() {
         UtilReader.writeMessage("exit");

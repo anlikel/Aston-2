@@ -34,10 +34,37 @@ project/
 │   └── main/
 │       ├── java/
 │       │   └── com/org/example/
-│       │       ├── commands/          # Main application class
-│       │       ├── entities           # User entity class
-│       │       ├── UserDao.java        # Data access object
-│       │       └── HibernateUtil.java  # Hibernate configuration
+│       │       ├── commands/          # Command pattern classes
+│       │       │   ├── Action.java
+│       │       │   ├── Command.java
+│       │       │   ├── CommandFactory.java
+│       │       │   ├── CreateCommand.java
+│       │       │   ├── DeleteCommand.java
+│       │       │   ├── ExitCommand.java
+│       │       │   ├── ReadCommand.java
+│       │       │   ├── ReadAllCommand.java
+│       │       │   └── UpdateCommand.java         
+│       │       ├── entities           
+│       │       │      └── User.java                  # User entity class
+│       │       ├── entitybuilders           
+│       │       │      ├── ClassTag.java
+│       │       │      ├── EntityBuilder.java
+│       │       │      ├── EntityBuilderFactory.java
+│       │       │      └── UserBuilder.java
+│       │       ├── exceptions           
+│       │       │      └── MyCustomException.java                    
+│       │       ├── menu           
+│       │       │     ├── MenuHandler.java
+│       │       │     └── MenuPrinter.java
+│       │       ├── repository                        # DB logic
+│       │       │     ├── TransactionManager.java
+│       │       │     ├── UserDao.java
+│       │       │     └── UserRepository.java
+│       │       ├── util           
+│       │       │    ├── HibernateUtil.java
+│       │       │    ├── UtilReader.java
+│       │       │    └── UtilValidator.java
+│       │       └── Main.java                       # Main application class
 │       └── resources/
 │           └── hibernate.cfg.xml       # Hibernate configuration
 │           └── logback.xml

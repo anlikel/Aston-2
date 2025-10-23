@@ -8,7 +8,13 @@ import org.example.exceptions.MyCustomException;
 import org.example.repository.UserRepository;
 import org.example.util.UtilReader;
 
+/**
+ * Команда обновления пользователя
+ */
 public class UpdateCommand implements Command {
+    /**
+     * Обновляет данные пользователя
+     */
     @Override
     public void execute() {
         try {

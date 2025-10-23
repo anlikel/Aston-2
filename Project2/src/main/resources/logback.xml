@@ -18,7 +18,6 @@
     <!-- Логирование Hibernate -->
     <logger name="org.hibernate" level="ERROR"/>
 
-    <!-- Корневой логгер - ТОЛЬКО в файл -->
     <root level="DEBUG">
         <appender-ref ref="FILE" />
     </root>

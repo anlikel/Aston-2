@@ -1,74 +1,121 @@
 package org.example.entities;
 
 import jakarta.persistence.*;
-
 import java.time.LocalDateTime;
 import java.util.Objects;
 
+/**
+ * Сущность пользователя
+ */
 @Entity
-@Table(name="users")
+@Table(name = "users")
 public class User {
     @Id
-    @GeneratedValue(strategy= GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name="name",unique=false,nullable=false)
+    @Column(name = "name", unique = false, nullable = false)
     private String name;
 
-    @Column(name="email",nullable=false,unique=true)
+    @Column(name = "email", nullable = false, unique = true)
     private String email;
 
-    @Column(name="age",nullable=false)
+    @Column(name = "age", nullable = false)
     private int age;
 
-    @Column(name="created_at",nullable=false,updatable = false)
+    @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
-    public User(){}
-
-    public User(String name,String email,int age){
-        this.name=name;
-        this.email=email;
-        this.age=age;
-        createdAt=LocalDateTime.now();
+    /**
+     * Конструктор по умолчанию
+     */
+    public User() {
     }
 
+    /**
+     * Конструктор с параметрами
+     * @param name имя пользователя
+     * @param email email пользователя
+     * @param age возраст пользователя
+     */
+    public User(String name, String email, int age) {
+        this.name = name;
+        this.email = email;
+        this.age = age;
+        createdAt = LocalDateTime.now();
+    }
+
+    /**
+     * @return идентификатор пользователя
+     */
     public Long getId() {
         return id;
     }
 
+    /**
+     * Устанавливает идентификатор
+     * @param id идентификатор пользователя
+     */
     public void setId(Long id) {
         this.id = id;
     }
 
+    /**
+     * @return имя пользователя
+     */
     public String getName() {
         return name;
     }
 
+    /**
+     * Устанавливает имя
+     * @param name имя пользователя
+     */
     public void setName(String name) {
         this.name = name;
     }
 
+    /**
+     * @return email пользователя
+     */
     public String getEmail() {
         return email;
     }
 
+    /**
+     * Устанавливает email
+     * @param email email пользователя
+     */
     public void setEmail(String email) {
         this.email = email;
     }
 
+    /**
+     * @return возраст пользователя
+     */
     public int getAge() {
         return age;
     }
 
+    /**
+     * Устанавливает возраст
+     * @param age возраст пользователя
+     */
     public void setAge(int age) {
         this.age = age;
     }
 
+    /**
+     * @return дата создания
+     */
     public LocalDateTime getCreatedAt() {
         return createdAt;
     }
 
+    /**
+     * Устанавливает дату создания
+     * @param createdAt дата создания
+     */
     public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
     }
