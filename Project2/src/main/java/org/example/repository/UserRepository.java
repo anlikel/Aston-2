@@ -1,13 +1,14 @@
 package org.example.repository;
 
 import org.example.entities.User;
+import org.example.exceptions.MyCustomException;
 import org.example.util.HibernateUtil;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
 import java.util.List;
 
-public class UserRepository {
+public class UserRepository implements UserDao{
 
     public Long saveUser(User user){
         Session session= HibernateUtil.getSessionFactory().openSession();
@@ -21,6 +22,7 @@ public class UserRepository {
         } catch (Exception e) {
             if (transaction != null) {
                 transaction.rollback();
+                throw new MyCustomException("cant save user,  transaction rollback");
             }
         }
         finally{session.close();}
@@ -61,7 +63,7 @@ public class UserRepository {
             transaction.commit();
         } catch (Exception e) {
             if (transaction != null) transaction.rollback();
-            throw e;
+            throw new MyCustomException("cant update user,  transaction rollback");
         } finally {
             session.close();
         }
@@ -80,7 +82,7 @@ public class UserRepository {
             transaction.commit();
         } catch (Exception e) {
             if (transaction != null) transaction.rollback();
-            throw e;
+            throw new MyCustomException("cant delete user,  transaction rollback");
         } finally {
             session.close();
         }
