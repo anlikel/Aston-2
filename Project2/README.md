@@ -47,7 +47,8 @@ project/
 └── docker-compose.yml
 
 6. Конфигурация базы данных.
-    Host: localhost:5432
+База данных поднимается через docker-compose с внешним портом 5433.
+    Host: localhost:5433
     Database: postgres
     Username: user
     Password: 1234
