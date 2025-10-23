@@ -1,10 +1,25 @@
 package org.example.commands;
 
+import org.example.entities.User;
+import org.example.entitybuilders.ClassTag;
+import org.example.entitybuilders.EntityBuilder;
+import org.example.entitybuilders.EntityBuilderFactory;
+import org.example.exceptions.MyCustomException;
+import org.example.repository.UserRepository;
 import org.example.util.UtilReader;
 
 public class CreateCommand implements Command{
     @Override
     public void execute() {
-        UtilReader.writeMessage("create");
+        try {
+            UserRepository userRepository = new UserRepository();
+            EntityBuilder<User> entityBuilder = EntityBuilderFactory.getBuilder(ClassTag.USER);
+            User user = entityBuilder.build();
+            Long userId = userRepository.saveUser(user);
+            UtilReader.writeMessage("create user with id="+userId);
+        }
+        catch(MyCustomException e){
+            throw new MyCustomException(e.getMessage());
+        }
     }
 }

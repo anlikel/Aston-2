@@ -21,6 +21,6 @@ public class CommandFactory {
         map.put(Action.READ,new ReadCommand());
         map.put(Action.UPDATE,new UpdateCommand());
         map.put(Action.DELETE,new DeleteCommand());
-        map.put(Action.DELETE,new ReadAllCommand());
+        map.put(Action.READ_ALL,new ReadAllCommand());
     }
 }

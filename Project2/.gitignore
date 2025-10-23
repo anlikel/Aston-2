@@ -9,6 +9,7 @@ target/
 .idea/jarRepositories.xml
 .idea/compiler.xml
 .idea/libraries/
+.idea/workspace.xml
 *.iws
 *.iml
 *.ipr
@@ -53,4 +54,5 @@ ehthumbs.db
 *.sqlite
 .h2/
 
+.gitignore
 docker-compose.override.yml

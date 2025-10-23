@@ -3,6 +3,7 @@ package org.example.repository;
 import org.example.entities.User;
 import org.example.exceptions.MyCustomException;
 import org.example.util.HibernateUtil;
+import org.example.util.UtilReader;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
@@ -53,7 +54,7 @@ public class UserRepository implements UserDao{
         return users;
     }
 
-    public void updateUserById(User user) {
+    public void updateUser(User user) {
         Session session = HibernateUtil.getSessionFactory().openSession();
         Transaction transaction = null;
 
@@ -76,10 +77,14 @@ public class UserRepository implements UserDao{
         try {
             transaction = session.beginTransaction();
             User user = session.get(User.class, id);
-            if (user != null) {
+            if(user==null){
+                throw new Exception();
+            }
+            else if (user != null) {
                 session.delete(user);
             }
             transaction.commit();
+            UtilReader.writeMessage("user deleted");
         } catch (Exception e) {
             if (transaction != null) transaction.rollback();
             throw new MyCustomException("cant delete user,  transaction rollback");

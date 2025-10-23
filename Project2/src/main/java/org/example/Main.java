@@ -6,22 +6,20 @@ import org.example.menu.MenuPrinter;
 import org.example.util.UtilReader;
 
 public class Main {
-    public static void main(String args){
+    public static void main(String [] args){
 
-    try{
-        mainCycle();
-    }
-    catch(MyCustomException e){
-        UtilReader.writeMessage(e.getMessage());
-        mainCycle();
-    }
-
+        while (true) {
+            try {
+                mainCycle();
+            } catch (MyCustomException e) {
+                UtilReader.writeMessage(e.getMessage());
+            }
+        }
     }
 
     static void mainCycle(){
         MenuPrinter.printMainMenu();
-        String choose= UtilReader.readMessage();
+        String choose = UtilReader.readMessage();
         MenuHandler.handleMainMenu(choose);
     }
-
 }
