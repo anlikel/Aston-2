@@ -4,7 +4,21 @@ import org.example.entities.User;
 import org.example.exceptions.MyCustomException;
 import org.example.util.UtilReader;
 
-public class UserBuilder implements EntityBuilder<User>{
+/**
+ * Строитель для создания объектов пользователей.
+ * Реализует интерфейс EntityBuilder для типа User.
+ * Обрабатывает ввод данных пользователя и создает экземпляры User.
+ */
+public class UserBuilder implements EntityBuilder<User> {
+
+    /**
+     * Создает новый экземпляр пользователя на основе введенных данных.
+     * Выполняет чтение имени, email и возраста через UtilReader.
+     * Обрабатывает возможные исключения при вводе данных.
+     *
+     * @return новый объект User с заполненными полями
+     * @throws MyCustomException если произошла ошибка при вводе данных
+     */
     @Override
     public User build() {
         try {
@@ -12,8 +26,7 @@ public class UserBuilder implements EntityBuilder<User>{
             String email = UtilReader.readEmail();
             int age = UtilReader.readAge();
             return new User(name, email, age);
-        }
-        catch(MyCustomException e){
+        } catch (MyCustomException e) {
             throw new MyCustomException(e.getMessage());
         }
     }

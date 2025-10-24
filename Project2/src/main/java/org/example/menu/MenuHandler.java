@@ -5,10 +5,27 @@ import org.example.commands.CommandFactory;
 import org.example.exceptions.MyCustomException;
 import org.example.util.UtilReader;
 
+/**
+ * Обработчик главного меню приложения.
+ * Обеспечивает выполнение команд в соответствии с выбором пользователя.
+ * Реализует паттерн "Команда" через фабрику команд.
+ */
 public class MenuHandler {
 
-    private MenuHandler(){}
+    /**
+     * Приватный конструктор для предотвращения создания экземпляров класса.
+     * Все методы класса являются статическими.
+     */
+    private MenuHandler() {
+    }
 
+    /**
+     * Обрабатывает выбор пользователя в главном меню и выполняет соответствующую команду.
+     * Использует фабрику команд для получения и выполнения нужного действия.
+     *
+     * @param choice строковый идентификатор выбранного пункта меню
+     * @throws MyCustomException если выбран неверный или несуществующий пункт меню
+     */
     public static void handleMainMenu(String choice) {
         switch (choice) {
             case "1":

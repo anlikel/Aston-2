@@ -1,21 +1,41 @@
 package org.example.util;
 
 import org.example.exceptions.MyCustomException;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
+/**
+ * Утилитарный класс для ввода и вывода данных в консоли.
+ * Обеспечивает чтение пользовательского ввода с валидацией и вывод сообщений.
+ */
 public class UtilReader {
+    /**
+     * Буферизированный читатель для ввода данных из консоли.
+     */
     private static BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
 
+    /**
+     * Приватный конструктор для предотвращения создания экземпляров класса.
+     */
     private UtilReader() {
     }
 
+    /**
+     * Выводит сообщение в консоль.
+     *
+     * @param message сообщение для вывода
+     */
     public static void writeMessage(String message) {
         System.out.println(message);
     }
 
+    /**
+     * Читает строку из консоли без валидации.
+     *
+     * @return введенная пользователем строка
+     * @throws MyCustomException если произошла ошибка ввода-вывода
+     */
     public static String readMessage() throws MyCustomException {
         String str = null;
         try {
@@ -26,6 +46,12 @@ public class UtilReader {
         return str;
     }
 
+    /**
+     * Читает и валидирует имя пользователя.
+     *
+     * @return валидное имя пользователя
+     * @throws MyCustomException если пользователь ввел "exit" или произошла ошибка ввода
+     */
     public static String readName() throws MyCustomException {
         UtilReader.writeMessage("input name or exit");
         while (true) {
@@ -47,6 +73,12 @@ public class UtilReader {
         }
     }
 
+    /**
+     * Читает и валидирует email пользователя.
+     *
+     * @return валидный email
+     * @throws MyCustomException если пользователь ввел "exit" или произошла ошибка ввода
+     */
     public static String readEmail() throws MyCustomException {
         UtilReader.writeMessage("input email or exit");
         while (true) {
@@ -67,6 +99,12 @@ public class UtilReader {
         }
     }
 
+    /**
+     * Читает и валидирует возраст пользователя.
+     *
+     * @return валидный возраст
+     * @throws MyCustomException если пользователь ввел "exit" или произошла ошибка ввода
+     */
     public static int readAge() throws MyCustomException {
         UtilReader.writeMessage("input age or exit");
         while (true) {
@@ -88,6 +126,12 @@ public class UtilReader {
         }
     }
 
+    /**
+     * Читает и валидирует идентификатор пользователя.
+     *
+     * @return валидный идентификатор
+     * @throws MyCustomException если пользователь ввел "exit" или произошла ошибка ввода
+     */
     public static Long readId() throws MyCustomException {
         UtilReader.writeMessage("input id or exit");
         while (true) {
@@ -108,5 +152,4 @@ public class UtilReader {
             }
         }
     }
-
 }

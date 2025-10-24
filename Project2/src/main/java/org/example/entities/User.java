@@ -1,6 +1,7 @@
 package org.example.entities;
 
 import jakarta.persistence.*;
+
 import java.time.LocalDateTime;
 import java.util.Objects;
 
@@ -34,9 +35,10 @@ public class User {
 
     /**
      * Конструктор с параметрами
-     * @param name имя пользователя
+     *
+     * @param name  имя пользователя
      * @param email email пользователя
-     * @param age возраст пользователя
+     * @param age   возраст пользователя
      */
     public User(String name, String email, int age) {
         this.name = name;
@@ -54,6 +56,7 @@ public class User {
 
     /**
      * Устанавливает идентификатор
+     *
      * @param id идентификатор пользователя
      */
     public void setId(Long id) {
@@ -69,6 +72,7 @@ public class User {
 
     /**
      * Устанавливает имя
+     *
      * @param name имя пользователя
      */
     public void setName(String name) {
@@ -84,6 +88,7 @@ public class User {
 
     /**
      * Устанавливает email
+     *
      * @param email email пользователя
      */
     public void setEmail(String email) {
@@ -99,6 +104,7 @@ public class User {
 
     /**
      * Устанавливает возраст
+     *
      * @param age возраст пользователя
      */
     public void setAge(int age) {
@@ -114,6 +120,7 @@ public class User {
 
     /**
      * Устанавливает дату создания
+     *
      * @param createdAt дата создания
      */
     public void setCreatedAt(LocalDateTime createdAt) {

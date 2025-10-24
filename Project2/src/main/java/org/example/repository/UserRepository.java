@@ -6,13 +6,27 @@ import org.example.util.UtilReader;
 import org.hibernate.Session;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import java.util.List;
 
+/**
+ * Репозиторий для работы с пользователями в базе данных.
+ * Реализует интерфейс UserDao используя Hibernate и транзакционный менеджер.
+ * Обеспечивает персистентность данных пользователей с логированием операций.
+ */
 public class UserRepository implements UserDao {
 
-    private static final Logger logger=LoggerFactory.getLogger(UserRepository.class);
+    /**
+     * Логгер для записи событий работы с базой данных.
+     */
+    private static final Logger logger = LoggerFactory.getLogger(UserRepository.class);
 
+    /**
+     * Сохраняет пользователя в базе данных.
+     *
+     * @param user объект пользователя для сохранения
+     * @return идентификатор сохраненного пользователя
+     * @throws MyCustomException если произошла ошибка при сохранении
+     */
     public Long saveUser(User user) {
         logger.info("DB event:try to saveUser {}", user.getName());
         return TransactionManager.executeInTransaction((Session session) -> {
@@ -23,6 +37,13 @@ public class UserRepository implements UserDao {
         });
     }
 
+    /**
+     * Получает пользователя по его идентификатору.
+     *
+     * @param id идентификатор пользователя
+     * @return объект пользователя
+     * @throws MyCustomException если пользователь с указанным id не найден
+     */
     public User getUserById(Long id) {
         logger.info("DB event:try to findUser id={}", id);
         return TransactionManager.executeInTransaction((Session session) -> {
@@ -36,6 +57,11 @@ public class UserRepository implements UserDao {
         });
     }
 
+    /**
+     * Получает список всех пользователей из базы данных.
+     *
+     * @return список всех пользователей
+     */
     public List<User> getAllUsers() {
         logger.info("DB event:try to getUsersList");
         return TransactionManager.executeInTransaction((Session session) -> {
@@ -44,6 +70,12 @@ public class UserRepository implements UserDao {
         });
     }
 
+    /**
+     * Обновляет данные пользователя в базе данных.
+     *
+     * @param user объект пользователя с обновленными данными
+     * @throws MyCustomException если произошла ошибка при обновлении
+     */
     public void updateUser(User user) {
         logger.info("DB event:try to updateUser id={}", user.getId());
         TransactionManager.executeInTransaction((Session session) -> {
@@ -53,6 +85,12 @@ public class UserRepository implements UserDao {
         });
     }
 
+    /**
+     * Удаляет пользователя по его идентификатору.
+     *
+     * @param id идентификатор пользователя для удаления
+     * @throws MyCustomException если пользователь с указанным id не найден
+     */
     public void deleteUserById(Long id) {
         logger.info("DB event:try to deleteUser id={}", id);
         TransactionManager.executeInTransaction((Session session) -> {

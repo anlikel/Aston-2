@@ -4,20 +4,46 @@ import org.example.commands.*;
 
 import java.util.HashMap;
 
+/**
+ * Фабрика для получения строителей сущностей по соответствующим тегам.
+ * Реализует паттерн Фабрика для централизованного управления созданием строителей.
+ * Использует отложенную инициализацию карты строителей при первом обращении.
+ */
 public class EntityBuilderFactory {
+    /**
+     * Карта для хранения соответствий между тегами классов и строителями сущностей.
+     * Инициализируется при первом вызове метода getBuilder.
+     */
     private static HashMap<ClassTag, EntityBuilder> map;
 
-    private EntityBuilderFactory(){}
+    /**
+     * Приватный конструктор для предотвращения создания экземпляров фабрики.
+     * Все методы фабрики являются статическими.
+     */
+    private EntityBuilderFactory() {
+    }
 
+    /**
+     * Возвращает строитель сущности для указанного тега класса.
+     * При первом вызове инициализирует карту доступных строителей.
+     *
+     * @param tag тег класса, для которого требуется строитель
+     * @return строитель сущности для указанного тега или null, если строитель не найден
+     */
     public static EntityBuilder getBuilder(ClassTag tag) {
-        if(map==null)
-        {
+        if (map == null) {
             initBuilderMap();
         }
         return map.get(tag);
     }
-    private static void initBuilderMap(){
-        map=new HashMap<>();
-        map.put(ClassTag.USER,new UserBuilder());
+
+    /**
+     * Инициализирует карту строителей сущностей.
+     * Регистрирует все доступные строители и их соответствия тегам классов.
+     * В текущей реализации регистрирует только строитель пользователей.
+     */
+    private static void initBuilderMap() {
+        map = new HashMap<>();
+        map.put(ClassTag.USER, new UserBuilder());
     }
 }
