@@ -1,6 +1,7 @@
 package org.example.util;
 
 import org.example.exceptions.MyCustomException;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -53,7 +54,7 @@ public class UtilReader {
      * @throws MyCustomException если пользователь ввел "exit" или произошла ошибка ввода
      */
     public static String readName() throws MyCustomException {
-        UtilReader.writeMessage("input name or exit");
+        UtilReader.writeMessage("input name or type exit");
         while (true) {
             try {
                 String name = bufferedReader.readLine();
@@ -68,7 +69,6 @@ public class UtilReader {
             } catch (IOException e) {
                 UtilReader.writeMessage("исключение: неправильный ввод данных повторите");
                 UtilReader.writeMessage("Имя с большой буквы и не больше 40 символов");
-                readName();
             }
         }
     }
@@ -80,7 +80,7 @@ public class UtilReader {
      * @throws MyCustomException если пользователь ввел "exit" или произошла ошибка ввода
      */
     public static String readEmail() throws MyCustomException {
-        UtilReader.writeMessage("input email or exit");
+        UtilReader.writeMessage("input email or type exit");
         while (true) {
             try {
                 String eml = bufferedReader.readLine();
@@ -94,7 +94,6 @@ public class UtilReader {
                 }
             } catch (IOException e) {
                 UtilReader.writeMessage("исключение: неправильный ввод данных повторите");
-                readEmail();
             }
         }
     }
@@ -106,7 +105,7 @@ public class UtilReader {
      * @throws MyCustomException если пользователь ввел "exit" или произошла ошибка ввода
      */
     public static int readAge() throws MyCustomException {
-        UtilReader.writeMessage("input age or exit");
+        UtilReader.writeMessage("input age or type exit");
         while (true) {
             try {
                 String age = bufferedReader.readLine();
@@ -121,7 +120,6 @@ public class UtilReader {
             } catch (IOException e) {
                 UtilReader.writeMessage("исключение: неправильный ввод данных повторите");
                 UtilReader.writeMessage("возраст от 0 до 100");
-                readAge();
             }
         }
     }
@@ -133,14 +131,13 @@ public class UtilReader {
      * @throws MyCustomException если пользователь ввел "exit" или произошла ошибка ввода
      */
     public static Long readId() throws MyCustomException {
-        UtilReader.writeMessage("input id or exit");
+        UtilReader.writeMessage("input id or type exit");
         while (true) {
             try {
                 String id = bufferedReader.readLine();
                 if (id.equals("exit")) {
                     throw new MyCustomException("вышли в основное меню");
-                }
-                if (UtilValidator.isValidId(id)) {
+                } else if (UtilValidator.isValidId(id)) {
                     return Long.valueOf(id);
                 } else {
                     throw new IOException("некорректное число");
@@ -148,7 +145,6 @@ public class UtilReader {
             } catch (IOException e) {
                 UtilReader.writeMessage("исключение: неправильный ввод данных повторите");
                 UtilReader.writeMessage("id >= 1");
-                readId();
             }
         }
     }
