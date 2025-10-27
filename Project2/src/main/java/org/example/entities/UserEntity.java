@@ -1,6 +1,12 @@
 package org.example.entities;
 
-import jakarta.persistence.*;
+
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+import jakarta.persistence.Column;
+import jakarta.persistence.GenerationType;
 
 import java.time.LocalDateTime;
 import java.util.Objects;
@@ -10,7 +16,7 @@ import java.util.Objects;
  */
 @Entity
 @Table(name = "users")
-public class User {
+public class UserEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -30,7 +36,7 @@ public class User {
     /**
      * Конструктор по умолчанию
      */
-    public User() {
+    public UserEntity() {
     }
 
     /**
@@ -40,7 +46,7 @@ public class User {
      * @param email email пользователя
      * @param age   возраст пользователя
      */
-    public User(String name, String email, int age) {
+    public UserEntity(String name, String email, int age) {
         this.name = name;
         this.email = email;
         this.age = age;
@@ -130,7 +136,7 @@ public class User {
     @Override
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
-        User user = (User) o;
+        UserEntity user = (UserEntity) o;
         return age == user.age && Objects.equals(id, user.id) && Objects.equals(name, user.name) && Objects.equals(email, user.email) && Objects.equals(createdAt, user.createdAt);
     }
 

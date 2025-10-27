@@ -1,6 +1,6 @@
 package org.example.repository;
 
-import org.example.entities.User;
+import org.example.entities.UserEntity;
 import org.example.exceptions.MyCustomException;
 import org.example.util.UtilReader;
 import org.hibernate.Session;
@@ -27,7 +27,7 @@ public class UserRepository implements UserDao {
      * @return идентификатор сохраненного пользователя
      * @throws MyCustomException если произошла ошибка при сохранении
      */
-    public Long saveUser(User user) {
+    public Long saveUser(UserEntity user) {
         logger.info("DB event:try to saveUser {}", user.getName());
         return TransactionManager.executeInTransaction((Session session) -> {
             Long userId = (Long) session.save(user);
@@ -44,10 +44,10 @@ public class UserRepository implements UserDao {
      * @return объект пользователя
      * @throws MyCustomException если пользователь с указанным id не найден
      */
-    public User getUserById(Long id) {
+    public UserEntity getUserById(Long id) {
         logger.info("DB event:try to findUser id={}", id);
         return TransactionManager.executeInTransaction((Session session) -> {
-            User user = session.get(User.class, id);
+            UserEntity user = session.get(UserEntity.class, id);
             if (user == null) {
                 logger.error("DB event:failed to findUser id={}", id);
                 throw new MyCustomException("user with id " + id + " not found");
@@ -62,11 +62,11 @@ public class UserRepository implements UserDao {
      *
      * @return список всех пользователей
      */
-    public List<User> getAllUsers() {
+    public List<UserEntity> getAllUsers() {
         logger.info("DB event:try to getUsersList");
         return TransactionManager.executeInTransaction((Session session) -> {
             logger.info("DB event:success getUsersList");
-            return session.createQuery("FROM User", User.class).list();
+            return session.createQuery("FROM UserEntity", UserEntity.class).list();
         });
     }
 
@@ -76,7 +76,7 @@ public class UserRepository implements UserDao {
      * @param user объект пользователя с обновленными данными
      * @throws MyCustomException если произошла ошибка при обновлении
      */
-    public void updateUser(User user) {
+    public void updateUser(UserEntity user) {
         logger.info("DB event:try to updateUser id={}", user.getId());
         TransactionManager.executeInTransaction((Session session) -> {
             session.update(user);
@@ -94,7 +94,7 @@ public class UserRepository implements UserDao {
     public void deleteUserById(Long id) {
         logger.info("DB event:try to deleteUser id={}", id);
         TransactionManager.executeInTransaction((Session session) -> {
-            User user = session.get(User.class, id);
+            UserEntity user = session.get(UserEntity.class, id);
             if (user == null) {
                 logger.error("DB event:failed to deleteUser id={}", id);
                 throw new MyCustomException("User with id " + id + " not found");

@@ -1,6 +1,6 @@
 package org.example.commands;
 
-import org.example.entities.User;
+import org.example.entities.UserEntity;
 import org.example.entitybuilders.ClassTag;
 import org.example.entitybuilders.EntityBuilder;
 import org.example.entitybuilders.EntityBuilderFactory;
@@ -19,13 +19,13 @@ public class UpdateCommand implements Command {
     public void execute() {
         try {
             UserRepository userRepository = new UserRepository();
-            EntityBuilder<User> entityBuilder = EntityBuilderFactory.getBuilder(ClassTag.USER);
+            EntityBuilder<UserEntity> entityBuilder = EntityBuilderFactory.getBuilder(ClassTag.USER);
             Long userId = UtilReader.readId();
-            User currentUser = userRepository.getUserById(userId);
+            UserEntity currentUser = userRepository.getUserById(userId);
             if (currentUser == null) {
                 throw new MyCustomException("User with id " + userId + " not found");
             }
-            User user = entityBuilder.build();
+            UserEntity user = entityBuilder.build();
             user.setId(currentUser.getId());
             userRepository.updateUser(user);
         } catch (MyCustomException e) {

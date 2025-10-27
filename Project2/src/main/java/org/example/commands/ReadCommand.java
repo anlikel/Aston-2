@@ -1,6 +1,6 @@
 package org.example.commands;
 
-import org.example.entities.User;
+import org.example.entities.UserEntity;
 import org.example.exceptions.MyCustomException;
 import org.example.repository.UserRepository;
 import org.example.util.UtilReader;
@@ -16,7 +16,7 @@ public class ReadCommand implements Command {
     public void execute() {
         UserRepository userRepository = new UserRepository();
         Long userId = UtilReader.readId();
-        User user = userRepository.getUserById(userId);
+        UserEntity user = userRepository.getUserById(userId);
         if (user == null) {
             throw new MyCustomException("no user with current id");
         }

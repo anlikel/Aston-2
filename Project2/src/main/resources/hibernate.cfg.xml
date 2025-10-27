@@ -25,6 +25,6 @@
         <!-- Enable Hibernate statistics -->
         <property name="generate_statistics">false</property>
 
-        <mapping class="org.example.entities.User"/>
+        <mapping class="org.example.entities.UserEntity"/>
     </session-factory>
 </hibernate-configuration>

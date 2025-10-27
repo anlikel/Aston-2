@@ -1,6 +1,6 @@
 package org.example.repository;
 
-import org.example.entities.User;
+import org.example.entities.UserEntity;
 
 import java.util.List;
 
@@ -17,7 +17,7 @@ public interface UserDao {
      * @param user объект пользователя для сохранения
      * @return идентификатор сохраненного пользователя
      */
-    public Long saveUser(User user);
+    public Long saveUser(UserEntity user);
 
     /**
      * Получает пользователя по его идентификатору.
@@ -25,21 +25,21 @@ public interface UserDao {
      * @param id идентификатор пользователя
      * @return объект пользователя или null, если пользователь не найден
      */
-    public User getUserById(Long id);
+    public UserEntity getUserById(Long id);
 
     /**
      * Получает список всех пользователей из хранилища.
      *
      * @return список всех пользователей, может быть пустым
      */
-    public List<User> getAllUsers();
+    public List<UserEntity> getAllUsers();
 
     /**
      * Обновляет данные пользователя в хранилище.
      *
      * @param user объект пользователя с обновленными данными
      */
-    public void updateUser(User user);
+    public void updateUser(UserEntity user);
 
     /**
      * Удаляет пользователя по его идентификатору.
