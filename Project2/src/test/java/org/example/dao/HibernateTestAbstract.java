@@ -36,7 +36,7 @@ public abstract class HibernateTestAbstract {
         configuration.setProperty("hibernate.connection.password", postgres.getPassword());
         configuration.setProperty("hibernate.dialect", "org.hibernate.dialect.PostgreSQLDialect");
         configuration.setProperty("hibernate.hbm2ddl.auto", "none");
-        configuration.setProperty("hibernate.show_sql", "true");
+        configuration.setProperty("hibernate.show_sql", "false");
         configuration.setProperty("hibernate.format_sql", "true");
 
         configuration.addAnnotatedClass(UserEntity.class);

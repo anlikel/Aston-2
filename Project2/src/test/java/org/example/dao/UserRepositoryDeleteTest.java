@@ -8,20 +8,20 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-public class UserRepositoryFindTest extends HibernateTestAbstract{
+public class UserRepositoryDeleteTest extends HibernateTestAbstract{
     private UserRepository userRepository=new UserRepository();
 
     @Test
-    void shouldFindUserById_WhenUserExists() {
-        UserEntity foundUser = userRepository.getUserById(1L);
+    void shouldDeleteUserById_WhenUserExists() {
+        UserEntity deletedUser = userRepository.deleteUserById(1L);
 
-        assertEquals("User1",foundUser.getName());
-        assertEquals("mail1@example.com",foundUser.getEmail());
-        assertEquals(25,foundUser.getAge());
+        assertEquals("User1",deletedUser.getName());
+        assertEquals("mail1@example.com",deletedUser.getEmail());
+        assertEquals(25,deletedUser.getAge());
     }
 
     @Test
-    void shouldThrowException_WhenUserNotFound() {
+    void shouldThrowException_WhenUserNotExists() {
 
         Long wrongId = 4L;
 

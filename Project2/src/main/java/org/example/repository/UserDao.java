@@ -46,5 +46,5 @@ public interface UserDao {
      *
      * @param id идентификатор пользователя для удаления
      */
-    public void deleteUserById(Long id);
+    public UserEntity deleteUserById(Long id);
 }
