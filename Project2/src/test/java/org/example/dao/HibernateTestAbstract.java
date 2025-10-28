@@ -1,10 +1,12 @@
 package org.example.dao;
 
 import org.example.entities.UserEntity;
+import org.example.util.HibernateUtil;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.testcontainers.containers.PostgreSQLContainer;
@@ -38,12 +40,13 @@ public abstract class HibernateTestAbstract {
         configuration.setProperty("hibernate.format_sql", "true");
 
         configuration.addAnnotatedClass(UserEntity.class);
-
         sessionFactory = configuration.buildSessionFactory();
+        HibernateUtil.setTestSessionFactory(sessionFactory);
     }
 
     @AfterAll
     static void tearDownAll() {
+        HibernateUtil.clearTestSessionFactory();
         if (sessionFactory != null) {
             sessionFactory.close();
         }
@@ -53,11 +56,22 @@ public abstract class HibernateTestAbstract {
     }
 
     @BeforeEach
-    void setUp() {
+    void initDB() {
         try (Session session = sessionFactory.openSession()) {
             session.beginTransaction();
 
             executeSqlScript(session, "init-scripts/init.sql");
+
+            session.getTransaction().commit();
+        } catch (IOException e) {
+            throw new RuntimeException("Failed to execute setup scripts", e);
+        }
+    }
+
+    @AfterEach
+    void clearDB() {
+        try (Session session = sessionFactory.openSession()) {
+            session.beginTransaction();
 
             executeSqlScript(session, "init-scripts/cleanup.sql");
 
@@ -66,6 +80,7 @@ public abstract class HibernateTestAbstract {
             throw new RuntimeException("Failed to execute setup scripts", e);
         }
     }
+
 
     private void executeSqlScript(Session session, String scriptPath) throws IOException {
         Path path = Paths.get(scriptPath);
