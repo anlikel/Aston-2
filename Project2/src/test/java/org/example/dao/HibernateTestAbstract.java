@@ -10,25 +10,28 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.testcontainers.containers.PostgreSQLContainer;
+import org.testcontainers.junit.jupiter.Container;
+import org.testcontainers.junit.jupiter.Testcontainers;
 
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
+@Testcontainers
 public abstract class HibernateTestAbstract {
     protected static SessionFactory sessionFactory;
-    protected static PostgreSQLContainer<?> postgres;
+
+    @Container
+    protected static final PostgreSQLContainer<?> postgres =
+            new PostgreSQLContainer<>("postgres:15")
+                    .withDatabaseName("postgres")
+                    .withUsername("user")
+                    .withPassword("1234")
+                    .withReuse(true);
 
     @BeforeAll
     static void setUpAll() {
-
-        postgres =
-                new PostgreSQLContainer<>("postgres:15")
-                        .withDatabaseName("postgres")
-                        .withUsername("user")
-                        .withPassword("1234");
-        postgres.start();
 
         Configuration configuration = new Configuration();
         configuration.setProperty("hibernate.connection.url", postgres.getJdbcUrl());
@@ -49,9 +52,6 @@ public abstract class HibernateTestAbstract {
         HibernateUtil.clearTestSessionFactory();
         if (sessionFactory != null) {
             sessionFactory.close();
-        }
-        if (postgres != null) {
-            postgres.stop();
         }
     }
 
