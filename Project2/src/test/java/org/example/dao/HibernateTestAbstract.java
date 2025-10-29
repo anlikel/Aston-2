@@ -50,9 +50,12 @@ public abstract class HibernateTestAbstract {
     @AfterAll
     static void tearDownAll() {
         HibernateUtil.clearTestSessionFactory();
+        HibernateUtil.closeSessionFactory();
         if (sessionFactory != null) {
             sessionFactory.close();
+            sessionFactory = null;
         }
+        postgres.stop();
     }
 
     @BeforeEach
