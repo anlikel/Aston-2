@@ -17,6 +17,10 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+/**
+ * Тестовый класс для проверки функциональности получения всех пользователей в UserService.
+ * Проверяет различные сценарии получения списка пользователей.
+ */
 @ExtendWith(MockitoExtension.class)
 class UserServiceGetAllTest {
 
@@ -26,9 +30,13 @@ class UserServiceGetAllTest {
     @InjectMocks
     private UserService userService;
 
+    /**
+     * Тест проверяет получение списка всех пользователей, когда в системе есть несколько пользователей.
+     * Ожидается, что метод вернет корректный список пользователей с правильными данными.
+     * Проверяет размер списка и корректность данных каждого пользователя.
+     */
     @Test
     void shouldGetAllUsers_WhenUsersExist() {
-
         UserEntity user1 = new UserEntity();
         user1.setId(1L);
         user1.setName("User1");
@@ -38,8 +46,8 @@ class UserServiceGetAllTest {
         UserEntity user2 = new UserEntity();
         user2.setId(2L);
         user2.setName("User2");
-        user1.setEmail("bbb@mail.ru");
-        user1.setAge(10);
+        user2.setEmail("bbb@mail.ru");
+        user2.setAge(20);
 
         List<UserEntity> expectedUsers = Arrays.asList(user1, user2);
         when(userRepository.getAllUsers()).thenReturn(expectedUsers);
@@ -52,6 +60,11 @@ class UserServiceGetAllTest {
         verify(userRepository).getAllUsers();
     }
 
+    /**
+     * Тест проверяет получение пустого списка, когда в системе нет пользователей.
+     * Ожидается, что метод вернет пустую коллекцию.
+     * Проверяет, что список действительно пуст.
+     */
     @Test
     void shouldGetEmptyList_WhenNoUsers() {
         when(userRepository.getAllUsers()).thenReturn(Collections.emptyList());
@@ -62,9 +75,13 @@ class UserServiceGetAllTest {
         verify(userRepository).getAllUsers();
     }
 
+    /**
+     * Тест проверяет получение списка пользователей, когда в системе только один пользователь.
+     * Ожидается, что метод вернет список с одним пользователем и корректными данными.
+     * Проверяет размер списка и корректность данных единственного пользователя.
+     */
     @Test
     void shouldGetAllUsers_WhenSingleUser() {
-
         UserEntity user1 = new UserEntity();
         user1.setId(1L);
         user1.setName("User1");

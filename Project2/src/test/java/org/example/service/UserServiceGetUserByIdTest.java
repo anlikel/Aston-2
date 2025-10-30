@@ -13,6 +13,10 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+/**
+ * Тестовый класс для проверки функциональности получения пользователя по идентификатору в UserService.
+ * Проверяет сценарии успешного получения пользователя и случаи, когда пользователь не найден.
+ */
 @ExtendWith(MockitoExtension.class)
 class UserServiceGetByIdTest {
 
@@ -22,9 +26,13 @@ class UserServiceGetByIdTest {
     @InjectMocks
     private UserService userService;
 
+    /**
+     * Тест проверяет успешное получение пользователя по существующему идентификатору.
+     * Ожидается, что метод вернет пользователя с корректными данными.
+     * Проверяет, что все поля возвращенного пользователя соответствуют ожидаемым значениям.
+     */
     @Test
     void shouldGetUserById_WhenUserExists() {
-
         Long userId = 1L;
         UserEntity expectedUser = new UserEntity();
         expectedUser.setId(userId);
@@ -44,9 +52,13 @@ class UserServiceGetByIdTest {
         verify(userRepository).getUserById(userId);
     }
 
+    /**
+     * Тест проверяет выброс исключения при попытке получения несуществующего пользователя.
+     * Ожидается, что метод выбросит MyCustomException, когда пользователь с указанным ID не найден.
+     * Проверяет, что исключение выбрасывается корректно и происходит обращение к репозиторию.
+     */
     @Test
     void shouldThrowException_WhenUserNotFound() {
-
         Long nonExistentUserId = 999L;
 
         when(userRepository.getUserById(nonExistentUserId)).thenReturn(null);

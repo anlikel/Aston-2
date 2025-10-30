@@ -12,6 +12,10 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+/**
+ * Тестовый класс для проверки функциональности создания пользователей в UserService.
+ * Проверяет различные сценарии создания пользователей с разными наборами данных.
+ */
 @ExtendWith(MockitoExtension.class)
 class UserServiceCreateTest {
 
@@ -21,9 +25,13 @@ class UserServiceCreateTest {
     @InjectMocks
     private UserService userService;
 
+    /**
+     * Тест проверяет успешное создание пользователя с валидными данными.
+     * Пользователь имеет имя, email и возраст.
+     * Ожидается, что метод вернет корректный идентификатор пользователя.
+     */
     @Test
     void shouldCreateUser_WhenValidUser() {
-
         UserEntity user = new UserEntity();
         user.setName("Aaaa");
         user.setEmail("aa@mail.com");
@@ -38,9 +46,13 @@ class UserServiceCreateTest {
         verify(userRepository).saveUser(user);
     }
 
+    /**
+     * Тест проверяет создание пользователя с минимальным набором данных.
+     * Пользователь имеет только имя, остальные поля не заполнены.
+     * Ожидается, что метод вернет корректный идентификатор пользователя.
+     */
     @Test
     void shouldCreateUser_WhenUserWithMinimalData() {
-
         UserEntity user = new UserEntity();
         user.setName("Bbb");
 

@@ -10,9 +10,12 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
+/**
+ * Тестовый класс для проверки функциональности обновления пользователей в UserService.
+ * Проверяет сценарии успешного обновления и случаи, когда пользователь не найден для обновления.
+ */
 @ExtendWith(MockitoExtension.class)
 class UserServiceUpdateTest {
 
@@ -22,6 +25,11 @@ class UserServiceUpdateTest {
     @InjectMocks
     private UserService userService;
 
+    /**
+     * Тест проверяет успешное обновление пользователя с валидными данными.
+     * Ожидается, что метод проверит существование пользователя и выполнит его обновление.
+     * Проверяет, что методы репозитория вызываются с правильными параметрами.
+     */
     @Test
     void shouldUpdateUser_WhenValidUser() {
         Long goodId = 999L;
@@ -40,9 +48,13 @@ class UserServiceUpdateTest {
         verify(userRepository).updateUser(user);
     }
 
+    /**
+     * Тест проверяет выброс исключения при попытке обновления несуществующего пользователя.
+     * Ожидается, что метод выбросит MyCustomException, когда пользователь с указанным ID не найден.
+     * Проверяет, что обновление не выполняется и происходит только проверка существования пользователя.
+     */
     @Test
     void shouldThrowException_WhenUserNotFoundForUpdate() {
-
         Long badId = 999L;
         UserEntity user = new UserEntity();
         user.setId(badId);
@@ -57,9 +69,6 @@ class UserServiceUpdateTest {
         });
 
         verify(userRepository).getUserById(badId);
-
         verify(userRepository, never()).updateUser(user);
     }
-
-
 }
