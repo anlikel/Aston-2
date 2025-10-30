@@ -90,6 +90,7 @@ public class UserRepository implements UserDao {
      * Удаляет пользователя по его идентификатору.
      *
      * @param id идентификатор пользователя для удаления
+     * @return объект удаленного пользователя
      * @throws MyCustomException если пользователь с указанным id не найден
      */
     public UserEntity deleteUserById(Long id) {

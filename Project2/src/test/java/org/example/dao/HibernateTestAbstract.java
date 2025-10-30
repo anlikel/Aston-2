@@ -18,10 +18,22 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
+/**
+ * Абстрактный базовый класс для тестирования Hibernate с использованием Testcontainers.
+ * Предоставляет общую конфигурацию и методы для работы с тестовой базой данных PostgreSQL.
+ */
 @Testcontainers
 public abstract class HibernateTestAbstract {
+
+    /**
+     * Фабрика сессий Hibernate для тестов
+     */
     protected static SessionFactory sessionFactory;
 
+    /**
+     * Контейнер PostgreSQL для тестов.
+     * Используется для создания изолированной тестовой базы данных.
+     */
     @Container
     protected static final PostgreSQLContainer<?> postgres =
             new PostgreSQLContainer<>("postgres:15")
@@ -30,6 +42,10 @@ public abstract class HibernateTestAbstract {
                     .withPassword("1234")
                     .withReuse(true);
 
+    /**
+     * Настройка тестового окружения перед всеми тестами.
+     * Конфигурирует Hibernate SessionFactory с параметрами тестовой БД.
+     */
     @BeforeAll
     static void setUpAll() {
 
@@ -47,6 +63,10 @@ public abstract class HibernateTestAbstract {
         HibernateUtil.setTestSessionFactory(sessionFactory);
     }
 
+    /**
+     * Очистка ресурсов после выполнения всех тестов.
+     * Закрывает фабрику сессий и останавливает контейнер с БД.
+     */
     @AfterAll
     static void tearDownAll() {
         HibernateUtil.clearTestSessionFactory();
@@ -58,6 +78,10 @@ public abstract class HibernateTestAbstract {
         postgres.stop();
     }
 
+    /**
+     * Инициализация базы данных перед каждым тестом.
+     * Выполняет SQL-скрипт для создания начальной структуры данных.
+     */
     @BeforeEach
     void initDB() {
         try (Session session = sessionFactory.openSession()) {
@@ -71,6 +95,10 @@ public abstract class HibernateTestAbstract {
         }
     }
 
+    /**
+     * Очистка базы данных после каждого теста.
+     * Выполняет SQL-скрипт для удаления тестовых данных.
+     */
     @AfterEach
     void clearDB() {
         try (Session session = sessionFactory.openSession()) {
@@ -84,7 +112,14 @@ public abstract class HibernateTestAbstract {
         }
     }
 
-
+    /**
+     * Выполняет SQL-скрипт в текущей сессии Hibernate.
+     *
+     * @param session    сессия Hibernate для выполнения запросов
+     * @param scriptPath путь к SQL-скрипту относительно classpath
+     * @throws IOException      если файл скрипта не найден или недоступен
+     * @throws RuntimeException если файл скрипта не существует
+     */
     private void executeSqlScript(Session session, String scriptPath) throws IOException {
         Path path = Paths.get(scriptPath);
         if (!Files.exists(path)) {
