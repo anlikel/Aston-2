@@ -27,47 +27,71 @@ docker exec -it myapp-postgres psql -U user -d postgres -c "SELECT * FROM users;
 5. Структура проекта:
 
 project/
-├── docker-compose.yml          # Docker configuration for PostgreSQL
+├── docker-compose.yml         # Docker configuration for PostgreSQL
 ├── init-scripts/
 │   └── init.sql               # SQL script for test data initialization
+│   └── cleanup.sql            # SQL script for clear db-tables
 ├── src/
-│   └── main/
-│       ├── java/
-│       │   └── com/org/example/
-│       │       ├── commands/          # Command pattern classes
-│       │       │   ├── Action.java
-│       │       │   ├── Command.java
-│       │       │   ├── CommandFactory.java
-│       │       │   ├── CreateCommand.java
-│       │       │   ├── DeleteCommand.java
-│       │       │   ├── ExitCommand.java
-│       │       │   ├── ReadCommand.java
-│       │       │   ├── ReadAllCommand.java
-│       │       │   └── UpdateCommand.java         
-│       │       ├── entities           
-│       │       │      └── User.java                  # User entity class
-│       │       ├── entitybuilders           
-│       │       │      ├── ClassTag.java
-│       │       │      ├── EntityBuilder.java
-│       │       │      ├── EntityBuilderFactory.java
-│       │       │      └── UserBuilder.java
-│       │       ├── exceptions           
-│       │       │      └── MyCustomException.java                    
-│       │       ├── menu           
-│       │       │     ├── MenuHandler.java
-│       │       │     └── MenuPrinter.java
-│       │       ├── repository                        # DB logic
-│       │       │     ├── TransactionManager.java
-│       │       │     ├── UserDao.java
-│       │       │     └── UserRepository.java
-│       │       ├── util           
-│       │       │    ├── HibernateUtil.java
-│       │       │    ├── UtilReader.java
-│       │       │    └── UtilValidator.java
-│       │       └── Main.java                       # Main application class
-│       └── resources/
-│           └── hibernate.cfg.xml       # Hibernate configuration
-│           └── logback.xml
+│   ├── main/
+│   │    ├── java/
+│   │    │   └── com/org/example/
+│   │    │       ├── commands/          # Command pattern classes
+│   │    │       │   ├── Action.java
+│   │    │       │   ├── Command.java
+│   │    │       │   ├── CommandFactory.java
+│   │    │       │   ├── CreateCommand.java
+│   │    │       │   ├── DeleteCommand.java
+│   │    │       │   ├── ExitCommand.java
+│   │    │       │   ├── ReadCommand.java
+│   │    │       │   ├── ReadAllCommand.java
+│   │    │       │   └── UpdateCommand.java         
+│   │    │       ├── entities           
+│   │    │       │      └── User.java                  # User entity class
+│   │    │       ├── entitybuilders           
+│   │    │       │      ├── ClassTag.java
+│   │    │       │      ├── EntityBuilder.java
+│   │    │       │      ├── EntityBuilderFactory.java
+│   │    │       │      └── UserBuilder.java
+│   │    │       ├── exceptions           
+│   │    │       │      └── MyCustomException.java                    
+│   │    │       ├── menu           
+│   │    │       │     ├── MenuHandler.java
+│   │    │       │     └── MenuPrinter.java
+│   │    │       ├── repository                        # DB logic
+│   │    │       │     ├── TransactionManager.java
+│   │    │       │     ├── UserDao.java
+│   │    │       │     └── UserRepository.java
+│   │    │       ├── util           
+│   │    │       │    ├── HibernateUtil.java
+│   │    │       │    ├── UtilReader.java
+│   │    │       │    └── UtilValidator.java
+│   │    │       └── Main.java                       # Main application class
+│   │    └── resources/
+│   │        └── hibernate.cfg.xml       # Hibernate configuration
+│   │        └── logback.xml
+│   │
+│   ├── test/
+│       └──java/
+│          └──/org/example/
+│              ├── dao                        # repository tests
+│              │    ├── HibernateTestAbstract.java
+│              │    ├── UserRepositoryDeleteTest.java
+│              │    ├── UserRepositoryFindAllTest.java
+│              │    ├── UserRepositoryFindTest.java
+│              │    ├── UserRepositorySaveTest.java
+│              │    └── UserRepositoryUpdateTest.java
+│              ├── service                     # service tests
+│              │   ├── UserServiceCreateTest.java
+│              │   ├── UserServiceDeleteUserTest.java
+│              │   ├── UserServiceGetAllUsersTest.java
+│              │   ├── UserServiceGetUserByIdTest.java
+│              │   └── UserServiceUpdateUserTest.java
+│              └── utils                        # util tests
+│                  ├── ValidAgeTest.java
+│                  ├── ValidEmailTest.java
+│                  ├── ValidIdTest.java
+│                  └── ValidNameTest.java
+│               
 ├── pom.xml                     # Maven dependencies
 └── README.md
 └── gitignore.md
@@ -111,3 +135,10 @@ project/
 
 docker-compose down -v
 docker-compose up -d
+
+12. Тестирование.
+
+Реализованы тесты на валидацию вводимых данных для создание класса UserEntity,
+тесты Dao-слоя для проверки работы с бд, тесты сервис слоя с помощью Mockito.
+
+Запуск: mvn test

@@ -6,6 +6,7 @@ import org.example.util.UtilReader;
 import org.hibernate.Session;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import java.util.List;
 
 /**
@@ -89,11 +90,12 @@ public class UserRepository implements UserDao {
      * Удаляет пользователя по его идентификатору.
      *
      * @param id идентификатор пользователя для удаления
+     * @return объект удаленного пользователя
      * @throws MyCustomException если пользователь с указанным id не найден
      */
-    public void deleteUserById(Long id) {
+    public UserEntity deleteUserById(Long id) {
         logger.info("DB event:try to deleteUser id={}", id);
-        TransactionManager.executeInTransaction((Session session) -> {
+        return TransactionManager.executeInTransaction((Session session) -> {
             UserEntity user = session.get(UserEntity.class, id);
             if (user == null) {
                 logger.error("DB event:failed to deleteUser id={}", id);
@@ -102,6 +104,7 @@ public class UserRepository implements UserDao {
             session.delete(user);
             UtilReader.writeMessage("User deleted successfully");
             logger.info("DB event:success deleteUser id={}", id);
+            return user;
         });
     }
 }
