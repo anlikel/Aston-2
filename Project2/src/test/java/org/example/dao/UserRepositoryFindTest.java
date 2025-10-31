@@ -4,6 +4,7 @@ import org.example.entities.UserEntity;
 import org.example.exceptions.MyCustomException;
 import org.example.repository.UserRepository;
 import org.junit.jupiter.api.Test;
+import org.testcontainers.junit.jupiter.Testcontainers;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -12,6 +13,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
  * Тестовый класс для проверки функциональности поиска пользователей по идентификатору.
  * Проверяет метод getUserById() в различных сценариях поиска.
  */
+@Testcontainers
 public class UserRepositoryFindTest extends HibernateTestAbstract {
 
     /**

@@ -13,8 +13,22 @@
             <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
         </encoder>
     </appender>
+
     <!-- Логирование Hibernate -->
     <logger name="org.hibernate" level="ERROR"/>
+
+    <!-- Логирование Testcontainers - отключаем дебаг логи -->
+    <logger name="org.testcontainers" level="INFO"/>
+    <logger name="com.github.dockerjava" level="WARN"/>
+    <logger name="org.testcontainers.utility" level="WARN"/>
+    <logger name="org.testcontainers.dockerclient" level="WARN"/>
+    <logger name="org.testcontainers.containers" level="WARN"/>
+
+    <!-- Отключаем логирование Apache HttpClient внутри Testcontainers -->
+    <logger name="org.apache.http" level="WARN"/>
+    <logger name="com.github.dockerjava.zerodep.shaded" level="WARN"/>
+    <logger name="com.github.dockerjava.zerodep.shaded.org.apache.hc" level="WARN"/>
+
     <root level="DEBUG">
         <appender-ref ref="FILE"/>
     </root>

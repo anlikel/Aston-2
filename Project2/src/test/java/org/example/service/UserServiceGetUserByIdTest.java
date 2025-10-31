@@ -18,7 +18,7 @@ import static org.mockito.Mockito.when;
  * Проверяет сценарии успешного получения пользователя и случаи, когда пользователь не найден.
  */
 @ExtendWith(MockitoExtension.class)
-class UserServiceGetByIdTest {
+class UserServiceGetUserByIdTest {
 
     @Mock
     private UserRepository userRepository;

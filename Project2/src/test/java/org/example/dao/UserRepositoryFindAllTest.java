@@ -3,6 +3,7 @@ package org.example.dao;
 import org.example.entities.UserEntity;
 import org.example.repository.UserRepository;
 import org.junit.jupiter.api.Test;
+import org.testcontainers.junit.jupiter.Testcontainers;
 
 import java.util.List;
 
@@ -12,6 +13,7 @@ import static org.junit.Assert.assertEquals;
  * Тестовый класс для проверки функциональности получения всех пользователей.
  * Проверяет метод getAllUsers() в различных сценариях наличия данных.
  */
+@Testcontainers
 public class UserRepositoryFindAllTest extends HibernateTestAbstract {
 
     /** Репозиторий пользователей для тестирования */

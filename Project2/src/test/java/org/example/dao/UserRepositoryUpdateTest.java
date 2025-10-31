@@ -3,6 +3,7 @@ package org.example.dao;
 import org.example.entities.UserEntity;
 import org.example.repository.UserRepository;
 import org.junit.jupiter.api.Test;
+import org.testcontainers.junit.jupiter.Testcontainers;
 
 import java.time.LocalDateTime;
 
@@ -13,6 +14,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
  * Тестовый класс для проверки функциональности обновления пользователей.
  * Проверяет метод updateUser() в различных сценариях обновления данных.
  */
+@Testcontainers
 public class UserRepositoryUpdateTest extends HibernateTestAbstract {
 
     /**

@@ -22,9 +22,7 @@ import java.nio.file.Paths;
  * Абстрактный базовый класс для тестирования Hibernate с использованием Testcontainers.
  * Предоставляет общую конфигурацию и методы для работы с тестовой базой данных PostgreSQL.
  */
-@Testcontainers
 public abstract class HibernateTestAbstract {
-
     /**
      * Фабрика сессий Hibernate для тестов
      */

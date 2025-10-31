@@ -22,7 +22,7 @@ import static org.mockito.Mockito.when;
  * Проверяет различные сценарии получения списка пользователей.
  */
 @ExtendWith(MockitoExtension.class)
-class UserServiceGetAllTest {
+class UserServiceGetAllUsersTest {
 
     @Mock
     private UserRepository userRepository;

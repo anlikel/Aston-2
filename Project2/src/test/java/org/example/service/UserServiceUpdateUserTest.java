@@ -17,7 +17,7 @@ import static org.mockito.Mockito.*;
  * Проверяет сценарии успешного обновления и случаи, когда пользователь не найден для обновления.
  */
 @ExtendWith(MockitoExtension.class)
-class UserServiceUpdateTest {
+class UserServiceUpdateUserTest {
 
     @Mock
     private UserRepository userRepository;
