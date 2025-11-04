@@ -3,6 +3,7 @@ package com.example.controller;
 import com.example.dto.CreateUserDto;
 import com.example.dto.GetUserDto;
 import com.example.entities.UserEntity;
+import com.example.exceptions.MyCustomException;
 import com.example.mapper.UserMapper;
 import com.example.service.UserService;
 import org.springframework.http.ResponseEntity;
@@ -22,16 +23,24 @@ public class UserController {
     }
 
     @PostMapping
-    public ResponseEntity<GetUserDto> createUser(@RequestBody CreateUserDto createUserDto) {
-        UserEntity user = UserMapper.toEntity(createUserDto);
-        UserEntity savedUser = userService.createUser(user);
-        return ResponseEntity.ok(UserMapper.toGetUserDto(savedUser));
+    public ResponseEntity<?> createUser(@RequestBody CreateUserDto createUserDto) {
+        try {
+            UserEntity user = UserMapper.toEntity(createUserDto);
+            UserEntity savedUser = userService.createUser(user);
+            return ResponseEntity.ok(UserMapper.toGetUserDto(savedUser));
+        } catch (MyCustomException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<GetUserDto> getUser(@PathVariable Long id) {
+    public ResponseEntity<?> getUser(@PathVariable Long id) {
+        try{
         UserEntity user = userService.getUserById(id);
-        return ResponseEntity.ok(UserMapper.toGetUserDto(user));
+            return ResponseEntity.ok(UserMapper.toGetUserDto(user));
+        }catch (MyCustomException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 
     @GetMapping
@@ -42,18 +51,26 @@ public class UserController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<GetUserDto> updateUser(
+    public ResponseEntity<?> updateUser(
             @PathVariable Long id,
             @RequestBody CreateUserDto updateUserDto) {
         UserEntity user = UserMapper.toEntity(updateUserDto);
         user.setId(id);
-        UserEntity updatedUser = userService.updateUser(user);
-        return ResponseEntity.ok(UserMapper.toGetUserDto(updatedUser));
+        try {
+            UserEntity updatedUser = userService.updateUser(user);
+            return ResponseEntity.ok(UserMapper.toGetUserDto(updatedUser));
+        }catch (MyCustomException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteUser(@PathVariable Long id) {
-        userService.deleteUserById(id);
-        return ResponseEntity.noContent().build();
+    public ResponseEntity<String> deleteUser(@PathVariable Long id) {
+        try {
+            userService.deleteUserById(id);
+            return ResponseEntity.ok("deleted");
+        } catch (MyCustomException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 }

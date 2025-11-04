@@ -4,6 +4,8 @@ import com.example.dto.GetUserDto;
 import com.example.entities.UserEntity;
 import com.example.dto.CreateUserDto;
 
+import java.time.LocalDateTime;
+
 /**
  * Маппер для преобразования между Entity и DTO
  */
@@ -24,6 +26,7 @@ public class UserMapper {
         user.setName(createUserDto.getName());
         user.setEmail(createUserDto.getEmail());
         user.setAge(createUserDto.getAge());
+        user.setCreatedAt(LocalDateTime.now());
         return user;
     }
 }

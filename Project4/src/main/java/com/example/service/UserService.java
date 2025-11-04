@@ -41,11 +41,8 @@ public class UserService {
     }
 
     public UserEntity createUser(UserEntity user) {
-        if(!UtilValidator.isValidId(String.valueOf(user.getId()))){
-            throw new MyCustomException("wrong id, should be in range from 1 to LongMax");
-        }
-        if (userRepository.existsById(user.getId())) {
-            throw new MyCustomException("User already exists with id: " + user.getId());
+        if (userRepository.existsByEmail(user.getEmail())) {
+            throw new MyCustomException("User already exists with unique email: " + user.getEmail());
         }
         if(!UtilValidator.isValidName(user.getName())){
             throw new MyCustomException("wrong name, should start from Uppercase letter");
