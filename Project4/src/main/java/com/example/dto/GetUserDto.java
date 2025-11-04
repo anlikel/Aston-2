@@ -13,7 +13,6 @@ public class GetUserDto {
     private int age;
     private LocalDateTime createdAt;
 
-    // Конструкторы
     public GetUserDto() {
     }
 
@@ -25,7 +24,6 @@ public class GetUserDto {
         this.createdAt = createdAt;
     }
 
-    // Геттеры и сеттеры
     public Long getId() {
         return id;
     }

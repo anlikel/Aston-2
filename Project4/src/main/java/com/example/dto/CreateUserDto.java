@@ -1,27 +1,17 @@
 package com.example.dto;
 
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 
 /**
  * DTO для создания нового пользователя
  */
 public class CreateUserDto {
 
-    @NotBlank(message = "Имя пользователя не может быть пустым")
     private String name;
 
-    @NotBlank(message = "Email не может быть пустым")
-    @Email(message = "Некорректный формат email")
     private String email;
 
-    @NotNull(message = "Возраст не может быть null")
-    @Min(value = 0, message = "Возраст не может быть отрицательным")
     private Integer age;
 
-    // Конструкторы
     public CreateUserDto() {
     }
 
@@ -31,7 +21,6 @@ public class CreateUserDto {
         this.age = age;
     }
 
-    // Геттеры и сеттеры
     public String getName() {
         return name;
     }
