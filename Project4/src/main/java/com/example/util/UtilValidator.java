@@ -61,17 +61,8 @@ public class UtilValidator {
      * @param age строка с возрастом для проверки
      * @return true если возраст валиден, false в противном случае
      */
-    public static boolean isValidAge(String age) {
-        if (age == null || age.trim().isEmpty()) {
-            return false;
-        }
-
-        try {
-            int ageInt = Integer.parseInt(age.trim());
-            return ageInt >= 0 && ageInt <= 100;
-        } catch (NumberFormatException e) {
-            return false;
-        }
+    public static boolean isValidAge(int age) {
+        return age >= 0 && age <= 100;
     }
 
     /**

@@ -50,7 +50,10 @@ public class UserService {
         if(!UtilValidator.isValidEmail(user.getEmail())){
             throw new MyCustomException("wrong email");
         }
-        return userRepository.save(user);
+        if(!UtilValidator.isValidAge(user.getAge())){
+            throw new MyCustomException("wrong age should be in range from 1 to 100");
+        }
+        return userRepository.saveUser(user);
     }
 
     public UserEntity updateUser(UserEntity user) {
@@ -66,6 +69,9 @@ public class UserService {
         if(!UtilValidator.isValidEmail(user.getEmail())){
             throw new MyCustomException("wrong email");
         }
-        return userRepository.save(user);
+        if(!UtilValidator.isValidAge(user.getAge())){
+            throw new MyCustomException("wrong age should be in range from 1 to 100");
+        }
+        return userRepository.saveUser(user);
     }
 }

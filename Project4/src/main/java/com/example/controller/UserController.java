@@ -6,6 +6,7 @@ import com.example.entities.UserEntity;
 import com.example.exceptions.MyCustomException;
 import com.example.mapper.UserMapper;
 import com.example.service.UserService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -27,9 +28,9 @@ public class UserController {
         try {
             UserEntity user = UserMapper.toEntity(createUserDto);
             UserEntity savedUser = userService.createUser(user);
-            return ResponseEntity.ok(UserMapper.toGetUserDto(savedUser));
+            return ResponseEntity.status(HttpStatus.CREATED).body(UserMapper.toGetUserDto(savedUser));
         } catch (MyCustomException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
         }
     }
 
@@ -37,9 +38,9 @@ public class UserController {
     public ResponseEntity<?> getUser(@PathVariable Long id) {
         try{
         UserEntity user = userService.getUserById(id);
-            return ResponseEntity.ok(UserMapper.toGetUserDto(user));
+            return ResponseEntity.status(HttpStatus.OK).body(UserMapper.toGetUserDto(user));
         }catch (MyCustomException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
     }
 
@@ -58,9 +59,9 @@ public class UserController {
         user.setId(id);
         try {
             UserEntity updatedUser = userService.updateUser(user);
-            return ResponseEntity.ok(UserMapper.toGetUserDto(updatedUser));
+            return ResponseEntity.status(HttpStatus.OK).body(UserMapper.toGetUserDto(updatedUser));
         }catch (MyCustomException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
     }
 
@@ -68,9 +69,9 @@ public class UserController {
     public ResponseEntity<String> deleteUser(@PathVariable Long id) {
         try {
             userService.deleteUserById(id);
-            return ResponseEntity.ok("deleted");
+            return ResponseEntity.status(HttpStatus.OK).body("deleted");
         } catch (MyCustomException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
     }
 }
