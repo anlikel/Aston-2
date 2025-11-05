@@ -30,13 +30,16 @@ public class UserService {
         return userRepository.getAllUsers();
     }
 
-    public void deleteUserById(Long userId) {
+    public boolean deleteUserById(Long userId) {
+        boolean result;
         if(!UtilValidator.isValidId(String.valueOf(userId))){
             throw new MyCustomException("wrong id, should be in range from 1 to LongMax");
         }
-        if (!userRepository.deleteUserById(userId)) {
+        result=userRepository.deleteUserById(userId);
+        if (!result) {
             throw new MyCustomException("User not found with id: " + userId);
         }
+        return result;
     }
 
     public UserEntity createUser(UserEntity user) {
