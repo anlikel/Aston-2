@@ -36,6 +36,7 @@ public class UserEntity {
      * Конструктор по умолчанию
      */
     public UserEntity() {
+        createdAt = LocalDateTime.now();
     }
 
     /**

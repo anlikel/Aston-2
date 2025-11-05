@@ -34,10 +34,9 @@ public class UserService {
         if(!UtilValidator.isValidId(String.valueOf(userId))){
             throw new MyCustomException("wrong id, should be in range from 1 to LongMax");
         }
-        if (!userRepository.existsById(userId)) {
+        if (!userRepository.deleteUserById(userId)) {
             throw new MyCustomException("User not found with id: " + userId);
         }
-        userRepository.deleteUserById(userId);
     }
 
     public UserEntity createUser(UserEntity user) {

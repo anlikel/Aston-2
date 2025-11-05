@@ -44,7 +44,11 @@ public interface UserRepository extends JpaRepository<UserEntity, Long> {
      * Удалить пользователя по ID
      * @param id идентификатор пользователя
      */
-    default void deleteUserById(Long id) {
-        deleteById(id);
+    default boolean deleteUserById(Long id) {
+        if (existsById(id)) {
+            deleteById(id);
+            return true;
+        }
+        return false;
     }
 }
