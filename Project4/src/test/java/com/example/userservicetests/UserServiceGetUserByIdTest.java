@@ -37,7 +37,7 @@ class UserServiceGetUserByIdTest {
      * Проверяет, что все поля возвращенного пользователя соответствуют ожидаемым значениям.
      */
     @Test
-    void shouldGetUserById_WhenUserIdExists_ReturnUser() {
+    void GetUserById_WhenUserIdExists_ReturnUser() {
         Long userId = 1L;
         UserEntity expectedUser = new UserEntity();
         expectedUser.setId(userId);
@@ -63,7 +63,7 @@ class UserServiceGetUserByIdTest {
      * Проверяет, что исключение выбрасывается корректно и происходит обращение к репозиторию.
      */
     @Test
-    void shouldGetUserById_WhenUserIdNotExists_ThrowException() {
+    void GetUserById_WhenUserIdNotExists_ThrowException() {
         Long nonExistentUserId = 999L;
 
         when(userRepository.getUserById(nonExistentUserId)).thenReturn(Optional.empty());

@@ -18,13 +18,13 @@ public class RepositoryDeleteUserByIdTest extends RepositoryTestAbstract{
     private UserRepository userRepository;
 
     @Test
-    void shouldDeleteUserById_WhenUserExists_ReturnTrue() {
+    void DeleteUserById_WhenUserExists_ReturnTrue() {
         boolean result = userRepository.deleteUserById(1L);
         assertTrue(result);
     }
 
     @Test
-    void shouldDeleteUserById_WhenUserNotExists_ReturnFalse() {
+    void DeleteUserById_WhenUserNotExists_ReturnFalse() {
         Long wrongId = 4L;
         boolean result = userRepository.deleteUserById(wrongId);
         assertFalse(result);

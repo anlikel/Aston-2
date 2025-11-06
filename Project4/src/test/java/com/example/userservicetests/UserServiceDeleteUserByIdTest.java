@@ -34,7 +34,7 @@ class UserServiceDeleteUserByIdTest {
      * Проверяет, что все поля пользователя соответствуют ожидаемым значениям.
      */
     @Test
-    void shouldDeleteUserById_WhenUserIdExists_ReturnTrue() {
+    void DeleteUserById_WhenUserIdExists_ReturnTrue() {
         Long goodId = 1L;
 
         when(userRepository.deleteUserById(goodId)).thenReturn(true);
@@ -51,7 +51,7 @@ class UserServiceDeleteUserByIdTest {
      * Проверяет, что исключение выбрасывается корректно.
      */
     @Test
-    void shouldDeleteUserById_WhenUserIdNotExists_ThrowException() {
+    void DeleteUserById_WhenUserIdNotExists_ThrowException() {
         Long badId = 999L;
 
         when(userRepository.deleteUserById(badId)).thenReturn(false);

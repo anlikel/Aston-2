@@ -21,7 +21,7 @@ public class RepositoryGetUserByIdTest extends RepositoryTestAbstract{
     private UserRepository userRepository;
 
     @Test
-    void shouldGetUserById_WhenIdExists_ReturnUserOptional() {
+    void GetUserById_WhenIdExists_ReturnUserOptional() {
 
         UserEntity user= userRepository.getUserById(1L).get();
 
@@ -31,11 +31,10 @@ public class RepositoryGetUserByIdTest extends RepositoryTestAbstract{
     }
 
     @Test
-    void shouldGetUserById_WhenIdNotExists_ReturnNull() {
+    void GetUserById_WhenIdNotExists_ReturnEmptyOptional() {
 
         Optional<UserEntity> userOptional = userRepository.getUserById(9L);
 
         assertTrue(userOptional.isEmpty());
     }
 }
-

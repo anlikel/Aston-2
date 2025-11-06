@@ -21,7 +21,7 @@ public class RepositorySaveUserTest extends RepositoryTestAbstract{
     private UserRepository userRepository;
 
     @Test
-    void shouldSaveUser_WhenIdExists_ReturnUpdatetUserWithOldId() {
+    void SaveUser_WhenIdExists_ReturnUpdatedUserWithOldId() {
         UserEntity newUser = new UserEntity();
         newUser.setId(1L);
         newUser.setName("Aaaa");
@@ -37,7 +37,7 @@ public class RepositorySaveUserTest extends RepositoryTestAbstract{
     }
 
     @Test
-    void shouldSaveUser_WhenIdNotExists_ReturnCreatedUserWithNewId() {
+    void SaveUser_WhenIdNotExists_ReturnCreatedUserWithNewId() {
 
         UserEntity newUser = new UserEntity();
         newUser.setName("Aaaa");

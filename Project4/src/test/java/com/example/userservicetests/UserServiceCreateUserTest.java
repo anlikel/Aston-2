@@ -4,10 +4,13 @@ import com.example.entities.UserEntity;
 import com.example.exceptions.MyCustomException;
 import com.example.repository.UserRepository;
 import com.example.service.UserService;
+import com.example.util.UtilValidator;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.MockedStatic;
+import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDateTime;
@@ -36,7 +39,7 @@ class UserServiceCreateUserTest {
      * Ожидается, что метод вернет корректный идентификатор пользователя.
      */
     @Test
-    void shouldCreateUser_WhenUserNotExistInDbWithUniqueEmail_ReturnCreatedUser() {
+    void CreateUser_WhenUserNotExistInDbWithUniqueEmail_ReturnCreatedUser() {
         UserEntity newUser = new UserEntity();
         newUser.setName("Aaaa");
         newUser.setEmail("aa@mail.com");
@@ -66,7 +69,7 @@ class UserServiceCreateUserTest {
     }
 
     @Test
-    void shouldCreateUser_WhenUserExistInDbWithUniqueEmail_ThrowException() {
+    void CreateUser_WhenUserExistInDbWithUniqueEmail_ThrowException() {
         UserEntity newUser = new UserEntity();
         newUser.setName("Aaaa");
         newUser.setEmail("aa@mail.com");
@@ -79,5 +82,65 @@ class UserServiceCreateUserTest {
         });
 
         verify(userRepository).existsByEmail("aa@mail.com");
+    }
+
+    @Test
+    void CreateUser_WhenNewUserNameIncorrect_ThrowException() {
+        UserEntity newUser = new UserEntity();
+        newUser.setName("aaaa"); // имя с маленькой буквы
+        newUser.setEmail("aa@mail.com");
+        newUser.setAge(20);
+
+        try (MockedStatic<UtilValidator> mockedValidator = Mockito.mockStatic(UtilValidator.class)) {
+
+            mockedValidator.when(() -> UtilValidator.isValidName("aaaa")).thenReturn(false);
+
+            assertThrows(MyCustomException.class, () -> {
+                userService.createUser(newUser);
+            });
+
+            mockedValidator.verify(() -> UtilValidator.isValidName("aaaa"));
+        }
+    }
+
+    @Test
+    void CreateUser_WhenNewUserEmailIncorrect_ThrowException() {
+        UserEntity newUser = new UserEntity();
+        newUser.setName("Aaaa");
+        newUser.setEmail("aamail.com");
+        newUser.setAge(20);
+
+        try (MockedStatic<UtilValidator> mockedValidator = Mockito.mockStatic(UtilValidator.class)) {
+
+            mockedValidator.when(() -> UtilValidator.isValidName("Aaaa")).thenReturn(true);
+            mockedValidator.when(() -> UtilValidator.isValidEmail("aamail.com")).thenReturn(false);
+
+            assertThrows(MyCustomException.class, () -> {
+                userService.createUser(newUser);
+            });
+
+            mockedValidator.verify(() -> UtilValidator.isValidEmail("aamail.com"));
+        }
+    }
+
+    @Test
+    void CreateUser_WhenNewUserAgeIncorrect_ThrowException() {
+        UserEntity newUser = new UserEntity();
+        newUser.setName("Aaaa");
+        newUser.setEmail("aa@mail.com");
+        newUser.setAge(200);
+
+        try (MockedStatic<UtilValidator> mockedValidator = Mockito.mockStatic(UtilValidator.class)) {
+
+            mockedValidator.when(() -> UtilValidator.isValidName("Aaaa")).thenReturn(true);
+            mockedValidator.when(() -> UtilValidator.isValidEmail("aa@mail.com")).thenReturn(true);
+            mockedValidator.when(() -> UtilValidator.isValidAge(200)).thenReturn(false);
+
+            assertThrows(MyCustomException.class, () -> {
+                userService.createUser(newUser);
+            });
+
+            mockedValidator.verify(() -> UtilValidator.isValidAge(200));
+        }
     }
 }

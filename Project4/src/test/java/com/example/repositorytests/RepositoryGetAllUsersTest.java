@@ -20,13 +20,13 @@ public class RepositoryGetAllUsersTest extends RepositoryTestAbstract{
     private UserRepository userRepository;
 
     @Test
-    void shouldGetAllUsersList_WhenUsersExists_ReturnNonEmptyList() {
+    void GetAllUsersList_WhenUsersExists_ReturnNonEmptyList() {
         List<UserEntity> users= userRepository.getAllUsers();
         assertEquals(2, users.size());
     }
 
     @Test
-    void shouldGetAllUsersList_WhenUsersNotExists_ReturnEmptyList() {
+    void GetAllUsersList_WhenUsersNotExists_ReturnEmptyList() {
         userRepository.deleteUserById(1L);
         userRepository.deleteUserById(2L);
         List<UserEntity> users= userRepository.getAllUsers();

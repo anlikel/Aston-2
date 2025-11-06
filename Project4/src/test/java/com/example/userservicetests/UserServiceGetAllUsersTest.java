@@ -37,7 +37,7 @@ class UserServiceGetAllUsersTest {
      * Проверяет размер списка и корректность данных каждого пользователя.
      */
     @Test
-    void shouldGetAllUsersList_WhenUsersExist_ReturnNonEmptyList() {
+    void GetAllUsersList_WhenUsersExist_ReturnNonEmptyList() {
         UserEntity user1 = new UserEntity();
         user1.setId(1L);
         user1.setName("User1");
@@ -67,7 +67,7 @@ class UserServiceGetAllUsersTest {
      * Проверяет, что список действительно пуст.
      */
     @Test
-    void shouldGetAllUsersList_WhenUsersNotExist_ReturnEmptyList() {
+    void GetAllUsersList_WhenUsersNotExist_ReturnEmptyList() {
         when(userRepository.getAllUsers()).thenReturn(Collections.emptyList());
 
         List<UserEntity> actualUsers = userService.getAllUsers();
