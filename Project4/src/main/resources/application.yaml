@@ -18,3 +18,51 @@ spring:
   sql:
     init:
       mode: always
+
+logging:
+  level:
+    # Корневой уровень
+    root: INFO
+
+    # Приложение
+    com.example: DEBUG
+
+    # Hibernate
+    org.hibernate: ERROR
+    org.hibernate.SQL: ERROR
+    org.hibernate.type.descriptor.sql.BasicBinder: ERROR
+
+    # Spring Framework
+    org.springframework: WARN
+    org.springframework.boot: INFO
+    org.springframework.web: WARN
+    org.springframework.jdbc: WARN
+    org.springframework.transaction: WARN
+
+    # DataSource и Connection pooling
+    com.zaxxer.hikari: WARN
+    org.apache.tomcat: WARN
+
+    # Testcontainers
+    org.testcontainers: INFO
+    com.github.dockerjava: WARN
+    org.testcontainers.utility: WARN
+    org.testcontainers.dockerclient: WARN
+    org.testcontainers.containers: WARN
+
+    # Apache HttpClient
+    org.apache.http: WARN
+    com.github.dockerjava.zerodep.shaded: WARN
+    com.github.dockerjava.zerodep.shaded.org.apache.hc: WARN
+
+  # Настройка файлового аппендера
+  file:
+    name: logs/application.log
+  logback:
+    rollingpolicy:
+      max-file-size: 10MB
+      max-history: 30
+      total-size-cap: 1GB
+      file-name-pattern: logs/application.%d{yyyy-MM-dd}.%i.log
+  pattern:
+    file: "%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n"
