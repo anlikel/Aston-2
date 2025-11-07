@@ -36,9 +36,11 @@ class UserControllerCreateUserTest {
     @Autowired
     private ObjectMapper objectMapper;
 
+    /**
+     * Тест успешного создания пользователя
+     */
     @Test
     void createUser_WhenUserNotExists_ReturnCreatedUser() throws Exception {
-
         CreateUserDto createUserDto = new CreateUserDto("Aaaa", "aaa@mail.com", 25);
         UserEntity savedUser = new UserEntity();
         savedUser.setId(1L);
@@ -67,9 +69,11 @@ class UserControllerCreateUserTest {
                 .andExpect(jsonPath("$.createdAt").exists());
     }
 
+    /**
+     * Тест создания пользователя с существующим email
+     */
     @Test
     void createUser_WhenUserExists_ReturnConflict() throws Exception {
-
         CreateUserDto createUserDto = new CreateUserDto("Aaaa", "aaa@mail.com", 25);
 
         when(userService.createUser(any(UserEntity.class)))

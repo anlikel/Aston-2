@@ -11,7 +11,8 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 
 @WebMvcTest(UserController.class)
 public class UserControllerDeleteUserTest {
@@ -22,8 +23,11 @@ public class UserControllerDeleteUserTest {
     @MockBean
     private UserService userService;
 
+    /**
+     * Тест успешного удаления пользователя
+     */
     @Test
-    void deleteUser_WhenUserExists_ReturnNoContent() throws Exception {
+    void deleteUser_WhenUserExists_ReturnOk() throws Exception {
 
         when(userService.deleteUserById(1L)).thenReturn(true);
 
@@ -32,6 +36,9 @@ public class UserControllerDeleteUserTest {
                 .andExpect(content().string("deleted"));
     }
 
+    /**
+     * Тест удаления несуществующего пользователя
+     */
     @Test
     void deleteUser_WhenUserNotFound_ReturnNotFound() throws Exception {
 
@@ -43,6 +50,9 @@ public class UserControllerDeleteUserTest {
                 .andExpect(content().string("User not found with id: 999"));
     }
 
+    /**
+     * Тест удаления с некорректным ID
+     */
     @Test
     void deleteUser_WhenInvalidId_ReturnBadRequest() throws Exception {
 

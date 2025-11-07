@@ -15,24 +15,28 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 @ActiveProfiles("test")
 @Sql(scripts = "/init.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
 @Sql(scripts = "/cleanup.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
-public class RepositoryGetUserByIdTest extends RepositoryTestAbstract{
+public class RepositoryGetUserByIdTest extends RepositoryTestAbstract {
 
     @Autowired
     private UserRepository userRepository;
 
+    /**
+     * Тест получения пользователя по существующему ID
+     */
     @Test
     void GetUserById_WhenIdExists_ReturnUserOptional() {
-
-        UserEntity user= userRepository.getUserById(1L).get();
+        UserEntity user = userRepository.getUserById(1L).get();
 
         assertEquals("User1", user.getName());
         assertEquals("mail1@example.com", user.getEmail());
         assertEquals(25, user.getAge());
     }
 
+    /**
+     * Тест получения пользователя по несуществующему ID
+     */
     @Test
     void GetUserById_WhenIdNotExists_ReturnEmptyOptional() {
-
         Optional<UserEntity> userOptional = userRepository.getUserById(9L);
 
         assertTrue(userOptional.isEmpty());

@@ -14,22 +14,28 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @ActiveProfiles("test")
 @Sql(scripts = "/init.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
 @Sql(scripts = "/cleanup.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
-public class RepositoryGetAllUsersTest extends RepositoryTestAbstract{
+public class RepositoryGetAllUsersTest extends RepositoryTestAbstract {
 
     @Autowired
     private UserRepository userRepository;
 
+    /**
+     * Тест получения списка пользователей
+     */
     @Test
     void GetAllUsersList_WhenUsersExists_ReturnNonEmptyList() {
-        List<UserEntity> users= userRepository.getAllUsers();
+        List<UserEntity> users = userRepository.getAllUsers();
         assertEquals(2, users.size());
     }
 
+    /**
+     * Тест получения пустого списка пользователей
+     */
     @Test
     void GetAllUsersList_WhenUsersNotExists_ReturnEmptyList() {
         userRepository.deleteUserById(1L);
         userRepository.deleteUserById(2L);
-        List<UserEntity> users= userRepository.getAllUsers();
+        List<UserEntity> users = userRepository.getAllUsers();
         assertEquals(0, users.size());
     }
 }

@@ -14,7 +14,8 @@ import java.util.List;
 
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
 @WebMvcTest(UserController.class)
 public class UserControllerGetAllUsersTest {
@@ -25,6 +26,9 @@ public class UserControllerGetAllUsersTest {
     @MockBean
     private UserService userService;
 
+    /**
+     * Тест получения списка пользователей
+     */
     @Test
     void getAllUsers_WhenUsersExist_ReturnListOfGetUserDto() throws Exception {
 
@@ -54,6 +58,9 @@ public class UserControllerGetAllUsersTest {
                 .andExpect(jsonPath("$[1].createdAt").exists());
     }
 
+    /**
+     * Тест получения пустого списка пользователей
+     */
     @Test
     void getAllUsers_WhenNoUsers_ReturnEmptyList() throws Exception {
 

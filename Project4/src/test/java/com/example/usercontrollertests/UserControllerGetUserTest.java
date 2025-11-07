@@ -13,7 +13,9 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 
 @WebMvcTest(UserController.class)
 public class UserControllerGetUserTest {
@@ -24,6 +26,9 @@ public class UserControllerGetUserTest {
     @MockBean
     private UserService userService;
 
+    /**
+     * Тест успешного получения пользователя по ID
+     */
     @Test
     void getUserById_WhenFoundById_ReturnGetUserDto() throws Exception {
 
@@ -48,6 +53,9 @@ public class UserControllerGetUserTest {
                 .andExpect(jsonPath("$.createdAt").exists());
     }
 
+    /**
+     * Тест получения несуществующего пользователя
+     */
     @Test
     void getUserById_WhenNotFoundById_ReturnNotFound() throws Exception {
 
