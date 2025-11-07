@@ -16,6 +16,7 @@ public interface UserRepository extends JpaRepository<UserEntity, Long> {
 
     /**
      * Создать нового пользователя
+     *
      * @param user сущность пользователя
      * @return сохраненный пользователь
      */
@@ -25,6 +26,7 @@ public interface UserRepository extends JpaRepository<UserEntity, Long> {
 
     /**
      * Получить пользователя по ID
+     *
      * @param id идентификатор пользователя
      * @return Optional с пользователем
      */
@@ -34,6 +36,7 @@ public interface UserRepository extends JpaRepository<UserEntity, Long> {
 
     /**
      * Получить всех пользователей
+     *
      * @return список всех пользователей
      */
     default List<UserEntity> getAllUsers() {
@@ -42,7 +45,9 @@ public interface UserRepository extends JpaRepository<UserEntity, Long> {
 
     /**
      * Удалить пользователя по ID
+     *
      * @param id идентификатор пользователя
+     * @return true если пользователь удален, false если не найден
      */
     default boolean deleteUserById(Long id) {
         if (existsById(id)) {

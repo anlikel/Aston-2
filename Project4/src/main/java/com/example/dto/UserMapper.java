@@ -1,8 +1,6 @@
-package com.example.mapper;
+package com.example.dto;
 
-import com.example.dto.GetUserDto;
 import com.example.entities.UserEntity;
-import com.example.dto.CreateUserDto;
 
 import java.time.LocalDateTime;
 
@@ -11,6 +9,9 @@ import java.time.LocalDateTime;
  */
 public class UserMapper {
 
+    /**
+     * Преобразование UserEntity в GetUserDto
+     */
     public static GetUserDto toGetUserDto(UserEntity user) {
         return new GetUserDto(
                 user.getId(),
@@ -21,6 +22,9 @@ public class UserMapper {
         );
     }
 
+    /**
+     * Преобразование CreateUserDto в UserEntity
+     */
     public static UserEntity toEntity(CreateUserDto createUserDto) {
         UserEntity user = new UserEntity();
         user.setName(createUserDto.getName());

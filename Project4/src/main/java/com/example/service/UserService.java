@@ -11,6 +11,11 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+/**
+ * Сервисный класс для управления операциями с пользователями.
+ * Обеспечивает бизнес-логику для создания, чтения, обновления и удаления пользователей.
+ * Включает валидацию данных, проверку уникальности email и логирование операций.
+ */
 @Service
 @Transactional
 public class UserService {
@@ -19,10 +24,24 @@ public class UserService {
 
     private static final Logger logger = LoggerFactory.getLogger(UserService.class);
 
+    /**
+     * Конструктор для внедрения зависимости UserRepository.
+     *
+     * @param userRepository репозиторий для работы с данными пользователей
+     */
     public UserService(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
 
+    /**
+     * Получает пользователя по указанному идентификатору.
+     * Выполняет поиск в базе данных и возвращает найденного пользователя.
+     * Если пользователь не найден, выбрасывает исключение MyCustomException.
+     *
+     * @param userId идентификатор пользователя для поиска
+     * @return найденная сущность пользователя
+     * @throws MyCustomException если пользователь с указанным ID не найден
+     */
     @Transactional(readOnly = true)
     public UserEntity getUserById(Long userId) {
         logger.info("DB event: try to getUserById {}", userId);
@@ -37,6 +56,12 @@ public class UserService {
         }
     }
 
+    /**
+     * Получает список всех пользователей из базы данных.
+     * Возвращает пустой список, если пользователи отсутствуют.
+     *
+     * @return список всех пользователей
+     */
     @Transactional(readOnly = true)
     public List<UserEntity> getAllUsers() {
         logger.info("DB event: try to getAllUsers");
@@ -45,6 +70,14 @@ public class UserService {
         return users;
     }
 
+    /**
+     * Удаляет пользователя по указанному идентификатору.
+     * Перед удалением проверяет валидность ID и существование пользователя.
+     *
+     * @param userId идентификатор пользователя для удаления
+     * @return true если пользователь успешно удален
+     * @throws MyCustomException если ID невалиден или пользователь не найден
+     */
     public boolean deleteUserById(Long userId) {
         logger.info("DB event: try to deleteUserById {}", userId);
 
@@ -61,6 +94,18 @@ public class UserService {
         return result;
     }
 
+    /**
+     * Создает нового пользователя в системе.
+     * Выполняет комплексную валидацию данных:
+     * - Проверяет уникальность email
+     * - Валидирует формат имени
+     * - Валидирует формат email
+     * - Проверяет корректность возраста
+     *
+     * @param user сущность пользователя для создания
+     * @return созданная сущность пользователя с присвоенным ID
+     * @throws MyCustomException если данные не проходят валидацию или email уже существует
+     */
     public UserEntity createUser(UserEntity user) {
         logger.info("DB event: try to createUser {}", user.getName());
         if (userRepository.existsByEmail(user.getEmail())) {
@@ -84,6 +129,17 @@ public class UserService {
         return savedUser;
     }
 
+    /**
+     * Обновляет данные существующего пользователя.
+     * Выполняет проверки:
+     * - Валидность ID пользователя
+     * - Существование пользователя в базе данных
+     * - Корректность обновляемых данных (имя, email, возраст)
+     *
+     * @param user сущность пользователя с обновленными данными
+     * @return обновленная сущность пользователя
+     * @throws MyCustomException если пользователь не найден или данные невалидны
+     */
     public UserEntity updateUser(UserEntity user) {
         logger.info("DB event: try to updateUser {}", user.getId());
         if (!UtilValidator.isValidId(String.valueOf(user.getId()))) {

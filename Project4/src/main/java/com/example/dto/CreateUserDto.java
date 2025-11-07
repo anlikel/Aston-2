@@ -3,6 +3,7 @@ package com.example.dto;
 
 /**
  * DTO для создания нового пользователя
+ * Используется для передачи Post и Put запросов
  */
 public class CreateUserDto {
 

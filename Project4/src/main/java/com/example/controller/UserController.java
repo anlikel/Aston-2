@@ -4,25 +4,48 @@ import com.example.dto.CreateUserDto;
 import com.example.dto.GetUserDto;
 import com.example.entities.UserEntity;
 import com.example.exceptions.MyCustomException;
-import com.example.mapper.UserMapper;
+import com.example.dto.UserMapper;
 import com.example.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.DeleteMapping;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * REST контроллер для управления пользователями.
+ * Предоставляет endpoints для операций CRUD (Create, Read, Update, Delete) с пользователями.
+ * Обрабатывает HTTP запросы и возвращает соответствующие HTTP статусы и DTO объекты.
+ */
 @RestController
 @RequestMapping("/api/users")
 public class UserController {
 
     private final UserService userService;
 
+    /**
+     * Конструктор для внедрения зависимости UserService.
+     *
+     * @param userService сервис для бизнес-логики работы с пользователями
+     */
     public UserController(UserService userService) {
         this.userService = userService;
     }
 
+    /**
+     * Создает нового пользователя на основе предоставленных данных.
+     *
+     * @param createUserDto DTO объект с данными для создания пользователя
+     * @return ResponseEntity с созданным пользователем (201 Created) или сообщением об ошибке (409 Conflict)
+     */
     @PostMapping
     public ResponseEntity<?> createUser(@RequestBody CreateUserDto createUserDto) {
         try {
@@ -34,16 +57,27 @@ public class UserController {
         }
     }
 
+    /**
+     * Получает пользователя по указанному идентификатору.
+     *
+     * @param id идентификатор пользователя
+     * @return ResponseEntity с данными пользователя (200 OK) или сообщением об ошибке (404 Not Found)
+     */
     @GetMapping("/{id}")
     public ResponseEntity<?> getUser(@PathVariable Long id) {
-        try{
-        UserEntity user = userService.getUserById(id);
+        try {
+            UserEntity user = userService.getUserById(id);
             return ResponseEntity.status(HttpStatus.OK).body(UserMapper.toGetUserDto(user));
-        }catch (MyCustomException e) {
+        } catch (MyCustomException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
     }
 
+    /**
+     * Получает список всех пользователей в системе.
+     *
+     * @return список DTO объектов всех пользователей (200 OK)
+     */
     @GetMapping
     public List<GetUserDto> getAllUsers() {
         return userService.getAllUsers().stream()
@@ -51,6 +85,13 @@ public class UserController {
                 .collect(Collectors.toList());
     }
 
+    /**
+     * Обновляет данные пользователя с указанным идентификатором.
+     *
+     * @param id            идентификатор пользователя для обновления
+     * @param updateUserDto DTO объект с обновленными данными пользователя
+     * @return ResponseEntity с обновленными данными пользователя (200 OK) или сообщением об ошибке (404 Not Found)
+     */
     @PutMapping("/{id}")
     public ResponseEntity<?> updateUser(
             @PathVariable Long id,
@@ -60,11 +101,17 @@ public class UserController {
         try {
             UserEntity updatedUser = userService.updateUser(user);
             return ResponseEntity.status(HttpStatus.OK).body(UserMapper.toGetUserDto(updatedUser));
-        }catch (MyCustomException e) {
+        } catch (MyCustomException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
     }
 
+    /**
+     * Удаляет пользователя с указанным идентификатором.
+     *
+     * @param id идентификатор пользователя для удаления
+     * @return ResponseEntity с подтверждением удаления (200 OK) или сообщением об ошибке (404 Not Found)
+     */
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteUser(@PathVariable Long id) {
         try {

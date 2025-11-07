@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 
 /**
  * DTO для возврата данных о пользователе
+ * Используется для получени ответов на запросы
  */
 public class GetUserDto {
 
