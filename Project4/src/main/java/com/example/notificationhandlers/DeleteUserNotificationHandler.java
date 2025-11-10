@@ -1,5 +1,6 @@
 package com.example.notificationhandlers;
 
+import com.example.service.EmailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
