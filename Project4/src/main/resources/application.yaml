@@ -23,7 +23,7 @@ spring:
     init:
       mode: always
 
-   # Настройка kafka
+    # Настройка kafka
   kafka:
     bootstrap-servers: localhost:9092
 
@@ -40,14 +40,19 @@ spring:
       value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
       auto-startup: true
       properties:
-        spring.json.trusted.packages: "com.example"
+        spring.json.trusted.packages: "com.example.notificationhandlers"
         spring.json.use.type.headers: false
-        spring.json.value.default.type: java.lang.String
+        spring.json.value.default.type: com.example.notificationhandlers.ServiceEventDto
 
     listener:
       type: single
       ack-mode: manual
       auto-startup: true
+
+app:
+  kafka:
+    topics:
+      user-topic: "user-topic"
 
 logging:
   level:
@@ -68,6 +73,18 @@ logging:
     org.springframework.web: WARN
     org.springframework.jdbc: WARN
     org.springframework.transaction: WARN
+    org.springframework.kafka: WARN
+
+    # Кафка
+    org.apache.kafka: WARN
+    kafka: WARN
+
+    # Конкретные классы Кафки
+    org.apache.kafka.clients: WARN
+    org.apache.kafka.common: WARN
+    org.apache.kafka.clients.producer: WARN
+    org.apache.kafka.clients.consumer: WARN
+    org.apache.kafka.clients.NetworkClient: ERROR
 
     # DataSource и Connection pooling
     com.zaxxer.hikari: WARN

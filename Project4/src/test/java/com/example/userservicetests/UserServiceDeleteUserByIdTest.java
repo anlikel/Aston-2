@@ -3,6 +3,7 @@ package com.example.userservicetests;
 import com.example.entities.UserEntity;
 import com.example.exceptions.MyCustomException;
 import com.example.repository.UserRepository;
+import com.example.service.KafkaService;
 import com.example.service.UserService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -28,6 +29,9 @@ class UserServiceDeleteUserByIdTest {
     @Mock
     private UserRepository userRepository;
 
+    @Mock
+    KafkaService kafkaService;
+
     @InjectMocks
     private UserService userService;
 
@@ -39,7 +43,7 @@ class UserServiceDeleteUserByIdTest {
     @Test
     void DeleteUserById_WhenUserIdExists_ReturnTrue() {
         Long goodId = 1L;
-        UserEntity expectedUser = new UserEntity("Aaaa", "aaa@mail.ru",12);
+        UserEntity expectedUser = new UserEntity("Aaaa", "aaa@mail.ru", 12);
 
         when(userRepository.deleteUserById(goodId)).thenReturn(Optional.of(expectedUser));
 

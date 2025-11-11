@@ -3,6 +3,7 @@ package com.example.userservicetests;
 import com.example.entities.UserEntity;
 import com.example.exceptions.MyCustomException;
 import com.example.repository.UserRepository;
+import com.example.service.KafkaService;
 import com.example.service.UserService;
 import com.example.util.UtilValidator;
 import org.junit.jupiter.api.Test;
@@ -31,6 +32,9 @@ class UserServiceCreateUserTest {
 
     @Mock
     private UserRepository userRepository;
+
+    @Mock
+    KafkaService kafkaService;
 
     @InjectMocks
     private UserService userService;

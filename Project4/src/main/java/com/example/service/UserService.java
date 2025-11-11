@@ -4,6 +4,7 @@ import com.example.entities.UserEntity;
 import com.example.exceptions.MyCustomException;
 import com.example.repository.UserRepository;
 import com.example.util.UtilValidator;
+import org.apache.catalina.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,6 +24,8 @@ public class UserService {
 
     private final UserRepository userRepository;
 
+    private final KafkaService kafkaService;
+
     private static final Logger logger = LoggerFactory.getLogger(UserService.class);
 
     /**
@@ -30,8 +33,9 @@ public class UserService {
      *
      * @param userRepository репозиторий для работы с данными пользователей
      */
-    public UserService(UserRepository userRepository) {
+    public UserService(UserRepository userRepository, KafkaService kafkaService) {
         this.userRepository = userRepository;
+        this.kafkaService=kafkaService;
     }
 
     /**
@@ -92,7 +96,9 @@ public class UserService {
             throw new MyCustomException("User not found with id: " + userId);
         }
         logger.info("DB event: success deleteUserById {}", userId);
-        return userOptional.get();
+        UserEntity user=userOptional.get();
+        kafkaService.sendEmailOnUserDelete(user);
+        return user;
     }
 
     /**
@@ -126,6 +132,7 @@ public class UserService {
             throw new MyCustomException("wrong age should be in range from 1 to 100");
         }
         UserEntity savedUser = userRepository.saveUser(user);
+        kafkaService.sendEmailOnUserCreate(savedUser);
         logger.info("DB event: success createUser {} with id {}", user.getName(), savedUser.getId());
         return savedUser;
     }

@@ -13,7 +13,6 @@ services:
     networks:
       - app-network
 
-  # ДОБАВЬТЕ ЭТОТ СЕРВИС ZOOKEEPER
   zookeeper:
     image: confluentinc/cp-zookeeper:latest
     container_name: myapp-zookeeper
@@ -35,13 +34,15 @@ services:
     environment:
       KAFKA_BROKER_ID: 1
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
-      # ИСПРАВЛЕННЫЕ НАСТРОЙКИ:
+
       KAFKA_LISTENERS: PLAINTEXT://0.0.0.0:9092
       KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://localhost:9092
       KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT
       KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
       KAFKA_AUTO_CREATE_TOPICS_ENABLE: "true"
+      KAFKA_LOG_RETENTION_HOURS: 24
+      KAFKA_LOG_RETENTION_BYTES: 100000000
     healthcheck:
       test: [ "CMD", "kafka-topics", "--list", "--bootstrap-server", "localhost:9092" ]
       interval: 10s
@@ -50,7 +51,6 @@ services:
     networks:
       - app-network
 
-# ДОБАВЬТЕ ЭТУ СЕКЦИЮ VOLUMES
 volumes:
   postgres_data:
 
