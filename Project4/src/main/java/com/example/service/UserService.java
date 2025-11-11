@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Сервисный класс для управления операциями с пользователями.
@@ -78,20 +79,20 @@ public class UserService {
      * @return true если пользователь успешно удален
      * @throws MyCustomException если ID невалиден или пользователь не найден
      */
-    public boolean deleteUserById(Long userId) {
+    public UserEntity deleteUserById(Long userId) {
         logger.info("DB event: try to deleteUserById {}", userId);
 
         if (!UtilValidator.isValidId(String.valueOf(userId))) {
             logger.warn("DB event: validation failed for deleteUserById {}, wrong id format", userId);
             throw new MyCustomException("wrong id, should be in range from 1 to LongMax");
         }
-        boolean result = userRepository.deleteUserById(userId);
-        if (!result) {
+        Optional<UserEntity>userOptional = userRepository.deleteUserById(userId);
+        if (userOptional.isEmpty()) {
             logger.error("DB event: user not found for deleteUserById {}", userId);
             throw new MyCustomException("User not found with id: " + userId);
         }
         logger.info("DB event: success deleteUserById {}", userId);
-        return result;
+        return userOptional.get();
     }
 
     /**

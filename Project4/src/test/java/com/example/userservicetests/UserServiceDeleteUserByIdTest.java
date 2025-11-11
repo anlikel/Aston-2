@@ -10,8 +10,11 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.Optional;
+
+import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -36,12 +39,15 @@ class UserServiceDeleteUserByIdTest {
     @Test
     void DeleteUserById_WhenUserIdExists_ReturnTrue() {
         Long goodId = 1L;
+        UserEntity expectedUser = new UserEntity("Aaaa", "aaa@mail.ru",12);
 
-        when(userRepository.deleteUserById(goodId)).thenReturn(true);
+        when(userRepository.deleteUserById(goodId)).thenReturn(Optional.of(expectedUser));
 
-        boolean result = userService.deleteUserById(goodId);
+        UserEntity result = userService.deleteUserById(goodId);
 
-        assertTrue(result);
+        assertNotNull(result);
+        assertEquals(expectedUser.getId(), result.getId());
+        assertEquals(expectedUser.getName(), result.getName());
         verify(userRepository).deleteUserById(goodId);
     }
 
@@ -53,8 +59,6 @@ class UserServiceDeleteUserByIdTest {
     @Test
     void DeleteUserById_WhenUserIdNotExists_ThrowException() {
         Long badId = 999L;
-
-        when(userRepository.deleteUserById(badId)).thenReturn(false);
 
         assertThrows(MyCustomException.class, () -> {
             userService.deleteUserById(badId);

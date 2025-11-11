@@ -1,6 +1,7 @@
 package com.example.usercontrollertests;
 
 import com.example.controller.UserController;
+import com.example.entities.UserEntity;
 import com.example.exceptions.MyCustomException;
 import com.example.service.UserService;
 import org.junit.jupiter.api.Test;
@@ -13,6 +14,7 @@ import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.mockito.ArgumentMatchers.any;
 
 @WebMvcTest(UserController.class)
 public class UserControllerDeleteUserTest {
@@ -29,7 +31,7 @@ public class UserControllerDeleteUserTest {
     @Test
     void deleteUser_WhenUserExists_ReturnOk() throws Exception {
 
-        when(userService.deleteUserById(1L)).thenReturn(true);
+        when(userService.deleteUserById(1L)).thenReturn(any(UserEntity.class));
 
         mockMvc.perform(delete("/api/users/1"))
                 .andExpect(status().isOk())

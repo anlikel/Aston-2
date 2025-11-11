@@ -1,12 +1,14 @@
 package com.example.repositorytests;
 
+import com.example.entities.UserEntity;
 import com.example.repository.UserRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.jdbc.Sql;
 
-import static org.junit.jupiter.api.Assertions.assertFalse;
+import java.util.Optional;
+
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @ActiveProfiles("test")
@@ -22,8 +24,8 @@ public class RepositoryDeleteUserByIdTest extends RepositoryTestAbstract {
      */
     @Test
     void DeleteUserById_WhenUserExists_ReturnTrue() {
-        boolean result = userRepository.deleteUserById(1L);
-        assertTrue(result);
+        Optional<UserEntity> user = userRepository.deleteUserById(1L);
+        assertTrue(user.isPresent());
     }
 
     /**
@@ -31,7 +33,7 @@ public class RepositoryDeleteUserByIdTest extends RepositoryTestAbstract {
      */
     @Test
     void DeleteUserById_WhenUserNotExists_ReturnFalse() {
-        boolean result = userRepository.deleteUserById(4L);
-        assertFalse(result);
+        Optional<UserEntity> user = userRepository.deleteUserById(4L);
+        assertTrue(user.isEmpty());
     }
 }
