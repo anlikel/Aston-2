@@ -4,12 +4,11 @@ import com.example.notificationhandlers.NotificationHandler;
 import com.example.notificationhandlers.NotificationHandlerFactory;
 import com.example.notificationhandlers.ServiceEventDto;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
 
 @Service
-public class EmailNotificationService {
+public class KafkaListenerEmailNotificationService {
 
     @Autowired
     private NotificationHandlerFactory handlerFactory;

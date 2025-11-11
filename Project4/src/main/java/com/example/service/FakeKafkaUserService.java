@@ -9,7 +9,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.Optional;
 
 /**
@@ -19,59 +18,22 @@ import java.util.Optional;
  */
 @Service
 @Transactional
-public class UserService {
+public class FakeKafkaUserService {
 
     private final UserRepository userRepository;
 
-    private final KafkaService kafkaService;
+    private final FakeKafkaService kafkaService;
 
-    private static final Logger logger = LoggerFactory.getLogger(UserService.class);
+    private static final Logger logger = LoggerFactory.getLogger(FakeKafkaUserService.class);
 
     /**
      * Конструктор для внедрения зависимости UserRepository.
      *
      * @param userRepository репозиторий для работы с данными пользователей
      */
-    public UserService(UserRepository userRepository, KafkaService kafkaService) {
+    public FakeKafkaUserService(UserRepository userRepository, FakeKafkaService kafkaService) {
         this.userRepository = userRepository;
         this.kafkaService = kafkaService;
-    }
-
-    /**
-     * Получает пользователя по указанному идентификатору.
-     * Выполняет поиск в базе данных и возвращает найденного пользователя.
-     * Если пользователь не найден, выбрасывает исключение MyCustomException.
-     *
-     * @param userId идентификатор пользователя для поиска
-     * @return найденная сущность пользователя
-     * @throws MyCustomException если пользователь с указанным ID не найден
-     */
-    @Transactional(readOnly = true)
-    public UserEntity getUserById(Long userId) {
-        logger.info("DB event: try to getUserById {}", userId);
-        try {
-            UserEntity user = userRepository.getUserById(userId)
-                    .orElseThrow(() -> new MyCustomException("User not found with id: " + userId));
-            logger.info("DB event: success getUserById {}", userId);
-            return user;
-        } catch (MyCustomException e) {
-            logger.error("DB event: failed getUserById {}, error: {}", userId, e.getMessage());
-            throw e;
-        }
-    }
-
-    /**
-     * Получает список всех пользователей из базы данных.
-     * Возвращает пустой список, если пользователи отсутствуют.
-     *
-     * @return список всех пользователей
-     */
-    @Transactional(readOnly = true)
-    public List<UserEntity> getAllUsers() {
-        logger.info("DB event: try to getAllUsers");
-        List<UserEntity> users = userRepository.getAllUsers();
-        logger.info("DB event: success getAllUsers, found {} users", users.size());
-        return users;
     }
 
     /**
@@ -112,6 +74,7 @@ public class UserService {
      * @return созданная сущность пользователя с присвоенным ID
      * @throws MyCustomException если данные не проходят валидацию или email уже существует
      */
+
     public UserEntity createUser(UserEntity user) {
         logger.info("DB event: try to createUser {}", user.getName());
         if (userRepository.existsByEmail(user.getEmail())) {
@@ -136,41 +99,5 @@ public class UserService {
         return savedUser;
     }
 
-    /**
-     * Обновляет данные существующего пользователя.
-     * Выполняет проверки:
-     * - Валидность ID пользователя
-     * - Существование пользователя в базе данных
-     * - Корректность обновляемых данных (имя, email, возраст)
-     *
-     * @param user сущность пользователя с обновленными данными
-     * @return обновленная сущность пользователя
-     * @throws MyCustomException если пользователь не найден или данные невалидны
-     */
-    public UserEntity updateUser(UserEntity user) {
-        logger.info("DB event: try to updateUser {}", user.getId());
-        if (!UtilValidator.isValidId(String.valueOf(user.getId()))) {
-            logger.warn("DB event: validation failed for updateUser {}, wrong id ", user.getId());
-            throw new MyCustomException("wrong id, should be in range from 1 to LongMax");
-        }
-        if (!userRepository.existsById(user.getId())) {
-            logger.error("DB event: user not found for updateUser {}", user.getId());
-            throw new MyCustomException("User not found with id: " + user.getId());
-        }
-        if (!UtilValidator.isValidName(user.getName())) {
-            logger.warn("DB event: validation failed for updateUser {}, wrong name format", user.getId());
-            throw new MyCustomException("wrong name, should start from Uppercase letter");
-        }
-        if (!UtilValidator.isValidEmail(user.getEmail())) {
-            logger.warn("DB event: validation failed for updateUser {}, wrong email format", user.getEmail());
-            throw new MyCustomException("wrong email");
-        }
-        if (!UtilValidator.isValidAge(user.getAge())) {
-            logger.warn("DB event: validation failed for updateUser {}, wrong age format", user.getAge());
-            throw new MyCustomException("wrong age should be in range from 1 to 100");
-        }
-        UserEntity updatedUser = userRepository.saveUser(user);
-        logger.info("DB event: success updateUser {}", user.getId());
-        return updatedUser;
-    }
+
 }
