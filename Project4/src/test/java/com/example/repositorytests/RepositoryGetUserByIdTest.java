@@ -37,8 +37,6 @@ public class RepositoryGetUserByIdTest extends RepositoryTestAbstract {
      */
     @Test
     void GetUserById_WhenIdNotExists_ReturnEmptyOptional() {
-        Optional<UserEntity> userOptional = userRepository.getUserById(9L);
-
-        assertTrue(userOptional.isEmpty());
+        assertTrue(userRepository.getUserById(9L).isEmpty());
     }
 }
