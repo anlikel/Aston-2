@@ -1,7 +1,7 @@
 package com.example.userservicetests;
 
+import com.example.dto.UserDto;
 import com.example.entities.UserEntity;
-import com.example.exceptions.MyCustomException;
 import com.example.repository.UserRepository;
 import com.example.service.KafkaService;
 import com.example.service.UserService;
@@ -14,12 +14,10 @@ import org.mockito.MockedStatic;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-
 import java.time.LocalDateTime;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -44,10 +42,8 @@ class UserServiceCreateUserTest {
      */
     @Test
     void CreateUser_WhenUserNotExistInDbWithUniqueEmail_ReturnCreatedUser() {
-        UserEntity newUser = new UserEntity();
-        newUser.setName("Aaaa");
-        newUser.setEmail("aa@mail.com");
-        newUser.setAge(20);
+
+        UserDto newUserDto = new UserDto("Aaaa", "aa@mail.com", 20);
 
         UserEntity createdUser = new UserEntity();
         createdUser.setId(1L);
@@ -59,32 +55,38 @@ class UserServiceCreateUserTest {
         when(userRepository.existsByEmail("aa@mail.com")).thenReturn(false);
         when(userRepository.saveUser(any(UserEntity.class))).thenReturn(createdUser);
 
-        UserEntity result = userService.createUser(newUser);
+        UserDto result = userService.createUser(newUserDto);
 
         assertNotNull(result);
         assertEquals(1L, result.getId());
         assertEquals("Aaaa", result.getName());
         assertEquals("aa@mail.com", result.getEmail());
         assertEquals(20, result.getAge());
-        assertNotNull(result.getCreatedAt());
+        assertEquals("OK", result.getResult());
 
         verify(userRepository).existsByEmail("aa@mail.com");
         verify(userRepository).saveUser(any(UserEntity.class));
+        verify(kafkaService).sendEmailOnUserCreate(createdUser);
     }
 
     /**
      * Тест создания пользователя с существующим email
      */
     @Test
-    void CreateUser_WhenUserExistInDbWithUniqueEmail_ThrowException() {
-        UserEntity newUser = new UserEntity();
-        newUser.setName("Aaaa");
-        newUser.setEmail("aa@mail.com");
-        newUser.setAge(20);
+    void CreateUser_WhenUserExistInDbWithUniqueEmail_ReturnUserDtoWithError() {
+
+        UserDto newUserDto = new UserDto("Aaaa", "aa@mail.com", 20);
 
         when(userRepository.existsByEmail("aa@mail.com")).thenReturn(true);
 
-        assertThrows(MyCustomException.class, () -> userService.createUser(newUser));
+        UserDto result = userService.createUser(newUserDto);
+
+        assertNotNull(result);
+        assertEquals("User already exists with unique email: aa@mail.com", result.getResult());
+        assertEquals("Aaaa", result.getName());
+        assertEquals("aa@mail.com", result.getEmail());
+        assertEquals(20, result.getAge());
+
         verify(userRepository).existsByEmail("aa@mail.com");
     }
 
@@ -92,16 +94,19 @@ class UserServiceCreateUserTest {
      * Тест создания пользователя с некорректным именем
      */
     @Test
-    void CreateUser_WhenNewUserNameIncorrect_ThrowException() {
-        UserEntity newUser = new UserEntity();
-        newUser.setName("aaaa");
-        newUser.setEmail("aa@mail.com");
-        newUser.setAge(20);
+    void CreateUser_WhenNewUserNameIncorrect_ReturnUserDtoWithError() {
+
+        UserDto newUserDto = new UserDto("aaaa", "aa@mail.com", 20);
 
         try (MockedStatic<UtilValidator> mockedValidator = Mockito.mockStatic(UtilValidator.class)) {
             mockedValidator.when(() -> UtilValidator.isValidName("aaaa")).thenReturn(false);
 
-            assertThrows(MyCustomException.class, () -> userService.createUser(newUser));
+            UserDto result = userService.createUser(newUserDto);
+
+            assertEquals("wrong name, should start from Uppercase letter", result.getResult());
+            assertEquals("aaaa", result.getName());
+            assertEquals("aa@mail.com", result.getEmail());
+            assertEquals(20, result.getAge());
             mockedValidator.verify(() -> UtilValidator.isValidName("aaaa"));
         }
     }
@@ -110,17 +115,20 @@ class UserServiceCreateUserTest {
      * Тест создания пользователя с некорректным email
      */
     @Test
-    void CreateUser_WhenNewUserEmailIncorrect_ThrowException() {
-        UserEntity newUser = new UserEntity();
-        newUser.setName("Aaaa");
-        newUser.setEmail("aamail.com");
-        newUser.setAge(20);
+    void CreateUser_WhenNewUserEmailIncorrect_ReturnUserDtoWithError() {
+
+        UserDto newUserDto = new UserDto("Aaaa", "aamail.com", 20);
 
         try (MockedStatic<UtilValidator> mockedValidator = Mockito.mockStatic(UtilValidator.class)) {
             mockedValidator.when(() -> UtilValidator.isValidName("Aaaa")).thenReturn(true);
             mockedValidator.when(() -> UtilValidator.isValidEmail("aamail.com")).thenReturn(false);
 
-            assertThrows(MyCustomException.class, () -> userService.createUser(newUser));
+            UserDto result = userService.createUser(newUserDto);
+
+            assertEquals("wrong email", result.getResult());
+            assertEquals("Aaaa", result.getName());
+            assertEquals("aamail.com", result.getEmail());
+            assertEquals(20, result.getAge());
             mockedValidator.verify(() -> UtilValidator.isValidEmail("aamail.com"));
         }
     }
@@ -129,18 +137,21 @@ class UserServiceCreateUserTest {
      * Тест создания пользователя с некорректным возрастом
      */
     @Test
-    void CreateUser_WhenNewUserAgeIncorrect_ThrowException() {
-        UserEntity newUser = new UserEntity();
-        newUser.setName("Aaaa");
-        newUser.setEmail("aa@mail.com");
-        newUser.setAge(200);
+    void CreateUser_WhenNewUserAgeIncorrect_ReturnUserDtoWithError() {
+
+        UserDto newUserDto = new UserDto("Aaaa", "aa@mail.com", 200);
 
         try (MockedStatic<UtilValidator> mockedValidator = Mockito.mockStatic(UtilValidator.class)) {
             mockedValidator.when(() -> UtilValidator.isValidName("Aaaa")).thenReturn(true);
             mockedValidator.when(() -> UtilValidator.isValidEmail("aa@mail.com")).thenReturn(true);
             mockedValidator.when(() -> UtilValidator.isValidAge(200)).thenReturn(false);
 
-            assertThrows(MyCustomException.class, () -> userService.createUser(newUser));
+            UserDto result = userService.createUser(newUserDto);
+
+            assertEquals("wrong age should be in range from 1 to 100", result.getResult());
+            assertEquals("Aaaa", result.getName());
+            assertEquals("aa@mail.com", result.getEmail());
+            assertEquals(200, result.getAge());
             mockedValidator.verify(() -> UtilValidator.isValidAge(200));
         }
     }

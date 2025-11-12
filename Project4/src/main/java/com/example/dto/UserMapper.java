@@ -12,25 +12,25 @@ public class UserMapper {
     /**
      * Преобразование UserEntity в GetUserDto
      */
-    public static GetUserDto toGetUserDto(UserEntity user) {
-        return new GetUserDto(
-                user.getId(),
+    public static UserDto toUserDto(UserEntity user) {
+        UserDto userDto = new UserDto(
                 user.getName(),
                 user.getEmail(),
-                user.getAge(),
-                user.getCreatedAt()
+                user.getAge()
         );
+        userDto.setId(user.getId());
+        userDto.setCreatedAt(user.getCreatedAt());
+        return userDto;
     }
 
     /**
      * Преобразование CreateUserDto в UserEntity
      */
-    public static UserEntity toEntity(CreateUserDto createUserDto) {
+    public static UserEntity toEntity(UserDto UserDto) {
         UserEntity user = new UserEntity();
-        user.setName(createUserDto.getName());
-        user.setEmail(createUserDto.getEmail());
-        user.setAge(createUserDto.getAge());
-        user.setCreatedAt(LocalDateTime.now());
+        user.setName(UserDto.getName());
+        user.setEmail(UserDto.getEmail());
+        user.setAge(UserDto.getAge());
         return user;
     }
 }

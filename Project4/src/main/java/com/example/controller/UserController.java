@@ -1,7 +1,6 @@
 package com.example.controller;
 
-import com.example.dto.CreateUserDto;
-import com.example.dto.GetUserDto;
+import com.example.dto.UserDto;
 import com.example.entities.UserEntity;
 import com.example.exceptions.MyCustomException;
 import com.example.dto.UserMapper;
@@ -43,18 +42,12 @@ public class UserController {
     /**
      * Создает нового пользователя на основе предоставленных данных.
      *
-     * @param createUserDto DTO объект с данными для создания пользователя
-     * @return ResponseEntity с созданным пользователем (201 Created) или сообщением об ошибке (409 Conflict)
+     * @param userDto DTO объект с данными для создания пользователя
+     * @return ResponseEntity с UserDto
      */
     @PostMapping
-    public ResponseEntity<?> createUser(@RequestBody CreateUserDto createUserDto) {
-        try {
-            UserEntity user = UserMapper.toEntity(createUserDto);
-            UserEntity savedUser = userService.createUser(user);
-            return ResponseEntity.status(HttpStatus.CREATED).body(UserMapper.toGetUserDto(savedUser));
-        } catch (MyCustomException e) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
-        }
+    public ResponseEntity<UserDto> createUser(@RequestBody UserDto userDto) {
+            return ResponseEntity.status(HttpStatus.OK).body(userService.createUser(userDto));
     }
 
     /**
@@ -64,13 +57,8 @@ public class UserController {
      * @return ResponseEntity с данными пользователя (200 OK) или сообщением об ошибке (404 Not Found)
      */
     @GetMapping("/{id}")
-    public ResponseEntity<?> getUser(@PathVariable Long id) {
-        try {
-            UserEntity user = userService.getUserById(id);
-            return ResponseEntity.status(HttpStatus.OK).body(UserMapper.toGetUserDto(user));
-        } catch (MyCustomException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
-        }
+    public ResponseEntity<UserDto> getUser(@PathVariable Long id) {
+            return ResponseEntity.status(HttpStatus.OK).body(userService.getUserById(id));
     }
 
     /**
@@ -79,10 +67,8 @@ public class UserController {
      * @return список DTO объектов всех пользователей (200 OK)
      */
     @GetMapping
-    public List<GetUserDto> getAllUsers() {
-        return userService.getAllUsers().stream()
-                .map(UserMapper::toGetUserDto)
-                .collect(Collectors.toList());
+    public List<UserDto> getAllUsers() {
+        return userService.getAllUsers();
     }
 
     /**
@@ -93,17 +79,10 @@ public class UserController {
      * @return ResponseEntity с обновленными данными пользователя (200 OK) или сообщением об ошибке (404 Not Found)
      */
     @PutMapping("/{id}")
-    public ResponseEntity<?> updateUser(
+    public ResponseEntity<UserDto> updateUser(
             @PathVariable Long id,
-            @RequestBody CreateUserDto updateUserDto) {
-        UserEntity user = UserMapper.toEntity(updateUserDto);
-        user.setId(id);
-        try {
-            UserEntity updatedUser = userService.updateUser(user);
-            return ResponseEntity.status(HttpStatus.OK).body(UserMapper.toGetUserDto(updatedUser));
-        } catch (MyCustomException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
-        }
+            @RequestBody UserDto updateUserDto) {
+            return ResponseEntity.status(HttpStatus.OK).body(userService.updateUser(updateUserDto,id));
     }
 
     /**
@@ -113,12 +92,7 @@ public class UserController {
      * @return ResponseEntity с подтверждением удаления (200 OK) или сообщением об ошибке (404 Not Found)
      */
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteUser(@PathVariable Long id) {
-        try {
-            userService.deleteUserById(id);
-            return ResponseEntity.status(HttpStatus.OK).body("deleted");
-        } catch (MyCustomException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
-        }
+    public ResponseEntity<UserDto> deleteUser(@PathVariable Long id) {
+            return ResponseEntity.status(HttpStatus.OK).body(userService.deleteUserById(id));
     }
 }

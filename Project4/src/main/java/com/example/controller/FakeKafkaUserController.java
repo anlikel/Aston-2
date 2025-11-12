@@ -1,6 +1,6 @@
 package com.example.controller;
 
-import com.example.dto.CreateUserDto;
+import com.example.dto.UserDto;
 import com.example.dto.UserMapper;
 import com.example.entities.UserEntity;
 import com.example.exceptions.MyCustomException;
@@ -32,18 +32,12 @@ public class FakeKafkaUserController {
     /**
      * Создает нового пользователя на основе предоставленных данных.
      *
-     * @param createUserDto DTO объект с данными для создания пользователя
-     * @return ResponseEntity с созданным пользователем (201 Created) или сообщением об ошибке (409 Conflict)
+     * @param userDto DTO объект с данными для создания пользователя
+     * @return ResponseEntity с UserDto
      */
     @PostMapping
-    public ResponseEntity<?> createUser(@RequestBody CreateUserDto createUserDto) {
-        try {
-            UserEntity user = UserMapper.toEntity(createUserDto);
-            UserEntity savedUser = userService.createUser(user);
-            return ResponseEntity.status(HttpStatus.CREATED).body(UserMapper.toGetUserDto(savedUser));
-        } catch (MyCustomException e) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
-        }
+    public ResponseEntity<UserDto> createUser(@RequestBody UserDto userDto) {
+        return ResponseEntity.status(HttpStatus.OK).body(userService.createUser(userDto));
     }
 
     /**
@@ -53,12 +47,7 @@ public class FakeKafkaUserController {
      * @return ResponseEntity с подтверждением удаления (200 OK) или сообщением об ошибке (404 Not Found)
      */
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteUser(@PathVariable Long id) {
-        try {
-            userService.deleteUserById(id);
-            return ResponseEntity.status(HttpStatus.OK).body("deleted");
-        } catch (MyCustomException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
-        }
+    public ResponseEntity<UserDto> deleteUser(@PathVariable Long id) {
+        return ResponseEntity.status(HttpStatus.OK).body(userService.deleteUserById(id));
     }
 }

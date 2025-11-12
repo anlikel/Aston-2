@@ -1,7 +1,7 @@
 package com.example.usercontrollertests;
 
 import com.example.controller.UserController;
-import com.example.entities.UserEntity;
+import com.example.dto.UserDto;
 import com.example.service.UserService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,32 +30,35 @@ public class UserControllerGetAllUsersTest {
      * Тест получения списка пользователей
      */
     @Test
-    void getAllUsers_WhenUsersExist_ReturnListOfGetUserDto() throws Exception {
+    void getAllUsers_WhenUsersExist_ReturnListOfUserDto() throws Exception {
 
-        UserEntity user1 = new UserEntity("Aaaa", "aaa@mail.com", 20);
+        UserDto user1 = new UserDto("Aaaa", "aaa@mail.com", 20);
         user1.setId(1L);
+        user1.setResult("OK");
 
-        UserEntity user2 = new UserEntity("Bbbb", "bbb@mail.com", 25);
+        UserDto user2 = new UserDto("Bbbb", "bbb@mail.com", 25);
         user2.setId(2L);
+        user2.setResult("OK");
 
-        List<UserEntity> users = Arrays.asList(user1, user2);
+        List<UserDto> users = Arrays.asList(user1, user2);
 
         when(userService.getAllUsers()).thenReturn(users);
 
         mockMvc.perform(get("/api/users"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.length()").value(2))
+
                 .andExpect(jsonPath("$[0].id").value(1))
                 .andExpect(jsonPath("$[0].name").value("Aaaa"))
                 .andExpect(jsonPath("$[0].email").value("aaa@mail.com"))
                 .andExpect(jsonPath("$[0].age").value(20))
-                .andExpect(jsonPath("$[0].createdAt").exists())
+                .andExpect(jsonPath("$[0].result").value("OK"))
 
                 .andExpect(jsonPath("$[1].id").value(2))
                 .andExpect(jsonPath("$[1].name").value("Bbbb"))
                 .andExpect(jsonPath("$[1].email").value("bbb@mail.com"))
                 .andExpect(jsonPath("$[1].age").value(25))
-                .andExpect(jsonPath("$[1].createdAt").exists());
+                .andExpect(jsonPath("$[1].result").value("OK"));
     }
 
     /**

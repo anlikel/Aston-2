@@ -25,7 +25,7 @@ public class FakeKafkaService {
                 user.getName(),
                 eventType
         );
-        logger.info("Successfully sent {} event for user: {}", eventType, user.getEmail());
+        logger.info("FAKE KAFKA Successfully sent {} event for user: {}", eventType, user.getEmail());
         eventPublisher.publishEvent(event);
     }
 

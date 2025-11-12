@@ -34,17 +34,17 @@ public class KafkaService {
             kafkaTemplate.send(userTopic, key, event)
                     .whenComplete((result, ex) -> {
                         if (ex == null) {
-                            logger.info("Successfully sent {} event for user: {}, partition: {}, offset: {}",
+                            logger.info("ORIGINAL KAFKA Successfully sent {} event for user: {}, partition: {}, offset: {}",
                                     eventType, user.getEmail(),
                                     result.getRecordMetadata().partition(),
                                     result.getRecordMetadata().offset());
                         } else {
-                            logger.error("Failed to send {} event for user: {}",
+                            logger.error("ORIGINAL KAFKA Failed to send {} event for user: {}",
                                     eventType, user.getEmail(), ex);
                         }
                     });
         } catch (Exception e) {
-            logger.error("Error sending Kafka message for user {}: {}", eventType, user.getEmail(), e);
+            logger.error("ORIGINAL KAFKA Error sending Kafka message for user {}: {}", eventType, user.getEmail(), e);
         }
     }
 

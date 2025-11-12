@@ -1,5 +1,7 @@
 package com.example.service;
 
+import com.example.dto.UserDto;
+import com.example.dto.UserMapper;
 import com.example.entities.UserEntity;
 import com.example.exceptions.MyCustomException;
 import com.example.repository.UserRepository;
@@ -44,22 +46,27 @@ public class FakeKafkaUserService {
      * @return true если пользователь успешно удален
      * @throws MyCustomException если ID невалиден или пользователь не найден
      */
-    public UserEntity deleteUserById(Long userId) {
+    public UserDto deleteUserById(Long userId) {
         logger.info("DB event: try to deleteUserById {}", userId);
 
         if (!UtilValidator.isValidId(String.valueOf(userId))) {
             logger.warn("DB event: validation failed for deleteUserById {}, wrong id format", userId);
-            throw new MyCustomException("wrong id, should be in range from 1 to LongMax");
+            UserDto userDto = new UserDto(null, null, 0);
+            userDto.setResult("wrong id, should be in range from 1 to LongMax");
+            return userDto;
         }
         Optional<UserEntity> userOptional = userRepository.deleteUserById(userId);
         if (userOptional.isEmpty()) {
             logger.error("DB event: user not found for deleteUserById {}", userId);
-            throw new MyCustomException("User not found with id: " + userId);
+            UserDto userDto = new UserDto(null, null, 0);
+            userDto.setResult("User not found with id: " + userId);
+            return userDto;
         }
         logger.info("DB event: success deleteUserById {}", userId);
-        UserEntity user = userOptional.get();
-        kafkaService.sendEmailOnUserDelete(user);
-        return user;
+        UserEntity deletedUser = userOptional.get();
+        kafkaService.sendEmailOnUserDelete(deletedUser);
+        UserDto deletedUserDto = UserMapper.toUserDto(deletedUser);
+        return deletedUserDto;
     }
 
     /**
@@ -70,33 +77,38 @@ public class FakeKafkaUserService {
      * - Валидирует формат email
      * - Проверяет корректность возраста
      *
-     * @param user сущность пользователя для создания
+     * @param userDto POJO объект для создания UserEntity
      * @return созданная сущность пользователя с присвоенным ID
      * @throws MyCustomException если данные не проходят валидацию или email уже существует
      */
-
-    public UserEntity createUser(UserEntity user) {
-        logger.info("DB event: try to createUser {}", user.getName());
-        if (userRepository.existsByEmail(user.getEmail())) {
-            logger.error("DB event: user already exists with unique email {}", user.getEmail());
-            throw new MyCustomException("User already exists with unique email: " + user.getEmail());
+    public UserDto createUser(UserDto userDto) {
+        logger.info("DB event: try to createUser {}", userDto.getName());
+        if (userRepository.existsByEmail(userDto.getEmail())) {
+            logger.error("DB event: user already exists with unique email {}", userDto.getEmail());
+            userDto.setResult("User already exists with unique email: " + userDto.getEmail());
+            return userDto;
         }
-        if (!UtilValidator.isValidName(user.getName())) {
-            logger.warn("DB event: validation failed for createUser {}, wrong name format", user.getId());
-            throw new MyCustomException("wrong name, should start from Uppercase letter");
+        if (!UtilValidator.isValidName(userDto.getName())) {
+            logger.warn("DB event: validation failed for createUser {}, wrong name format", userDto.getId());
+            userDto.setResult("wrong name, should start from Uppercase letter");
+            return userDto;
         }
-        if (!UtilValidator.isValidEmail(user.getEmail())) {
-            logger.warn("DB event: validation failed for createUser {}, wrong email format", user.getEmail());
-            throw new MyCustomException("wrong email");
+        if (!UtilValidator.isValidEmail(userDto.getEmail())) {
+            logger.warn("DB event: validation failed for createUser {}, wrong email format", userDto.getEmail());
+            userDto.setResult("wrong email");
+            return userDto;
         }
-        if (!UtilValidator.isValidAge(user.getAge())) {
-            logger.warn("DB event: validation failed for createUser {}, wrong age format", user.getAge());
-            throw new MyCustomException("wrong age should be in range from 1 to 100");
+        if (!UtilValidator.isValidAge(userDto.getAge())) {
+            logger.warn("DB event: validation failed for createUser {}, wrong age format", userDto.getAge());
+            userDto.setResult("wrong age should be in range from 1 to 100");
+            return userDto;
         }
+        UserEntity user = UserMapper.toEntity(userDto);
         UserEntity savedUser = userRepository.saveUser(user);
         kafkaService.sendEmailOnUserCreate(savedUser);
+        UserDto savedUserDto = UserMapper.toUserDto(savedUser);
         logger.info("DB event: success createUser {} with id {}", user.getName(), savedUser.getId());
-        return savedUser;
+        return savedUserDto;
     }
 
 

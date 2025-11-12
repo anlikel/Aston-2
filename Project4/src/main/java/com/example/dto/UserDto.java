@@ -6,7 +6,7 @@ import java.time.LocalDateTime;
  * DTO для возврата данных о пользователе
  * Используется для получения ответов на запросы
  */
-public class GetUserDto {
+public class UserDto {
 
     /**
      * Уникальный идентификатор пользователя
@@ -33,28 +33,29 @@ public class GetUserDto {
      */
     private LocalDateTime createdAt;
 
+    private String result;
+
     /**
      * Конструктор по умолчанию
      * Используется для десериализации JSON
      */
-    public GetUserDto() {
+    public UserDto() {
     }
 
     /**
      * Конструктор со всеми параметрами
      *
-     * @param id        уникальный идентификатор
      * @param name      имя пользователя
      * @param email     электронная почта
      * @param age       возраст пользователя
-     * @param createdAt дата и время создания
      */
-    public GetUserDto(Long id, String name, String email, int age, LocalDateTime createdAt) {
-        this.id = id;
+    public UserDto(String name, String email, int age) {
+        this.id = 0L;
         this.name = name;
         this.email = email;
         this.age = age;
-        this.createdAt = createdAt;
+        this.createdAt = null;
+        this.result="OK";
     }
 
     /**
@@ -145,5 +146,13 @@ public class GetUserDto {
      */
     public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
+    }
+
+    public String getResult() {
+        return result;
+    }
+
+    public void setResult(String result) {
+        this.result = result;
     }
 }

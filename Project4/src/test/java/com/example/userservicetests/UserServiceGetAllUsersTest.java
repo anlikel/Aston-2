@@ -1,5 +1,6 @@
 package com.example.userservicetests;
 
+import com.example.dto.UserDto;
 import com.example.entities.UserEntity;
 import com.example.repository.UserRepository;
 import com.example.service.UserService;
@@ -38,6 +39,7 @@ class UserServiceGetAllUsersTest {
      */
     @Test
     void GetAllUsersList_WhenUsersExist_ReturnNonEmptyList() {
+
         UserEntity user1 = new UserEntity();
         user1.setId(1L);
         user1.setName("User1");
@@ -53,11 +55,22 @@ class UserServiceGetAllUsersTest {
         List<UserEntity> expectedUsers = Arrays.asList(user1, user2);
         when(userRepository.getAllUsers()).thenReturn(expectedUsers);
 
-        List<UserEntity> actualUsers = userService.getAllUsers();
+        List<UserDto> actualUsers = userService.getAllUsers();
 
         assertEquals(2, actualUsers.size());
+
+        assertEquals(1L, actualUsers.get(0).getId());
         assertEquals("User1", actualUsers.get(0).getName());
+        assertEquals("aaa@mail.ru", actualUsers.get(0).getEmail());
+        assertEquals(10, actualUsers.get(0).getAge());
+        assertEquals("OK", actualUsers.get(0).getResult());
+
+        assertEquals(2L, actualUsers.get(1).getId());
         assertEquals("User2", actualUsers.get(1).getName());
+        assertEquals("bbb@mail.ru", actualUsers.get(1).getEmail());
+        assertEquals(20, actualUsers.get(1).getAge());
+        assertEquals("OK", actualUsers.get(1).getResult());
+
         verify(userRepository).getAllUsers();
     }
 
@@ -68,9 +81,10 @@ class UserServiceGetAllUsersTest {
      */
     @Test
     void GetAllUsersList_WhenUsersNotExist_ReturnEmptyList() {
+
         when(userRepository.getAllUsers()).thenReturn(Collections.emptyList());
 
-        List<UserEntity> actualUsers = userService.getAllUsers();
+        List<UserDto> actualUsers = userService.getAllUsers();
 
         assertTrue(actualUsers.isEmpty());
         verify(userRepository).getAllUsers();
