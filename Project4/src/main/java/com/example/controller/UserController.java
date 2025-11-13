@@ -1,9 +1,6 @@
 package com.example.controller;
 
 import com.example.dto.UserDto;
-import com.example.entities.UserEntity;
-import com.example.exceptions.MyCustomException;
-import com.example.dto.UserMapper;
 import com.example.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,7 +14,6 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.DeleteMapping;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * REST контроллер для управления пользователями.
@@ -47,7 +43,7 @@ public class UserController {
      */
     @PostMapping
     public ResponseEntity<UserDto> createUser(@RequestBody UserDto userDto) {
-            return ResponseEntity.status(HttpStatus.OK).body(userService.createUser(userDto));
+        return ResponseEntity.status(HttpStatus.OK).body(userService.createUser(userDto));
     }
 
     /**
@@ -58,7 +54,7 @@ public class UserController {
      */
     @GetMapping("/{id}")
     public ResponseEntity<UserDto> getUser(@PathVariable Long id) {
-            return ResponseEntity.status(HttpStatus.OK).body(userService.getUserById(id));
+        return ResponseEntity.status(HttpStatus.OK).body(userService.getUserById(id));
     }
 
     /**
@@ -82,7 +78,7 @@ public class UserController {
     public ResponseEntity<UserDto> updateUser(
             @PathVariable Long id,
             @RequestBody UserDto updateUserDto) {
-            return ResponseEntity.status(HttpStatus.OK).body(userService.updateUser(updateUserDto,id));
+        return ResponseEntity.status(HttpStatus.OK).body(userService.updateUser(updateUserDto, id));
     }
 
     /**
@@ -93,6 +89,6 @@ public class UserController {
      */
     @DeleteMapping("/{id}")
     public ResponseEntity<UserDto> deleteUser(@PathVariable Long id) {
-            return ResponseEntity.status(HttpStatus.OK).body(userService.deleteUserById(id));
+        return ResponseEntity.status(HttpStatus.OK).body(userService.deleteUserById(id));
     }
 }

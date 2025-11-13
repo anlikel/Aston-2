@@ -7,12 +7,22 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
 
+/**
+ * Сервис для обработки событий из Kafka и отправки уведомлений.
+ * Слушает события пользователей и делегирует их обработку соответствующим обработчикам.
+ */
 @Service
 public class KafkaListenerEmailNotificationService {
 
     @Autowired
     private NotificationHandlerFactory handlerFactory;
 
+    /**
+     * Обрабатывает события сервиса, полученные из Kafka топика.
+     * Получает соответствующий обработчик на основе типа события и отправляет уведомление.
+     *
+     * @param event событие сервиса, содержащее информацию о пользователе и типе события
+     */
     @KafkaListener(topics = "#{'${app.kafka.topics.user-topic:user-topic}'}")
     public void handleServiceEvent(ServiceEventDto event) {
         System.out.println("Received event: " + event.getEventType() + " for user: " + event.getEmail());

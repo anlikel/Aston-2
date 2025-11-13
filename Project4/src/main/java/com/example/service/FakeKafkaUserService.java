@@ -14,8 +14,8 @@ import org.springframework.stereotype.Service;
 import java.util.Optional;
 
 /**
- * Сервисный класс для управления операциями с пользователями.
- * Обеспечивает бизнес-логику для создания, чтения, обновления и удаления пользователей.
+ * Фейковый сервисный класс для управления операциями с пользователями с использованием FakeKafkaService.
+ * Обеспечивает бизнес-логику для создания и удаления пользователей с отправкой событий через фейковый Kafka сервис.
  * Включает валидацию данных, проверку уникальности email и логирование операций.
  */
 @Service
@@ -23,15 +23,14 @@ import java.util.Optional;
 public class FakeKafkaUserService {
 
     private final UserRepository userRepository;
-
     private final FakeKafkaService kafkaService;
-
     private static final Logger logger = LoggerFactory.getLogger(FakeKafkaUserService.class);
 
     /**
-     * Конструктор для внедрения зависимости UserRepository.
+     * Конструктор для внедрения зависимостей UserRepository и FakeKafkaService.
      *
      * @param userRepository репозиторий для работы с данными пользователей
+     * @param kafkaService   фейковый Kafka сервис для отправки событий
      */
     public FakeKafkaUserService(UserRepository userRepository, FakeKafkaService kafkaService) {
         this.userRepository = userRepository;
@@ -41,10 +40,10 @@ public class FakeKafkaUserService {
     /**
      * Удаляет пользователя по указанному идентификатору.
      * Перед удалением проверяет валидность ID и существование пользователя.
+     * После успешного удаления отправляет событие через фейковый Kafka сервис.
      *
      * @param userId идентификатор пользователя для удаления
-     * @return true если пользователь успешно удален
-     * @throws MyCustomException если ID невалиден или пользователь не найден
+     * @return DTO удаленного пользователя или DTO с сообщением об ошибке
      */
     public UserDto deleteUserById(Long userId) {
         logger.info("DB event: try to deleteUserById {}", userId);
@@ -76,10 +75,10 @@ public class FakeKafkaUserService {
      * - Валидирует формат имени
      * - Валидирует формат email
      * - Проверяет корректность возраста
+     * После успешного создания отправляет событие через фейковый Kafka сервис.
      *
-     * @param userDto POJO объект для создания UserEntity
-     * @return созданная сущность пользователя с присвоенным ID
-     * @throws MyCustomException если данные не проходят валидацию или email уже существует
+     * @param userDto DTO объект с данными для создания пользователя
+     * @return DTO созданного пользователя или DTO с сообщением об ошибке
      */
     public UserDto createUser(UserDto userDto) {
         logger.info("DB event: try to createUser {}", userDto.getName());
@@ -89,7 +88,7 @@ public class FakeKafkaUserService {
             return userDto;
         }
         if (!UtilValidator.isValidName(userDto.getName())) {
-            logger.warn("DB event: validation failed for createUser {}, wrong name format", userDto.getId());
+            logger.warn("DB event: validation failed for createUser {}, wrong name format", userDto.getName());
             userDto.setResult("wrong name, should start from Uppercase letter");
             return userDto;
         }
@@ -110,6 +109,4 @@ public class FakeKafkaUserService {
         logger.info("DB event: success createUser {} with id {}", user.getName(), savedUser.getId());
         return savedUserDto;
     }
-
-
 }

@@ -25,15 +25,14 @@ import java.util.stream.Collectors;
 public class UserService {
 
     private final UserRepository userRepository;
-
     private final KafkaService kafkaService;
-
     private static final Logger logger = LoggerFactory.getLogger(UserService.class);
 
     /**
-     * Конструктор для внедрения зависимости UserRepository.
+     * Конструктор для внедрения зависимостей UserRepository и KafkaService.
      *
      * @param userRepository репозиторий для работы с данными пользователей
+     * @param kafkaService   сервис для отправки событий в Kafka
      */
     public UserService(UserRepository userRepository, KafkaService kafkaService) {
         this.userRepository = userRepository;
@@ -43,11 +42,10 @@ public class UserService {
     /**
      * Получает пользователя по указанному идентификатору.
      * Выполняет поиск в базе данных и возвращает найденного пользователя.
-     * Если пользователь не найден, выбрасывает исключение MyCustomException.
+     * Если пользователь не найден, возвращает DTO с сообщением об ошибке.
      *
      * @param userId идентификатор пользователя для поиска
-     * @return найденная сущность пользователя
-     * @throws MyCustomException если пользователь с указанным ID не найден
+     * @return DTO найденного пользователя или DTO с сообщением об ошибке
      */
     @Transactional(readOnly = true)
     public UserDto getUserById(Long userId) {
@@ -70,7 +68,7 @@ public class UserService {
      * Получает список всех пользователей из базы данных.
      * Возвращает пустой список, если пользователи отсутствуют.
      *
-     * @return список всех пользователей
+     * @return список всех пользователей в формате DTO
      */
     @Transactional(readOnly = true)
     public List<UserDto> getAllUsers() {
@@ -88,8 +86,7 @@ public class UserService {
      * Перед удалением проверяет валидность ID и существование пользователя.
      *
      * @param userId идентификатор пользователя для удаления
-     * @return true если пользователь успешно удален
-     * @throws MyCustomException если ID невалиден или пользователь не найден
+     * @return DTO удаленного пользователя или DTO с сообщением об ошибке
      */
     public UserDto deleteUserById(Long userId) {
         logger.info("DB event: try to deleteUserById {}", userId);
@@ -122,9 +119,8 @@ public class UserService {
      * - Валидирует формат email
      * - Проверяет корректность возраста
      *
-     * @param userDto POJO объект для создания UserEntity
-     * @return созданная сущность пользователя с присвоенным ID
-     * @throws MyCustomException если данные не проходят валидацию или email уже существует
+     * @param userDto DTO объект с данными для создания пользователя
+     * @return DTO созданного пользователя или DTO с сообщением об ошибке
      */
     public UserDto createUser(UserDto userDto) {
         logger.info("DB event: try to createUser {}", userDto.getName());
@@ -134,7 +130,7 @@ public class UserService {
             return userDto;
         }
         if (!UtilValidator.isValidName(userDto.getName())) {
-            logger.warn("DB event: validation failed for createUser {}, wrong name format", userDto.getId());
+            logger.warn("DB event: validation failed for createUser {}, wrong name format", userDto.getName());
             userDto.setResult("wrong name, should start from Uppercase letter");
             return userDto;
         }
@@ -163,9 +159,9 @@ public class UserService {
      * - Существование пользователя в базе данных
      * - Корректность обновляемых данных (имя, email, возраст)
      *
-     * @param userDto POJO объект с переданными данными
-     * @return обновленная сущность пользователя
-     * @throws MyCustomException если пользователь не найден или данные невалидны
+     * @param userDto DTO объект с обновленными данными
+     * @param id      идентификатор пользователя для обновления
+     * @return DTO обновленного пользователя или DTO с сообщением об ошибке
      */
     public UserDto updateUser(UserDto userDto, Long id) {
         logger.info("DB event: try to updateUser {}", id);

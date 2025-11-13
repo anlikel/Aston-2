@@ -2,8 +2,6 @@ package com.example.dto;
 
 import com.example.entities.UserEntity;
 
-import java.time.LocalDateTime;
-
 /**
  * Маппер для преобразования между Entity и DTO
  */
@@ -24,7 +22,7 @@ public class UserMapper {
     }
 
     /**
-     * Преобразование CreateUserDto в UserEntity
+     * Преобразование UserDto в UserEntity
      */
     public static UserEntity toEntity(UserDto UserDto) {
         UserEntity user = new UserEntity();

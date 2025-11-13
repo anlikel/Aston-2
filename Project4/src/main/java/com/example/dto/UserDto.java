@@ -3,8 +3,7 @@ package com.example.dto;
 import java.time.LocalDateTime;
 
 /**
- * DTO для возврата данных о пользователе
- * Используется для получения ответов на запросы
+ * Универсальный DTO для получения/возврата данных
  */
 public class UserDto {
 
@@ -45,9 +44,9 @@ public class UserDto {
     /**
      * Конструктор со всеми параметрами
      *
-     * @param name      имя пользователя
-     * @param email     электронная почта
-     * @param age       возраст пользователя
+     * @param name  имя пользователя
+     * @param email электронная почта
+     * @param age   возраст пользователя
      */
     public UserDto(String name, String email, int age) {
         this.id = 0L;
@@ -55,7 +54,7 @@ public class UserDto {
         this.email = email;
         this.age = age;
         this.createdAt = null;
-        this.result="OK";
+        this.result = "OK";
     }
 
     /**

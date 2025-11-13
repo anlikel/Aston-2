@@ -7,12 +7,22 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Service;
 
+/**
+ * Фейковый сервис для обработки событий и отправки уведомлений.
+ * Слушает Spring события вместо Kafka и делегирует их обработку соответствующим обработчикам.
+ */
 @Service
 public class FakeKafkaListenerEmailNotificationService {
 
     @Autowired
     private NotificationHandlerFactory handlerFactory;
 
+    /**
+     * Обрабатывает события сервиса, полученные через Spring EventListener.
+     * Получает соответствующий обработчик на основе типа события и отправляет уведомление.
+     *
+     * @param event событие сервиса, содержащее информацию о пользователе и типе события
+     */
     @EventListener
     public void handleServiceEvent(ServiceEventDto event) {
         System.out.println("Received event: " + event.getEventType() + " for user: " + event.getEmail());

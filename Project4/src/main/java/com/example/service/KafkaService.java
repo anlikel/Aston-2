@@ -10,6 +10,10 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
+/**
+ * Сервис для отправки событий в Kafka.
+ * Обеспечивает отправку уведомлений о событиях пользователя (создание, удаление).
+ */
 @Service
 public class KafkaService {
 
@@ -21,6 +25,12 @@ public class KafkaService {
     @Value("${app.kafka.topics.user-topic:user-topic}")
     private String userTopic;
 
+    /**
+     * Отправляет событие пользователя в Kafka.
+     *
+     * @param user      сущность пользователя, для которого генерируется событие
+     * @param eventType тип события (CREATE или DELETE)
+     */
     public void sendUserEvent(UserEntity user, EventType eventType) {
         ServiceEventDto event = new ServiceEventDto(
                 user.getEmail(),
@@ -48,10 +58,20 @@ public class KafkaService {
         }
     }
 
+    /**
+     * Отправляет событие создания пользователя в Kafka.
+     *
+     * @param savedUser сущность созданного пользователя
+     */
     public void sendEmailOnUserCreate(UserEntity savedUser) {
         sendUserEvent(savedUser, EventType.CREATE);
     }
 
+    /**
+     * Отправляет событие удаления пользователя в Kafka.
+     *
+     * @param deletedUser сущность удаленного пользователя
+     */
     public void sendEmailOnUserDelete(UserEntity deletedUser) {
         sendUserEvent(deletedUser, EventType.DELETE);
     }
