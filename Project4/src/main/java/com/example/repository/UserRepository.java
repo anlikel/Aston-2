@@ -47,13 +47,13 @@ public interface UserRepository extends JpaRepository<UserEntity, Long> {
      * Удалить пользователя по ID
      *
      * @param id идентификатор пользователя
-     * @return true если пользователь удален, false если не найден
+     * @return Optional<UserEntity> если пользователь удален, empty если не найден
      */
-    default boolean deleteUserById(Long id) {
-        if (existsById(id)) {
+    default Optional<UserEntity> deleteUserById(Long id) {
+        Optional<UserEntity> userOptional = findById(id);
+        if (userOptional.isPresent()) {
             deleteById(id);
-            return true;
         }
-        return false;
+        return userOptional;
     }
 }

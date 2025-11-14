@@ -1,7 +1,7 @@
 package com.example.userservicetests;
 
+import com.example.dto.UserDto;
 import com.example.entities.UserEntity;
-import com.example.exceptions.MyCustomException;
 import com.example.repository.UserRepository;
 import com.example.service.UserService;
 import org.junit.jupiter.api.Test;
@@ -16,7 +16,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 
 /**
  * Тестовый класс для проверки функциональности получения пользователя по идентификатору в UserService.
@@ -37,7 +36,8 @@ class UserServiceGetUserByIdTest {
      * Проверяет, что все поля возвращенного пользователя соответствуют ожидаемым значениям.
      */
     @Test
-    void GetUserById_WhenUserIdExists_ReturnUser() {
+    void GetUserById_WhenUserIdExists_ReturnUserDto() {
+
         Long userId = 1L;
         UserEntity expectedUser = new UserEntity();
         expectedUser.setId(userId);
@@ -47,31 +47,36 @@ class UserServiceGetUserByIdTest {
 
         when(userRepository.getUserById(userId)).thenReturn(Optional.of(expectedUser));
 
-        UserEntity actualUser = userService.getUserById(userId);
+        UserDto actualUser = userService.getUserById(userId);
 
         assertNotNull(actualUser);
         assertEquals(expectedUser.getId(), actualUser.getId());
         assertEquals(expectedUser.getName(), actualUser.getName());
         assertEquals(expectedUser.getEmail(), actualUser.getEmail());
         assertEquals(expectedUser.getAge(), actualUser.getAge());
+        assertEquals("OK", actualUser.getResult());
         verify(userRepository).getUserById(userId);
     }
 
     /**
-     * Тест проверяет выброс исключения при попытке получения несуществующего пользователя.
-     * Ожидается, что метод выбросит MyCustomException, когда пользователь с указанным ID не найден.
-     * Проверяет, что исключение выбрасывается корректно и происходит обращение к репозиторию.
+     * Тест проверяет обработку случая, когда пользователь не найден.
+     * Ожидается, что метод вернет UserDto с сообщением об ошибке.
+     * Проверяет, что происходит обращение к репозиторию и возвращается корректный DTO с ошибкой.
      */
     @Test
-    void GetUserById_WhenUserIdNotExists_ThrowException() {
+    void GetUserById_WhenUserIdNotExists_ReturnUserDtoWithError() {
+
         Long nonExistentUserId = 999L;
 
         when(userRepository.getUserById(nonExistentUserId)).thenReturn(Optional.empty());
 
-        assertThrows(MyCustomException.class, () -> {
-            userService.getUserById(nonExistentUserId);
-        });
+        UserDto result = userService.getUserById(nonExistentUserId);
 
+        assertNotNull(result);
+        assertEquals("User not found with id: 999", result.getResult());
+        assertEquals(null, result.getName());
+        assertEquals(null, result.getEmail());
+        assertEquals(0, result.getAge());
         verify(userRepository).getUserById(nonExistentUserId);
     }
 }

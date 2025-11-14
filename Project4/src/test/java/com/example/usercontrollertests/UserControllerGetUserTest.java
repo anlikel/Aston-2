@@ -1,9 +1,7 @@
 package com.example.usercontrollertests;
 
 import com.example.controller.UserController;
-import com.example.dto.GetUserDto;
-import com.example.entities.UserEntity;
-import com.example.exceptions.MyCustomException;
+import com.example.dto.UserDto;
 import com.example.service.UserService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +13,6 @@ import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 
 @WebMvcTest(UserController.class)
 public class UserControllerGetUserTest {
@@ -30,40 +27,40 @@ public class UserControllerGetUserTest {
      * Тест успешного получения пользователя по ID
      */
     @Test
-    void getUserById_WhenFoundById_ReturnGetUserDto() throws Exception {
+    void getUserById_WhenFoundById_ReturnUserDto() throws Exception {
 
-        UserEntity user = new UserEntity("Aaaa", "aaa@mail.com", 20);
-        user.setId(1L);
+        UserDto userDto = new UserDto("Aaaa", "aaa@mail.com", 20);
+        userDto.setId(1L);
+        userDto.setResult("OK");
 
-        GetUserDto getUserDto = new GetUserDto();
-        getUserDto.setId(user.getId());
-        getUserDto.setName(user.getName());
-        getUserDto.setEmail(user.getEmail());
-        getUserDto.setAge(user.getAge());
-        getUserDto.setCreatedAt(user.getCreatedAt());
-
-        when(userService.getUserById(1L)).thenReturn(user);
+        when(userService.getUserById(1L)).thenReturn(userDto);
 
         mockMvc.perform(get("/api/users/1"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id").value(getUserDto.getId()))
-                .andExpect(jsonPath("$.name").value(getUserDto.getName()))
-                .andExpect(jsonPath("$.email").value(getUserDto.getEmail()))
-                .andExpect(jsonPath("$.age").value(getUserDto.getAge()))
-                .andExpect(jsonPath("$.createdAt").exists());
+                .andExpect(jsonPath("$.id").value(1L))
+                .andExpect(jsonPath("$.name").value("Aaaa"))
+                .andExpect(jsonPath("$.email").value("aaa@mail.com"))
+                .andExpect(jsonPath("$.age").value(20))
+                .andExpect(jsonPath("$.result").value("OK"));
     }
 
     /**
      * Тест получения несуществующего пользователя
      */
     @Test
-    void getUserById_WhenNotFoundById_ReturnNotFound() throws Exception {
+    void getUserById_WhenNotFoundById_ReturnUserDtoWithError() throws Exception {
 
-        when(userService.getUserById(999L))
-                .thenThrow(new MyCustomException("User not found with id: 999"));
+        UserDto errorUserDto = new UserDto(null, null, 0);
+        errorUserDto.setResult("User not found with id: 999");
+
+        when(userService.getUserById(999L)).thenReturn(errorUserDto);
+
 
         mockMvc.perform(get("/api/users/999"))
-                .andExpect(status().isNotFound())
-                .andExpect(content().string("User not found with id: 999"));
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.name").isEmpty())
+                .andExpect(jsonPath("$.email").isEmpty())
+                .andExpect(jsonPath("$.age").value(0))
+                .andExpect(jsonPath("$.result").value("User not found with id: 999"));
     }
 }

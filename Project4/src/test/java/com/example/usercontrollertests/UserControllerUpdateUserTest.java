@@ -1,9 +1,7 @@
 package com.example.usercontrollertests;
 
 import com.example.controller.UserController;
-import com.example.dto.CreateUserDto;
-import com.example.entities.UserEntity;
-import com.example.exceptions.MyCustomException;
+import com.example.dto.UserDto;
 import com.example.service.UserService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,11 +12,11 @@ import org.springframework.test.web.servlet.MockMvc;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 
 @WebMvcTest(UserController.class)
 public class UserControllerUpdateUserTest {
@@ -37,43 +35,96 @@ public class UserControllerUpdateUserTest {
      */
     @Test
     void updateUser_WhenUserExistsAndValidData_ReturnUpdatedUser() throws Exception {
+
         Long userId = 1L;
-        CreateUserDto updateUserDto = new CreateUserDto("Bbbbb", "bbb@mail.com", 30);
+        UserDto updateUserDto = new UserDto("Bbbbb", "bbb@mail.com", 30);
 
-        UserEntity updatedUser = new UserEntity();
-        updatedUser.setId(userId);
-        updatedUser.setName(updateUserDto.getName());
-        updatedUser.setEmail(updateUserDto.getEmail());
-        updatedUser.setAge(updateUserDto.getAge());
+        UserDto updatedUserDto = new UserDto("Bbbbb", "bbb@mail.com", 30);
+        updatedUserDto.setId(userId);
+        updatedUserDto.setResult("OK");
 
-        when(userService.updateUser(any(UserEntity.class))).thenReturn(updatedUser);
+        when(userService.updateUser(any(UserDto.class), eq(userId))).thenReturn(updatedUserDto);
 
         mockMvc.perform(put("/api/users/{id}", userId)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(updateUserDto)))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id").value(updatedUser.getId()))
-                .andExpect(jsonPath("$.name").value(updatedUser.getName()))
-                .andExpect(jsonPath("$.email").value(updatedUser.getEmail()))
-                .andExpect(jsonPath("$.age").value(updatedUser.getAge()))
-                .andExpect(jsonPath("$.createdAt").exists());
+                .andExpect(jsonPath("$.id").value(userId))
+                .andExpect(jsonPath("$.name").value("Bbbbb"))
+                .andExpect(jsonPath("$.email").value("bbb@mail.com"))
+                .andExpect(jsonPath("$.age").value(30))
+                .andExpect(jsonPath("$.result").value("OK"));
     }
 
     /**
      * Тест обновления несуществующего пользователя
      */
     @Test
-    void updateUser_WhenUserNotFound_ShouldReturnNotFound() throws Exception {
-        Long userId = 999L;
-        CreateUserDto updateUserDto = new CreateUserDto("Bbbbb", "bbb@mail.com", 30);
+    void updateUser_WhenUserNotFound_ReturnUserDtoWithError() throws Exception {
 
-        when(userService.updateUser(any(UserEntity.class)))
-                .thenThrow(new MyCustomException("User not found with id: " + userId));
+        Long userId = 999L;
+        UserDto updateUserDto = new UserDto("Bbbbb", "bbb@mail.com", 30);
+
+        UserDto errorUserDto = new UserDto("Bbbbb", "bbb@mail.com", 30);
+        errorUserDto.setResult("User not found with id: 999");
+
+        when(userService.updateUser(any(UserDto.class), eq(userId))).thenReturn(errorUserDto);
 
         mockMvc.perform(put("/api/users/{id}", userId)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(updateUserDto)))
-                .andExpect(status().isNotFound())
-                .andExpect(content().string("User not found with id: " + userId));
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.name").value("Bbbbb"))
+                .andExpect(jsonPath("$.email").value("bbb@mail.com"))
+                .andExpect(jsonPath("$.age").value(30))
+                .andExpect(jsonPath("$.result").value("User not found with id: 999"));
+    }
+
+    /**
+     * Тест обновления пользователя с невалидными данными
+     */
+    @Test
+    void updateUser_WhenInvalidData_ReturnUserDtoWithError() throws Exception {
+
+        Long userId = 1L;
+        UserDto updateUserDto = new UserDto("bbbbb", "invalid-email", 150);
+
+        UserDto errorUserDto = new UserDto("bbbbb", "invalid-email", 150);
+        errorUserDto.setResult("wrong name, should start from Uppercase letter");
+
+        when(userService.updateUser(any(UserDto.class), eq(userId))).thenReturn(errorUserDto);
+
+        mockMvc.perform(put("/api/users/{id}", userId)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(updateUserDto)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.name").value("bbbbb"))
+                .andExpect(jsonPath("$.email").value("invalid-email"))
+                .andExpect(jsonPath("$.age").value(150))
+                .andExpect(jsonPath("$.result").value("wrong name, should start from Uppercase letter"));
+    }
+
+    /**
+     * Тест обновления пользователя с невалидным ID
+     */
+    @Test
+    void updateUser_WhenInvalidId_ReturnUserDtoWithError() throws Exception {
+
+        Long invalidUserId = -1L;
+        UserDto updateUserDto = new UserDto("Bbbbb", "bbb@mail.com", 30);
+
+        UserDto errorUserDto = new UserDto("Bbbbb", "bbb@mail.com", 30);
+        errorUserDto.setResult("wrong id, should be in range from 1 to LongMax");
+
+        when(userService.updateUser(any(UserDto.class), eq(invalidUserId))).thenReturn(errorUserDto);
+
+        mockMvc.perform(put("/api/users/{id}", invalidUserId)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(updateUserDto)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.name").value("Bbbbb"))
+                .andExpect(jsonPath("$.email").value("bbb@mail.com"))
+                .andExpect(jsonPath("$.age").value(30))
+                .andExpect(jsonPath("$.result").value("wrong id, should be in range from 1 to LongMax"));
     }
 }
