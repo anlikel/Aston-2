@@ -34,19 +34,32 @@ project/
 │   │    │       ├── controller/                            # rest controller
 │   │    │       │   └── UserController.java         
 │   │    │       ├── entities           
-│   │    │       │      └── UserEntity.java                  # User entity class
+│   │    │       │   └── UserEntity.java                  # User entity class
 │   │    │       ├── dto                                     # data transfer objects
-│   │    │       │      ├── CreateUserDto.java
-│   │    │       │      ├── GetUserDto.java
-│   │    │       │      └── UserMapper.java                  # mapper class to convertion dto/entity
+│   │    │       │   ├── CreateUserDto.java
+│   │    │       │   ├── GetUserDto.java
+│   │    │       │   └── UserMapper.java                  # mapper class to convertion dto/entity
 │   │    │       ├── exceptions           
-│   │    │       │      └── MyCustomException.java                    
+│   │    │       │   └── MyCustomException.java   
+│   │    │       ├── notificationhandlers              #main package to organize notification events
+│   │    │       │   ├── EventType.java                #Enum with event names
+│   │    │       │   ├── ServiceEventDto.java          #DTO to transfer events to kafka
+│   │    │       │   ├── NotificationHandler.java         
+│   │    │       │   ├── NotificationHandlerFactory.java                
+│   │    │       │   ├── CreateUserNotificationHandler.java 
+│   │    │       │   └── DeleteUserNotificationHandler.java    
 │   │    │       ├── repository                              # DB logic
-│   │    │       │     └── UserRepository.java
+│   │    │       │   └── UserRepository.java
 │   │    │       ├── service           
-│   │    │       │    └── UserService.java
+│   │    │       │   ├── UserService.java
+│   │    │       │   ├── FakeKafkaUserService.java     #userservice with fakekafkaservice call
+│   │    │       │   ├── FakeKafkaService.java         #kafka server imitation working via events
+│   │    │       │   ├── EmailService.java             #simple class mail send imitation       
+│   │    │       │   ├── KafkaService.java
+│   │    │       │   ├── KafkaListenerEmailNotificationService.java     # kafka consumer  
+│   │    │       │   └── FakeKafkaListenerEmailNotificationService.java    #fake kafka consumer via event listener                        
 │   │    │       ├── util           
-│   │    │       │    └── UtilValidator.java
+│   │    │       │   └── UtilValidator.java
 │   │    │       └── Project4Application.java                 # Main application class
 │   │    └── resources/
 │   │        ├── static 
@@ -75,11 +88,15 @@ project/
 │       │       │   ├── UserServiceGetAllUsersTest.java
 │       │       │   ├── UserServiceGetUserByIdTest.java
 │       │       │   └── UserServiceUpdateUserTest.java
-│       │       └── utils                                         # util tests
-│       │           ├── ValidAgeTest.java
-│       │           ├── ValidEmailTest.java
-│       │           ├── ValidIdTest.java
-│       │          └── ValidNameTest.java
+│       │       ├── utils                                         # util tests
+│       │       │   ├── ValidAgeTest.java
+│       │       │   ├── ValidEmailTest.java
+│       │       │   ├── ValidIdTest.java
+│       │       │   └── ValidNameTest.java
+│       │       └── kafkatests                                         # kafka tests
+│       │           ├── TestKafkaConfig.java
+│       │           ├── KafkaServiceIntegrationCreateUserTest.java
+│       │           └── KafkaServiceIntegrationCreateDeleteTest.java
 │       │
 │       └── resources/
 │           ├── application-test.yaml                            # configuration
@@ -87,8 +104,8 @@ project/
 │           └── init.sql                                         # init db script for tests
 │               
 ├── pom.xml                                                         # Maven dependencies
-└── README.md
-└── gitignore.md
+├──  README.md
+├──  gitignore.md
 └── compose.yaml
 
 3. Конфигурация базы данных.
@@ -122,5 +139,6 @@ project/
 Реализованы тесты на валидацию вводимых данных для создание класса UserEntity,
 тесты Dao-слоя для проверки работы с бд, тесты сервис слоя с помощью Mockito,
 тесты слоя контрорллера.
+тесты KAFKA сервиса.
 
 Запуск: mvn test
