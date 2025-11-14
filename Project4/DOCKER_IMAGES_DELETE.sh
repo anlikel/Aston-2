@@ -1,6 +1,6 @@
 #!/bin/bash
 
-CONTAINER_NAMES=("myapp-kafka" "myapp-zookeeper" "myapp-postgres")
+CONTAINER_NAMES=("gubenko-kafka" "gubenko-zookeeper" "gubenko-postgres")
 
 echo "Проверка существования контейнеров..."
 
