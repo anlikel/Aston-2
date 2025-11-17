@@ -1,11 +1,13 @@
 package com.example.dto;
 
+import org.springframework.hateoas.RepresentationModel;
+
 import java.time.LocalDateTime;
 
 /**
  * Универсальный DTO для получения/возврата данных
  */
-public class UserDto {
+public class UserDto{
 
     /**
      * Уникальный идентификатор пользователя
