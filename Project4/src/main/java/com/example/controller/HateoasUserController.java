@@ -1,17 +1,13 @@
 package com.example.controller;
 
 import com.example.dto.UserDto;
+import com.example.service.HateoasService;
 import com.example.service.UserService;
 import com.example.swagger.CreateUserApiResponse;
 import com.example.swagger.DeleteUserApiResponse;
 import com.example.swagger.GetAllUsersApiResponse;
 import com.example.swagger.GetUserApiResponse;
-import com.example.swagger.SwaggerDescriptionExamples;
 import com.example.swagger.UpdateUserApiResponse;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.media.Content;
-import io.swagger.v3.oas.annotations.media.ExampleObject;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
@@ -26,12 +22,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.DeleteMapping;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
-
 /**
  * REST контроллер для управления пользователями.
  * Предоставляет endpoints для операций CRUD (Create, Read, Update, Delete) с пользователями.
@@ -42,15 +32,15 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 @Tag(name = "HateoasUserController", description = "API для управления пользователями с поддержкой HATEOAS")
 public class HateoasUserController {
 
-    private final UserService userService;
+    private final HateoasService hateoasService;
 
     /**
      * Конструктор для внедрения зависимости UserService.
      *
-     * @param userService сервис для бизнес-логики работы с пользователями
+     * @param hateoasService сервис для бизнес-логики работы с пользователями с применнием open-api
      */
-    public HateoasUserController(UserService userService) {
-        this.userService = userService;
+    public HateoasUserController(HateoasService hateoasService) {
+        this.hateoasService = hateoasService;
     }
 
     /**
@@ -62,17 +52,7 @@ public class HateoasUserController {
     @PostMapping
     @CreateUserApiResponse
     public ResponseEntity<EntityModel<UserDto>> createUser(@RequestBody UserDto userDto) {
-        UserDto savedUserDto = userService.createUser(userDto);
-        EntityModel<UserDto> user = EntityModel.of(savedUserDto);
-        Long id = savedUserDto.getId();
-        user.add(
-                linkTo(methodOn(UserController.class).createUser(userDto)).withSelfRel(),
-                linkTo(methodOn(UserController.class).getAllUsers()).withRel("getAllUsers"),
-                linkTo(methodOn(UserController.class).getUser(id)).withRel("getUser"),
-                linkTo(methodOn(UserController.class).deleteUser(id)).withRel("deleteUser"),
-                linkTo(methodOn(UserController.class).updateUser(id, userDto)).withRel("updateUser")
-        );
-        return ResponseEntity.status(HttpStatus.OK).body(user);
+        return ResponseEntity.status(HttpStatus.OK).body(hateoasService.getEntityModelWithCreateUser(userDto));
     }
 
     /**
@@ -84,16 +64,7 @@ public class HateoasUserController {
     @GetMapping("/{id}")
     @GetUserApiResponse
     public ResponseEntity<EntityModel<UserDto>> getUser(@PathVariable Long id) {
-        UserDto userDto = userService.getUserById(id);
-        EntityModel<UserDto> user = EntityModel.of(userDto);
-        user.add(
-                linkTo(methodOn(UserController.class).getUser(id)).withSelfRel(),
-                linkTo(methodOn(UserController.class).getAllUsers()).withRel("getAllUsers"),
-                linkTo(methodOn(UserController.class).deleteUser(id)).withRel("deleteUser"),
-                linkTo(methodOn(UserController.class).createUser(userDto)).withRel("createUser"),
-                linkTo(methodOn(UserController.class).updateUser(id, userDto)).withRel("updateUser")
-        );
-        return ResponseEntity.status(HttpStatus.OK).body(user);
+        return ResponseEntity.status(HttpStatus.OK).body(hateoasService.getEntityModelWithGetUser(id));
     }
 
     /**
@@ -104,19 +75,7 @@ public class HateoasUserController {
     @GetMapping
     @GetAllUsersApiResponse
     public ResponseEntity<CollectionModel<EntityModel<UserDto>>> getAllUsers() {
-        List<EntityModel<UserDto>> userModels = userService.getAllUsers().stream()
-                .map(user -> EntityModel.of(user,
-                        linkTo(methodOn(UserController.class).getUser(user.getId())).withSelfRel(),
-                        linkTo(methodOn(UserController.class).deleteUser(user.getId())).withRel("deleteUser"),
-                        linkTo(methodOn(UserController.class).createUser(user)).withRel("createUser"),
-                        linkTo(methodOn(UserController.class).updateUser(user.getId(), user)).withRel("updateUser")
-                ))
-                .collect(Collectors.toList());
-
-        CollectionModel<EntityModel<UserDto>> users = CollectionModel.of(userModels);
-        users.add(linkTo(methodOn(UserController.class).getAllUsers()).withSelfRel());
-
-        return ResponseEntity.status(HttpStatus.OK).body(users);
+        return ResponseEntity.status(HttpStatus.OK).body(hateoasService.getEntityModelWithGetAllUsers());
     }
 
     /**
@@ -131,16 +90,7 @@ public class HateoasUserController {
     public ResponseEntity<EntityModel<UserDto>> updateUser(
             @PathVariable Long id,
             @RequestBody UserDto updateUserDto) {
-        UserDto user = userService.updateUser(updateUserDto, id);
-        EntityModel<UserDto> userModel = EntityModel.of(user);
-        userModel.add(
-                linkTo(methodOn(UserController.class).updateUser(id, updateUserDto)).withSelfRel(),
-                linkTo(methodOn(UserController.class).getAllUsers()).withRel("getAllUsers"),
-                linkTo(methodOn(UserController.class).getUser(id)).withRel("getUser"),
-                linkTo(methodOn(UserController.class).deleteUser(id)).withRel("deleteUser"),
-                linkTo(methodOn(UserController.class).createUser(updateUserDto)).withRel("createUser")
-        );
-        return ResponseEntity.status(HttpStatus.OK).body(userModel);
+        return ResponseEntity.status(HttpStatus.OK).body(hateoasService.getEntityModelWithUpdateUser(updateUserDto, id));
     }
 
     /**
@@ -152,15 +102,6 @@ public class HateoasUserController {
     @DeleteMapping("/{id}")
     @DeleteUserApiResponse
     public ResponseEntity<EntityModel<UserDto>> deleteUser(@PathVariable Long id) {
-        UserDto userDto = userService.deleteUserById(id);
-        EntityModel<UserDto> user = EntityModel.of(userDto);
-        user.add(
-                linkTo(methodOn(UserController.class).getUser(id)).withSelfRel(),
-                linkTo(methodOn(UserController.class).getAllUsers()).withRel("getAllUsers"),
-                linkTo(methodOn(UserController.class).getUser(id)).withRel("getUser"),
-                linkTo(methodOn(UserController.class).createUser(userDto)).withRel("createUser"),
-                linkTo(methodOn(UserController.class).updateUser(id, userDto)).withRel("updateUser")
-        );
-        return ResponseEntity.status(HttpStatus.OK).body(user);
+        return ResponseEntity.status(HttpStatus.OK).body(hateoasService.getEntityModelWithDeleteUser(id));
     }
 }
