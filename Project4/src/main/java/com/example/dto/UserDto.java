@@ -1,7 +1,5 @@
 package com.example.dto;
 
-import org.springframework.hateoas.RepresentationModel;
-
 import java.time.LocalDateTime;
 
 /**

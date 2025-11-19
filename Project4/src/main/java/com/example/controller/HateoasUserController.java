@@ -2,6 +2,12 @@ package com.example.controller;
 
 import com.example.dto.UserDto;
 import com.example.service.UserService;
+import com.example.swagger.SwaggerDescriptionExamples;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.ExampleObject;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.http.HttpStatus;
@@ -28,6 +34,7 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
  */
 @RestController
 @RequestMapping("/api/hateoasusers")
+@Tag(name = "HateoasUserController", description = "API для управления пользователями с поддержкой HATEOAS")
 public class HateoasUserController {
 
     private final UserService userService;
@@ -48,6 +55,24 @@ public class HateoasUserController {
      * @return ResponseEntity с UserDto
      */
     @PostMapping
+    @Operation(summary = "createUser", description = "удаляет пользователя")
+    @ApiResponse(
+            responseCode = "200",
+            description = SwaggerDescriptionExamples.DESCRIPTION,
+            content = @Content(
+                    mediaType = "application/json",
+                    examples = {
+                            @ExampleObject(
+                                    name = "Success",
+                                    value = SwaggerDescriptionExamples.CREATE_USER_SUCCESS
+                            ),
+                            @ExampleObject(
+                                    name = "Fail",
+                                    value = SwaggerDescriptionExamples.CREATE_USER_FAIL
+                            )
+                    }
+            )
+    )
     public ResponseEntity<EntityModel<UserDto>> createUser(@RequestBody UserDto userDto) {
         UserDto savedUserDto = userService.createUser(userDto);
         EntityModel<UserDto> user = EntityModel.of(savedUserDto);
@@ -69,6 +94,24 @@ public class HateoasUserController {
      * @return ResponseEntity с данными пользователя (200 OK) или сообщением об ошибке (404 Not Found)
      */
     @GetMapping("/{id}")
+    @Operation(summary = "getUserById", description = "Возвращает пользователя с указанным идентификатором")
+    @ApiResponse(
+            responseCode = "200",
+            description = SwaggerDescriptionExamples.DESCRIPTION,
+            content = @Content(
+                    mediaType = "application/json",
+                    examples = {
+                            @ExampleObject(
+                                    name = "Success",
+                                    value = SwaggerDescriptionExamples.GET_USER_SUCCESS
+                            ),
+                            @ExampleObject(
+                                    name = "Fail",
+                                    value = SwaggerDescriptionExamples.GET_USER_FAIL
+                            )
+                    }
+            )
+    )
     public ResponseEntity<EntityModel<UserDto>> getUser(@PathVariable Long id) {
         UserDto userDto = userService.getUserById(id);
         EntityModel<UserDto> user = EntityModel.of(userDto);
@@ -88,6 +131,24 @@ public class HateoasUserController {
      * @return список DTO объектов всех пользователей (200 OK)
      */
     @GetMapping
+    @Operation(summary = "getAllUsers", description = "Возвращает список пользователей")
+    @ApiResponse(
+            responseCode = "200",
+            description = SwaggerDescriptionExamples.DESCRIPTION,
+            content = @Content(
+                    mediaType = "application/json",
+                    examples = {
+                            @ExampleObject(
+                                    name = "Success",
+                                    value = SwaggerDescriptionExamples.GET_ALL_USERS_SUCCESS
+                            ),
+                            @ExampleObject(
+                                    name = "Fail",
+                                    value = SwaggerDescriptionExamples.GET_ALL_USERS_FAIL
+                            )
+                    }
+            )
+    )
     public ResponseEntity<CollectionModel<EntityModel<UserDto>>> getAllUsers() {
         List<EntityModel<UserDto>> userModels = userService.getAllUsers().stream()
                 .map(user -> EntityModel.of(user,
@@ -112,7 +173,25 @@ public class HateoasUserController {
      * @return ResponseEntity с обновленными данными пользователя (200 OK) или сообщением об ошибке (404 Not Found)
      */
     @PutMapping("/{id}")
-    public ResponseEntity<UserDto> updateUser(
+    @Operation(summary = "updateUser", description = "Обновляет пользователя")
+    @ApiResponse(
+            responseCode = "200",
+            description = SwaggerDescriptionExamples.DESCRIPTION,
+            content = @Content(
+                    mediaType = "application/json",
+                    examples = {
+                            @ExampleObject(
+                                    name = "Success",
+                                    value = SwaggerDescriptionExamples.UPDATE_USER_SUCCESS
+                            ),
+                            @ExampleObject(
+                                    name = "Fail",
+                                    value = SwaggerDescriptionExamples.UPDATE_USER_FAIL
+                            )
+                    }
+            )
+    )
+    public ResponseEntity<EntityModel<UserDto>> updateUser(
             @PathVariable Long id,
             @RequestBody UserDto updateUserDto) {
         UserDto user = userService.updateUser(updateUserDto, id);
@@ -124,7 +203,7 @@ public class HateoasUserController {
                 linkTo(methodOn(UserController.class).deleteUser(id)).withRel("deleteUser"),
                 linkTo(methodOn(UserController.class).createUser(updateUserDto)).withRel("createUser")
         );
-        return ResponseEntity.status(HttpStatus.OK).body(user);
+        return ResponseEntity.status(HttpStatus.OK).body(userModel);
     }
 
     /**
@@ -134,6 +213,24 @@ public class HateoasUserController {
      * @return ResponseEntity с подтверждением удаления (200 OK) или сообщением об ошибке (404 Not Found)
      */
     @DeleteMapping("/{id}")
+    @Operation(summary = "deleteUser", description = "удаляет пользователя")
+    @ApiResponse(
+            responseCode = "200",
+            description = SwaggerDescriptionExamples.DESCRIPTION,
+            content = @Content(
+                    mediaType = "application/json",
+                    examples = {
+                            @ExampleObject(
+                                    name = "Success",
+                                    value = SwaggerDescriptionExamples.DELETE_USER_SUCCESS
+                            ),
+                            @ExampleObject(
+                                    name = "Fail",
+                                    value = SwaggerDescriptionExamples.DELETE_USER_FAIL
+                            )
+                    }
+            )
+    )
     public ResponseEntity<EntityModel<UserDto>> deleteUser(@PathVariable Long id) {
         UserDto userDto = userService.deleteUserById(id);
         EntityModel<UserDto> user = EntityModel.of(userDto);
