@@ -1,7 +1,8 @@
-package com.example.service;
+package com.example.hateoas;
 
 import com.example.controller.UserController;
 import com.example.dto.UserDto;
+import com.example.service.UserService;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.stereotype.Service;
@@ -13,11 +14,11 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @Service
-public class HateoasService {
+public class HateoasServiceImpl implements HateoasServiceInterface<UserDto, Long> {
 
     private final UserService userService;
 
-    public HateoasService(UserService userService) {
+    public HateoasServiceImpl(UserService userService) {
         this.userService = userService;
     }
 

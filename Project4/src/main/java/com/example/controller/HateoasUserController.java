@@ -1,8 +1,7 @@
 package com.example.controller;
 
 import com.example.dto.UserDto;
-import com.example.service.HateoasService;
-import com.example.service.UserService;
+import com.example.hateoas.HateoasServiceImpl;
 import com.example.swagger.CreateUserApiResponse;
 import com.example.swagger.DeleteUserApiResponse;
 import com.example.swagger.GetAllUsersApiResponse;
@@ -32,15 +31,15 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 @Tag(name = "HateoasUserController", description = "API для управления пользователями с поддержкой HATEOAS")
 public class HateoasUserController {
 
-    private final HateoasService hateoasService;
+    private final HateoasServiceImpl hateoasServiceImpl;
 
     /**
      * Конструктор для внедрения зависимости UserService.
      *
-     * @param hateoasService сервис для бизнес-логики работы с пользователями с применнием open-api
+     * @param hateoasServiceImpl сервис для бизнес-логики работы с пользователями с применнием open-api
      */
-    public HateoasUserController(HateoasService hateoasService) {
-        this.hateoasService = hateoasService;
+    public HateoasUserController(HateoasServiceImpl hateoasServiceImpl) {
+        this.hateoasServiceImpl = hateoasServiceImpl;
     }
 
     /**
@@ -52,7 +51,7 @@ public class HateoasUserController {
     @PostMapping
     @CreateUserApiResponse
     public ResponseEntity<EntityModel<UserDto>> createUser(@RequestBody UserDto userDto) {
-        return ResponseEntity.status(HttpStatus.OK).body(hateoasService.getEntityModelWithCreateUser(userDto));
+        return ResponseEntity.status(HttpStatus.OK).body(hateoasServiceImpl.getEntityModelWithCreateUser(userDto));
     }
 
     /**
@@ -64,7 +63,7 @@ public class HateoasUserController {
     @GetMapping("/{id}")
     @GetUserApiResponse
     public ResponseEntity<EntityModel<UserDto>> getUser(@PathVariable Long id) {
-        return ResponseEntity.status(HttpStatus.OK).body(hateoasService.getEntityModelWithGetUser(id));
+        return ResponseEntity.status(HttpStatus.OK).body(hateoasServiceImpl.getEntityModelWithGetUser(id));
     }
 
     /**
@@ -75,7 +74,7 @@ public class HateoasUserController {
     @GetMapping
     @GetAllUsersApiResponse
     public ResponseEntity<CollectionModel<EntityModel<UserDto>>> getAllUsers() {
-        return ResponseEntity.status(HttpStatus.OK).body(hateoasService.getEntityModelWithGetAllUsers());
+        return ResponseEntity.status(HttpStatus.OK).body(hateoasServiceImpl.getEntityModelWithGetAllUsers());
     }
 
     /**
@@ -90,7 +89,7 @@ public class HateoasUserController {
     public ResponseEntity<EntityModel<UserDto>> updateUser(
             @PathVariable Long id,
             @RequestBody UserDto updateUserDto) {
-        return ResponseEntity.status(HttpStatus.OK).body(hateoasService.getEntityModelWithUpdateUser(updateUserDto, id));
+        return ResponseEntity.status(HttpStatus.OK).body(hateoasServiceImpl.getEntityModelWithUpdateUser(updateUserDto, id));
     }
 
     /**
@@ -102,6 +101,6 @@ public class HateoasUserController {
     @DeleteMapping("/{id}")
     @DeleteUserApiResponse
     public ResponseEntity<EntityModel<UserDto>> deleteUser(@PathVariable Long id) {
-        return ResponseEntity.status(HttpStatus.OK).body(hateoasService.getEntityModelWithDeleteUser(id));
+        return ResponseEntity.status(HttpStatus.OK).body(hateoasServiceImpl.getEntityModelWithDeleteUser(id));
     }
 }
