@@ -22,7 +22,6 @@ public class NotificationHandlerFactory {
      *
      * @param handlerList список всех доступных обработчиков уведомлений
      */
-    @Autowired
     public NotificationHandlerFactory(List<NotificationHandler> handlerList) {
         handlers = handlerList.stream()
                 .collect(Collectors.toMap(

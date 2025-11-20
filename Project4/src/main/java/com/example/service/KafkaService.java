@@ -3,6 +3,7 @@ package com.example.service;
 import com.example.entities.UserEntity;
 import com.example.notificationhandlers.EventType;
 import com.example.notificationhandlers.ServiceEventDto;
+import com.example.serviceinterfaces.KafkaServiceInterface;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +16,7 @@ import org.springframework.stereotype.Service;
  * Обеспечивает отправку уведомлений о событиях пользователя (создание, удаление).
  */
 @Service
-public class KafkaService {
+public class KafkaService implements KafkaServiceInterface {
 
     private static final Logger logger = LoggerFactory.getLogger(KafkaService.class);
 

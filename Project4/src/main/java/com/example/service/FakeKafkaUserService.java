@@ -5,12 +5,14 @@ import com.example.dto.UserMapper;
 import com.example.entities.UserEntity;
 import com.example.exceptions.MyCustomException;
 import com.example.repository.UserRepository;
+import com.example.serviceinterfaces.UserServiceInterface;
 import com.example.util.UtilValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -20,7 +22,7 @@ import java.util.Optional;
  */
 @Service
 @Transactional
-public class FakeKafkaUserService {
+public class FakeKafkaUserService implements UserServiceInterface<UserDto, Long> {
 
     private final UserRepository userRepository;
     private final FakeKafkaService kafkaService;
@@ -108,5 +110,15 @@ public class FakeKafkaUserService {
         UserDto savedUserDto = UserMapper.toUserDto(savedUser);
         logger.info("DB event: success createUser {} with id {}", user.getName(), savedUser.getId());
         return savedUserDto;
+    }
+
+    @Override
+    public UserDto updateUser(UserDto userDto, Long id) {
+        return null;
+    }
+
+    @Override
+    public List<UserDto> getAllUsers() {
+        return List.of();
     }
 }

@@ -18,7 +18,6 @@ public class CreateUserNotificationHandler implements NotificationHandler {
      *
      * @param emailService сервис для отправки электронной почты
      */
-    @Autowired
     public CreateUserNotificationHandler(EmailService emailService) {
         this.emailService = emailService;
     }

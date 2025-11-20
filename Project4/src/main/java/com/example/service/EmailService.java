@@ -1,5 +1,6 @@
 package com.example.service;
 
+import com.example.serviceinterfaces.EmailServiceInterface;
 import org.springframework.stereotype.Service;
 
 /**
@@ -7,7 +8,7 @@ import org.springframework.stereotype.Service;
  * Предоставляет методы для отправки приветственных писем и уведомлений об удалении аккаунта.
  */
 @Service
-public class EmailService {
+public class EmailService implements EmailServiceInterface {
 
     /**
      * Отправляет приветственное письмо новому пользователю.
@@ -47,7 +48,7 @@ public class EmailService {
      * @param subject тема письма
      * @param message содержание письма
      */
-    private void sendEmail(String to, String subject, String message) {
+    public void sendEmail(String to, String subject, String message) {
         System.out.println("Sending email to: " + to);
         System.out.println("Subject: " + subject);
         System.out.println("Message: " + message);

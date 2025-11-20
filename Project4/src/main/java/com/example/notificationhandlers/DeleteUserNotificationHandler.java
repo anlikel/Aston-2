@@ -18,7 +18,6 @@ public class DeleteUserNotificationHandler implements NotificationHandler {
      *
      * @param emailService сервис для отправки электронной почты
      */
-    @Autowired
     public DeleteUserNotificationHandler(EmailService emailService) {
         this.emailService = emailService;
     }

@@ -5,6 +5,7 @@ import com.example.dto.UserMapper;
 import com.example.entities.UserEntity;
 import com.example.exceptions.MyCustomException;
 import com.example.repository.UserRepository;
+import com.example.serviceinterfaces.UserServiceInterface;
 import com.example.util.UtilValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,7 +23,7 @@ import java.util.stream.Collectors;
  */
 @Service
 @Transactional
-public class UserService {
+public class UserService implements UserServiceInterface<UserDto, Long> {
 
     private final UserRepository userRepository;
     private final KafkaService kafkaService;

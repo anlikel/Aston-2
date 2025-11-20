@@ -3,6 +3,7 @@ package com.example.service;
 import com.example.notificationhandlers.NotificationHandler;
 import com.example.notificationhandlers.NotificationHandlerFactory;
 import com.example.notificationhandlers.ServiceEventDto;
+import com.example.serviceinterfaces.KafkaListenerEmailNotificationServiceInterface;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Service;
@@ -12,7 +13,7 @@ import org.springframework.stereotype.Service;
  * Слушает Spring события вместо Kafka и делегирует их обработку соответствующим обработчикам.
  */
 @Service
-public class FakeKafkaListenerEmailNotificationService {
+public class FakeKafkaListenerEmailNotificationService implements KafkaListenerEmailNotificationServiceInterface<ServiceEventDto> {
 
     @Autowired
     private NotificationHandlerFactory handlerFactory;
