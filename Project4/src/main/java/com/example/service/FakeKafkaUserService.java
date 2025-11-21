@@ -3,7 +3,6 @@ package com.example.service;
 import com.example.dto.UserDto;
 import com.example.dto.UserMapper;
 import com.example.entities.UserEntity;
-import com.example.exceptions.MyCustomException;
 import com.example.repository.UserRepository;
 import com.example.serviceinterfaces.UserServiceInterface;
 import com.example.util.UtilValidator;

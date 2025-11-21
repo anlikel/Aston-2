@@ -25,6 +25,17 @@ import org.springframework.web.bind.annotation.DeleteMapping;
  * REST контроллер для управления пользователями.
  * Предоставляет endpoints для операций CRUD (Create, Read, Update, Delete) с пользователями.
  * Обрабатывает HTTP запросы и возвращает соответствующие HTTP статусы и DTO объекты.
+ * Также контроллер реализует функции библиотеки HATEOAS и предоставляет описание
+ * своих функций через open api.
+ *
+ * <p><strong>Кастомные аннотации:</strong>
+ * <ul>
+ *   <li>{@link CreateUserApiResponse} - документирование ответов для создания пользователя</li>
+ *   <li>{@link GetUserApiResponse} - документирование ответов для получения пользователя</li>
+ *   <li>{@link GetAllUsersApiResponse} - документирование ответов для получения всех пользователей</li>
+ *   <li>{@link UpdateUserApiResponse} - документирование ответов для обновления пользователя</li>
+ *   <li>{@link DeleteUserApiResponse} - документирование ответов для удаления пользователя</li>
+ * </ul>
  */
 @RestController
 @RequestMapping("/api/hateoasusers")
@@ -34,9 +45,9 @@ public class HateoasUserController {
     private final HateoasServiceImpl hateoasServiceImpl;
 
     /**
-     * Конструктор для внедрения зависимости UserService.
+     * Конструктор для внедрения зависимости HateoasServiceImpl.
      *
-     * @param hateoasServiceImpl сервис для бизнес-логики работы с пользователями с применнием open-api
+     * @param hateoasServiceImpl сервис для бизнес-логики работы с пользователями с применением open-api
      */
     public HateoasUserController(HateoasServiceImpl hateoasServiceImpl) {
         this.hateoasServiceImpl = hateoasServiceImpl;
@@ -44,9 +55,11 @@ public class HateoasUserController {
 
     /**
      * Создает нового пользователя на основе предоставленных данных.
+     * Используется кастомная аннотация {@link CreateUserApiResponse} для документирования ответов API.
      *
      * @param userDto DTO объект с данными для создания пользователя
      * @return ResponseEntity с UserDto
+     * @see CreateUserApiResponse
      */
     @PostMapping
     @CreateUserApiResponse
@@ -56,9 +69,11 @@ public class HateoasUserController {
 
     /**
      * Получает пользователя по указанному идентификатору.
+     * Используется кастомная аннотация {@link GetUserApiResponse} для документирования ответов API.
      *
      * @param id идентификатор пользователя
      * @return ResponseEntity с данными пользователя (200 OK) или сообщением об ошибке (404 Not Found)
+     * @see GetUserApiResponse
      */
     @GetMapping("/{id}")
     @GetUserApiResponse
@@ -68,8 +83,10 @@ public class HateoasUserController {
 
     /**
      * Получает список всех пользователей в системе.
+     * Используется кастомная аннотация {@link GetAllUsersApiResponse} для документирования ответов API.
      *
      * @return список DTO объектов всех пользователей (200 OK)
+     * @see GetAllUsersApiResponse
      */
     @GetMapping
     @GetAllUsersApiResponse
@@ -79,10 +96,12 @@ public class HateoasUserController {
 
     /**
      * Обновляет данные пользователя с указанным идентификатором.
+     * Используется кастомная аннотация {@link UpdateUserApiResponse} для документирования ответов API.
      *
      * @param id            идентификатор пользователя для обновления
      * @param updateUserDto DTO объект с обновленными данными пользователя
      * @return ResponseEntity с обновленными данными пользователя (200 OK) или сообщением об ошибке (404 Not Found)
+     * @see UpdateUserApiResponse
      */
     @PutMapping("/{id}")
     @UpdateUserApiResponse
@@ -94,9 +113,11 @@ public class HateoasUserController {
 
     /**
      * Удаляет пользователя с указанным идентификатором.
+     * Используется кастомная аннотация {@link DeleteUserApiResponse} для документирования ответов API.
      *
      * @param id идентификатор пользователя для удаления
      * @return ResponseEntity с подтверждением удаления (200 OK) или сообщением об ошибке (404 Not Found)
+     * @see DeleteUserApiResponse
      */
     @DeleteMapping("/{id}")
     @DeleteUserApiResponse

@@ -10,6 +10,37 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+/**
+ * Аннотация для документирования Swagger ответов операции обновления пользователя.
+ *
+ * <p>Предоставляет стандартизированное описание API endpoint'а для обновления данных пользователя,
+ * включая примеры успешного и неуспешного выполнения операции.</p>
+ *
+ * <p><b>Применение:</b></p>
+ * <pre>
+ * {@code
+ * @UpdateUserApiResponse
+ * @PutMapping("/{id}")
+ * public ResponseEntity<UserDto> updateUser(
+ *     @PathVariable Long id,
+ *     @RequestBody @Valid UserDto userDto) {
+ *     // реализация метода
+ * }
+ * }
+ * </pre>
+ *
+ * <p><b>Содержит:</b></p>
+ * <ul>
+ *   <li>Описание операции "updateUser"</li>
+ *   <li>Пример успешного ответа с обновленными данными пользователя</li>
+ *   <li>Пример ошибки при ненайденном пользователе</li>
+ *   <li>HATEOAS ссылки для навигации</li>
+ * </ul>
+ *
+ * @see SwaggerDescriptionExamples
+ * @see Operation
+ * @see ApiResponse
+ */
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
 @Operation(summary = "updateUser", description = "Обновляет пользователя")
@@ -30,6 +61,5 @@ import java.lang.annotation.Target;
                 }
         )
 )
-
 public @interface UpdateUserApiResponse {
 }

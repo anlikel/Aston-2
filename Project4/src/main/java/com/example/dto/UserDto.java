@@ -5,7 +5,7 @@ import java.time.LocalDateTime;
 /**
  * Универсальный DTO для получения/возврата данных
  */
-public class UserDto{
+public class UserDto {
 
     /**
      * Уникальный идентификатор пользователя
