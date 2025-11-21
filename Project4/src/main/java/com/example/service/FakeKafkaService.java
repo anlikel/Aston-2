@@ -3,6 +3,7 @@ package com.example.service;
 import com.example.entities.UserEntity;
 import com.example.notificationhandlers.EventType;
 import com.example.notificationhandlers.ServiceEventDto;
+import com.example.serviceinterfaces.KafkaServiceInterface;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationEventPublisher;
@@ -13,7 +14,7 @@ import org.springframework.stereotype.Service;
  * Имитирует отправку событий в Kafka путем публикации Spring событий внутри приложения.
  */
 @Service
-public class FakeKafkaService {
+public class FakeKafkaService implements KafkaServiceInterface {
 
     private static final Logger logger = LoggerFactory.getLogger(FakeKafkaService.class);
 

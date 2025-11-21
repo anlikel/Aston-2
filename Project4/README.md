@@ -32,12 +32,13 @@ project/
 │   │    ├── java/
 │   │    │   └── com/example/
 │   │    │       ├── controller/                            # rest controller
-│   │    │       │   └── UserController.java         
+│   │    │       │   ├── FakeKafkaUserController.java  
+│   │    │       │   ├── HateoasUserController.java
+│   │    │       │   └── UserController.java       
 │   │    │       ├── entities           
 │   │    │       │   └── UserEntity.java                  # User entity class
 │   │    │       ├── dto                                     # data transfer objects
-│   │    │       │   ├── CreateUserDto.java
-│   │    │       │   ├── GetUserDto.java
+│   │    │       │   ├── UserDto.java
 │   │    │       │   └── UserMapper.java                  # mapper class to convertion dto/entity
 │   │    │       ├── exceptions           
 │   │    │       │   └── MyCustomException.java   
@@ -57,9 +58,21 @@ project/
 │   │    │       │   ├── EmailService.java             #simple class mail send imitation       
 │   │    │       │   ├── KafkaService.java
 │   │    │       │   ├── KafkaListenerEmailNotificationService.java     # kafka consumer  
-│   │    │       │   └── FakeKafkaListenerEmailNotificationService.java    #fake kafka consumer via event listener                        
+│   │    │       │   └── FakeKafkaListenerEmailNotificationService.java    #fake kafka consumer via event listener  
+│   │    │       ├── serviceinterfaces              
+│   │    │       │   ├── EmailServiceInterface.java                
+│   │    │       │   ├── KafkaListenerEmailNotificationServiceInterface.java          
+│   │    │       │   ├── KafkaServiceInterface.java         
+│   │    │       │   └── UserServiceInterface.java                                      
 │   │    │       ├── util           
 │   │    │       │   └── UtilValidator.java
+│   │    │       ├── swagger              
+│   │    │       │   ├── SwaggerDescriptionExamples.java     #class with string constants               
+│   │    │       │   ├── CreateUserApiResponse.java          
+│   │    │       │   ├── DeleteUserApiResponse.java         
+│   │    │       │   ├── UpdateUserApiResponse.java                
+│   │    │       │   ├── GetUserApiResponse.java 
+│   │    │       │   └── GetAllUsersUserApiResponse.java    
 │   │    │       └── Project4Application.java                 # Main application class
 │   │    └── resources/
 │   │        ├── static 
@@ -129,19 +142,33 @@ project/
     c) Удалить пользователя по ид.
     d) Обновить пользователя по ид.
     e) Получить полный список текущих пользователей, сохраненных в бд.
+
+6. Доступные эндпоинты:
+
+    а) http://localhost:8080/api/users - стандартный эндпоинт со всеми
+    реализованными операциями и отправкой уведомлений через микросервис кафка.
+
+    б) http://localhost:8080/api/fakeusers - эндпоинт c реализованными операциями 
+    создания/удаления пользователя и отправкой уведомлений через аналог-микросервиса кафка,
+    реализованный через стандартные средства спринг.
     
-6. Логирование.
+    в) http://localhost:8080/api/hateoasusers - эндпоинт со всеми
+    реализованными операциями , отправкой уведомлений через микросервис кафка,
+    также добавлена поддержка возврата доступных ссылок по операциям с пользователями
+    через HATEOAS и документирование через open-api по адресу http://localhost:8080/swagger-ui.html
+    
+7. Логирование.
 
     Все логи сохраняются в папку /logs в корне проекта.
 
-7. Тестирование.
+8. Тестирование.
 
 Реализованы тесты на валидацию вводимых данных для создание класса UserEntity,
 тесты Dao-слоя для проверки работы с бд, тесты сервис слоя с помощью Mockito,
 тесты слоя контрорллера.
 тесты KAFKA сервиса.
 
-8. Возможные проблемы
+9. Возможные проблемы
 Запуск тестов: mvn test
 Остановка/удаление контейнеров для послеждующего перезапуска в случае конфликта имен контейнеров
 скрипт DOCKER_IMAGES_DELETE.sh

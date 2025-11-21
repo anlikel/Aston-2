@@ -1,6 +1,5 @@
 package com.example.notificationhandlers;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -22,7 +21,6 @@ public class NotificationHandlerFactory {
      *
      * @param handlerList список всех доступных обработчиков уведомлений
      */
-    @Autowired
     public NotificationHandlerFactory(List<NotificationHandler> handlerList) {
         handlers = handlerList.stream()
                 .collect(Collectors.toMap(
