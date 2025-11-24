@@ -1,0 +1,17 @@
+spring:
+  sql:
+    init:
+      mode: never
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    show-sql: false
+    properties:
+      hibernate:
+        format_sql: false
+  kafka:
+    bootstrap-servers:
+    consumer:
+      auto-startup: false
+    listener:
+      auto-startup: false
