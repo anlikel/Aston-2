@@ -1,0 +1,78 @@
+2025-11-24 17:25:03.339 [main] INFO  com.example.Project4Application - Starting Project4Application using Java 17.0.14 with PID 51473 (/home/tilium/Desktop/Aston-2/Project7/user-service/target/classes started by tilium in /home/tilium/Desktop/Aston-2/Project7)
+2025-11-24 17:25:03.340 [main] DEBUG com.example.Project4Application - Running with Spring Boot v3.2.0, Spring v6.1.1
+2025-11-24 17:25:03.341 [main] INFO  com.example.Project4Application - No active profile set, falling back to 1 default profile: "default"
+2025-11-24 17:25:03.381 [main] INFO  o.s.b.d.c.l.DockerComposeLifecycleManager - Using Docker Compose file '/home/tilium/Desktop/Aston-2/Project7/user-service/compose.yaml'
+2025-11-24 17:25:03.940 [OutputReader-stderr] INFO  o.s.b.docker.compose.core.DockerCli -  Container gubenko-zookeeper  Starting
+2025-11-24 17:25:03.941 [OutputReader-stderr] INFO  o.s.b.docker.compose.core.DockerCli -  Container gubenko-postgres  Starting
+2025-11-24 17:25:04.112 [OutputReader-stderr] INFO  o.s.b.docker.compose.core.DockerCli -  Container gubenko-zookeeper  Started
+2025-11-24 17:25:04.113 [OutputReader-stderr] INFO  o.s.b.docker.compose.core.DockerCli -  Container gubenko-kafka  Starting
+2025-11-24 17:25:04.136 [OutputReader-stderr] INFO  o.s.b.docker.compose.core.DockerCli -  Container gubenko-postgres  Started
+2025-11-24 17:25:04.254 [OutputReader-stderr] INFO  o.s.b.docker.compose.core.DockerCli -  Container gubenko-kafka  Started
+2025-11-24 17:25:04.255 [OutputReader-stderr] INFO  o.s.b.docker.compose.core.DockerCli -  Container gubenko-kafka  Waiting
+2025-11-24 17:25:04.255 [OutputReader-stderr] INFO  o.s.b.docker.compose.core.DockerCli -  Container gubenko-postgres  Waiting
+2025-11-24 17:25:04.255 [OutputReader-stderr] INFO  o.s.b.docker.compose.core.DockerCli -  Container gubenko-zookeeper  Waiting
+2025-11-24 17:25:04.756 [OutputReader-stderr] INFO  o.s.b.docker.compose.core.DockerCli -  Container gubenko-postgres  Healthy
+2025-11-24 17:25:04.756 [OutputReader-stderr] INFO  o.s.b.docker.compose.core.DockerCli -  Container gubenko-zookeeper  Healthy
+2025-11-24 17:25:15.756 [OutputReader-stderr] INFO  o.s.b.docker.compose.core.DockerCli -  Container gubenko-kafka  Healthy
+2025-11-24 17:25:17.218 [main] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 8081 (http)
+2025-11-24 17:25:17.224 [main] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2025-11-24 17:25:17.225 [main] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.16]
+2025-11-24 17:25:17.265 [main] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+2025-11-24 17:25:17.265 [main] INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 737 ms
+2025-11-24 17:25:18.329 [main] WARN  o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2025-11-24 17:25:18.745 [main] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port 8081 (http) with context path ''
+2025-11-24 17:25:18.871 [main] INFO  com.example.Project4Application - Started Project4Application in 15.809 seconds (process running for 16.009)
+2025-11-24 17:32:16.876 [main] INFO  com.example.Project4Application - Starting Project4Application using Java 17.0.14 with PID 53179 (/home/tilium/Desktop/Aston-2/Project7/user-service/target/classes started by tilium in /home/tilium/Desktop/Aston-2/Project7)
+2025-11-24 17:32:16.877 [main] DEBUG com.example.Project4Application - Running with Spring Boot v3.2.0, Spring v6.1.1
+2025-11-24 17:32:16.878 [main] INFO  com.example.Project4Application - No active profile set, falling back to 1 default profile: "default"
+2025-11-24 17:32:16.915 [main] INFO  o.s.b.d.c.l.DockerComposeLifecycleManager - Using Docker Compose file '/home/tilium/Desktop/Aston-2/Project7/user-service/compose.yaml'
+2025-11-24 17:32:17.459 [OutputReader-stderr] INFO  o.s.b.docker.compose.core.DockerCli -  Container gubenko-zookeeper  Starting
+2025-11-24 17:32:17.460 [OutputReader-stderr] INFO  o.s.b.docker.compose.core.DockerCli -  Container gubenko-postgres  Starting
+2025-11-24 17:32:17.644 [OutputReader-stderr] INFO  o.s.b.docker.compose.core.DockerCli -  Container gubenko-postgres  Started
+2025-11-24 17:32:17.664 [OutputReader-stderr] INFO  o.s.b.docker.compose.core.DockerCli -  Container gubenko-zookeeper  Started
+2025-11-24 17:32:17.664 [OutputReader-stderr] INFO  o.s.b.docker.compose.core.DockerCli -  Container gubenko-kafka  Starting
+2025-11-24 17:32:17.803 [OutputReader-stderr] INFO  o.s.b.docker.compose.core.DockerCli -  Container gubenko-kafka  Started
+2025-11-24 17:32:17.803 [OutputReader-stderr] INFO  o.s.b.docker.compose.core.DockerCli -  Container gubenko-zookeeper  Waiting
+2025-11-24 17:32:17.803 [OutputReader-stderr] INFO  o.s.b.docker.compose.core.DockerCli -  Container gubenko-kafka  Waiting
+2025-11-24 17:32:17.803 [OutputReader-stderr] INFO  o.s.b.docker.compose.core.DockerCli -  Container gubenko-postgres  Waiting
+2025-11-24 17:32:18.304 [OutputReader-stderr] INFO  o.s.b.docker.compose.core.DockerCli -  Container gubenko-zookeeper  Healthy
+2025-11-24 17:32:18.305 [OutputReader-stderr] INFO  o.s.b.docker.compose.core.DockerCli -  Container gubenko-postgres  Healthy
+2025-11-24 17:32:29.304 [OutputReader-stderr] INFO  o.s.b.docker.compose.core.DockerCli -  Container gubenko-kafka  Healthy
+2025-11-24 17:32:30.766 [main] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 8081 (http)
+2025-11-24 17:32:30.772 [main] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2025-11-24 17:32:30.773 [main] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.16]
+2025-11-24 17:32:30.813 [main] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+2025-11-24 17:32:30.813 [main] INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 750 ms
+2025-11-24 17:32:31.952 [main] WARN  o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2025-11-24 17:32:32.437 [main] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port 8081 (http) with context path ''
+2025-11-24 17:32:32.549 [main] INFO  com.example.Project4Application - Started Project4Application in 15.953 seconds (process running for 16.157)
+2025-11-24 17:33:16.627 [http-nio-8081-exec-1] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+2025-11-24 17:33:16.649 [http-nio-8081-exec-1] INFO  com.example.service.UserService - DB event: try to getAllUsers
+2025-11-24 17:33:16.715 [http-nio-8081-exec-1] INFO  com.example.service.UserService - DB event: success getAllUsers, found 2 users
+2025-11-24 17:35:42.053 [main] INFO  com.example.Project4Application - Starting Project4Application using Java 17.0.14 with PID 55171 (/home/tilium/Desktop/Aston-2/Project7/user-service/target/classes started by tilium in /home/tilium/Desktop/Aston-2/Project7)
+2025-11-24 17:35:42.054 [main] DEBUG com.example.Project4Application - Running with Spring Boot v3.2.0, Spring v6.1.1
+2025-11-24 17:35:42.055 [main] INFO  com.example.Project4Application - No active profile set, falling back to 1 default profile: "default"
+2025-11-24 17:35:42.091 [main] INFO  o.s.b.d.c.l.DockerComposeLifecycleManager - Using Docker Compose file '/home/tilium/Desktop/Aston-2/Project7/user-service/compose.yaml'
+2025-11-24 17:35:42.644 [OutputReader-stderr] INFO  o.s.b.docker.compose.core.DockerCli -  Container gubenko-postgres  Starting
+2025-11-24 17:35:42.644 [OutputReader-stderr] INFO  o.s.b.docker.compose.core.DockerCli -  Container gubenko-zookeeper  Starting
+2025-11-24 17:35:42.807 [OutputReader-stderr] INFO  o.s.b.docker.compose.core.DockerCli -  Container gubenko-zookeeper  Started
+2025-11-24 17:35:42.807 [OutputReader-stderr] INFO  o.s.b.docker.compose.core.DockerCli -  Container gubenko-kafka  Starting
+2025-11-24 17:35:42.831 [OutputReader-stderr] INFO  o.s.b.docker.compose.core.DockerCli -  Container gubenko-postgres  Started
+2025-11-24 17:35:42.945 [OutputReader-stderr] INFO  o.s.b.docker.compose.core.DockerCli -  Container gubenko-kafka  Started
+2025-11-24 17:35:42.946 [OutputReader-stderr] INFO  o.s.b.docker.compose.core.DockerCli -  Container gubenko-kafka  Waiting
+2025-11-24 17:35:42.946 [OutputReader-stderr] INFO  o.s.b.docker.compose.core.DockerCli -  Container gubenko-postgres  Waiting
+2025-11-24 17:35:42.946 [OutputReader-stderr] INFO  o.s.b.docker.compose.core.DockerCli -  Container gubenko-zookeeper  Waiting
+2025-11-24 17:35:43.447 [OutputReader-stderr] INFO  o.s.b.docker.compose.core.DockerCli -  Container gubenko-postgres  Healthy
+2025-11-24 17:35:43.447 [OutputReader-stderr] INFO  o.s.b.docker.compose.core.DockerCli -  Container gubenko-zookeeper  Healthy
+2025-11-24 17:35:54.447 [OutputReader-stderr] INFO  o.s.b.docker.compose.core.DockerCli -  Container gubenko-kafka  Healthy
+2025-11-24 17:35:55.928 [main] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 8081 (http)
+2025-11-24 17:35:55.934 [main] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2025-11-24 17:35:55.934 [main] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.16]
+2025-11-24 17:35:55.986 [main] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+2025-11-24 17:35:55.986 [main] INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 771 ms
+2025-11-24 17:35:57.169 [main] WARN  o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2025-11-24 17:35:57.629 [main] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port 8081 (http) with context path ''
+2025-11-24 17:35:57.731 [main] INFO  com.example.Project4Application - Started Project4Application in 15.958 seconds (process running for 16.156)
+2025-11-24 17:36:27.560 [http-nio-8081-exec-1] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+2025-11-24 17:36:27.581 [http-nio-8081-exec-1] INFO  com.example.service.UserService - DB event: try to getAllUsers
+2025-11-24 17:36:27.649 [http-nio-8081-exec-1] INFO  com.example.service.UserService - DB event: success getAllUsers, found 2 users

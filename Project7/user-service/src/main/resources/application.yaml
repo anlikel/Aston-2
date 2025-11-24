@@ -1,6 +1,9 @@
+server:
+  port: 8081
+
 spring:
   application:
-    name: Project4
+    name: Project7
   docker:
     compose:
       enabled: true

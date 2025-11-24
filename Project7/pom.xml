@@ -14,7 +14,7 @@
 
     <modules>
         <module>user-service</module>
-        <!--<module>api-gateway</module>-->
+        <module>api-gateway</module>
         <!--<module>eureka-server</module>-->
     </modules>
 

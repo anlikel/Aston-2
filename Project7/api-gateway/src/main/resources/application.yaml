@@ -1,0 +1,38 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: gateway-service
+  cloud:
+    gateway:
+      routes:
+        - id: user_service_basic
+          uri: http://localhost:8081
+          predicates:
+            - Path=/api/users/**
+          filters:
+            - RewritePath=/api/users/(?<segment>.*), /api/users/${segment}
+
+        - id: user_service_fake
+          uri: http://localhost:8081
+          predicates:
+            - Path=/api/fakeusers/**
+          filters:
+            - RewritePath=/api/fakeusers/(?<segment>.*), /api/fakeusers/${segment}
+
+        - id: user_service_hateoas
+          uri: http://localhost:8081
+          predicates:
+            - Path=/api/hateoasusers/**
+          filters:
+            - RewritePath=/api/hateoasusers/(?<segment>.*), /api/hateoasusers/${segment}
+
+        # Маршрут для Swagger UI
+        - id: swagger-ui
+          uri: http://localhost:8081
+          predicates:
+            - Path=/swagger-ui/**,/v3/api-docs/**,/swagger-ui.html
+          filters:
+            - RewritePath=/swagger-ui/(?<segment>.*), /swagger-ui/${segment}
+            - RewritePath=/v3/api-docs/(?<segment>.*), /v3/api-docs/${segment}
