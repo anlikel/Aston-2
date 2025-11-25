@@ -1,0 +1,119 @@
+services:
+  postgres:
+    image: postgres:15
+    container_name: gubenko-postgres
+    environment:
+      POSTGRES_DB: postgres
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: 1234
+    ports:
+      - "5433:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - app-network
+
+  zookeeper:
+    image: confluentinc/cp-zookeeper:latest
+    container_name: gubenko-zookeeper
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+    ports:
+      - "2181:2181"
+    networks:
+      - app-network
+
+  kafka:
+    image: confluentinc/cp-kafka:7.3.2
+    container_name: gubenko-kafka
+    depends_on:
+      - zookeeper
+    ports:
+      - "9092:9092"
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+
+      KAFKA_LISTENERS: PLAINTEXT://0.0.0.0:9092
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://localhost:9092
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: "true"
+      KAFKA_LOG_RETENTION_HOURS: 24
+      KAFKA_LOG_RETENTION_BYTES: 100000000
+    healthcheck:
+      test: [ "CMD", "kafka-topics", "--list", "--bootstrap-server", "localhost:9092" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - app-network
+
+#####################
+  eureka-server:
+    # Замените 'your-artifact-id' на актуальный artifactId из pom.xml вашего eureka-сервера
+    # Если это модуль внутри проекта, путь может быть сложнее
+    build:
+      context: ./eureka-server # Путь к модулю Eureka Server относительно корня проекта
+      dockerfile: Dockerfile
+    container_name: gubenko-eureka-server
+    ports:
+      - "8761:8761"
+    healthcheck:
+      test: [ "CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:8761/" ]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 30s
+    networks:
+      - app-network
+
+  user-service:
+    # Замените 'your-artifact-id' на актуальный artifactId из pom.xml
+    build:
+      context: ./user-service # Путь к модулю User Service относительно корня проекта
+      dockerfile: Dockerfile
+    container_name: gubenko-user-service
+    ports:
+      - "8081:8081"
+    environment:
+#      # Указываем сервисам общаться по именам сервисов Docker Compose
+#      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/postgres
+#      SPRING_KAFKA_BOOTSTRAP_SERVERS: kafka:9092
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka-server:8761/eureka/
+      - EUREKA_CLIENT_ENABLED=true
+      - SPRING_CLOUD_DISCOVERY_ENABLED=true
+    depends_on:
+      postgres:
+        condition: service_started
+      kafka:
+        condition: service_healthy
+#      eureka-server:
+#        condition: service_healthy
+    networks:
+      - app-network
+
+  api-gateway:
+    build:
+      context: ./api-gateway # Путь к модулю API Gateway относительно корня проекта
+      dockerfile: Dockerfile
+    container_name: gubenko-api-gateway
+    ports:
+      - "8080:8080"
+    environment:
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka-server:8761/eureka/
+      - EUREKA_CLIENT_ENABLED=true
+      - SPRING_CLOUD_DISCOVERY_ENABLED=true
+    depends_on:
+      - eureka-server
+    networks:
+      - app-network
+###############
+volumes:
+  postgres_data:
+
+networks:
+  app-network:
+    driver: bridge

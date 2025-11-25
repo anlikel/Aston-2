@@ -2,12 +2,14 @@ package com.example;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 
 /**
  * Главный класс приложения для запуска Spring Boot приложения.
  * Содержит точку входа в приложение и конфигурацию Spring Boot.
  */
 @SpringBootApplication
+@EnableDiscoveryClient
 public class Project4Application {
 
     /**

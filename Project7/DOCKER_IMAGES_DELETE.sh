@@ -1,6 +1,6 @@
 #!/bin/bash
 
-CONTAINER_NAMES=("gubenko-kafka" "gubenko-zookeeper" "gubenko-postgres")
+CONTAINER_NAMES=("gubenko-kafka" "gubenko-zookeeper" "gubenko-postgres" "gubenko-eureka-server" "gubenko-user-service" "gubenko-api-gateway")
 
 echo "Проверка существования контейнеров..."
 
@@ -30,3 +30,5 @@ echo "Удаляем связанные тома..."
 docker volume prune -f
 
 echo "✅ Очистка завершена. Все указанные контейнеры удалены."
+
+#docker system prune -a -f
