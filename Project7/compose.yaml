@@ -51,10 +51,7 @@ services:
     networks:
       - app-network
 
-#####################
   eureka-server:
-    # Замените 'your-artifact-id' на актуальный artifactId из pom.xml вашего eureka-сервера
-    # Если это модуль внутри проекта, путь может быть сложнее
     build:
       context: ./eureka-server # Путь к модулю Eureka Server относительно корня проекта
       dockerfile: Dockerfile
@@ -62,7 +59,7 @@ services:
     ports:
       - "8761:8761"
     healthcheck:
-      test: [ "CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:8761/" ]
+      test: [ "CMD", "curl", "-f", "http://localhost:8761/" ]
       interval: 10s
       timeout: 5s
       retries: 10
@@ -71,7 +68,6 @@ services:
       - app-network
 
   user-service:
-    # Замените 'your-artifact-id' на актуальный artifactId из pom.xml
     build:
       context: ./user-service # Путь к модулю User Service относительно корня проекта
       dockerfile: Dockerfile
@@ -79,9 +75,6 @@ services:
     ports:
       - "8081:8081"
     environment:
-#      # Указываем сервисам общаться по именам сервисов Docker Compose
-#      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/postgres
-#      SPRING_KAFKA_BOOTSTRAP_SERVERS: kafka:9092
       - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka-server:8761/eureka/
       - EUREKA_CLIENT_ENABLED=true
       - SPRING_CLOUD_DISCOVERY_ENABLED=true
@@ -90,8 +83,8 @@ services:
         condition: service_started
       kafka:
         condition: service_healthy
-#      eureka-server:
-#        condition: service_healthy
+      eureka-server:
+        condition: service_healthy
     networks:
       - app-network
 
@@ -110,7 +103,6 @@ services:
       - eureka-server
     networks:
       - app-network
-###############
 volumes:
   postgres_data:
 

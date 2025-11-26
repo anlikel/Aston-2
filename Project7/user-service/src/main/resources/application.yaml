@@ -4,19 +4,35 @@ server:
 eureka:
   client:
     enabled: true
+
+    initial-instance-info-replication-interval-seconds: 10
+    registry-fetch-interval-seconds: 10
+    eureka-service-url-poll-interval-seconds: 10
+    eureka-server-connect-timeout-seconds: 30
+    eureka-server-read-timeout-seconds: 30
+
     service-url:
       defaultZone: http://eureka-server:8761/eureka/
   instance:
-    hostname: user-service  # ← ИЗМЕНИТЬ
+    hostname: user-service
     prefer-ip-address: false
 
+    lease-renewal-interval-in-seconds: 10
+    lease-expiration-duration-in-seconds: 30
+
 spring:
+
+  cloud:
+    discovery:
+      client:
+        composite-indicator:
+          enabled: false
+    loadbalancer:
+      retry:
+        enabled: true
+
   application:
     name: user-service
-#  docker:
-#    compose:
-#      enabled: true
-#      file: ../compose.yaml
   datasource:
     url: jdbc:postgresql://postgres:5432/postgres
     username: user

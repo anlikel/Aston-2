@@ -7,7 +7,7 @@ eureka:
     service-url:
       defaultZone: http://eureka-server:8761/eureka/
   instance:
-    hostname: api-gateway  # ← ИЗМЕНИТЬ
+    hostname: api-gateway
     prefer-ip-address: false
 
 spring:
@@ -17,7 +17,6 @@ spring:
     gateway:
       routes:
         - id: user_service_basic
-#          uri: http://user-service:8081
           uri: lb://user-service
           predicates:
             - Path=/api/users/**
@@ -25,7 +24,6 @@ spring:
             - RewritePath=/api/users/(?<segment>.*), /api/users/${segment}
 
         - id: user_service_fake
-#          uri: http://user-service:8081
           uri: lb://user-service
           predicates:
             - Path=/api/fakeusers/**
@@ -33,16 +31,13 @@ spring:
             - RewritePath=/api/fakeusers/(?<segment>.*), /api/fakeusers/${segment}
 
         - id: user_service_hateoas
-#          uri: http://user-service:8081
           uri: lb://user-service
           predicates:
             - Path=/api/hateoasusers/**
           filters:
             - RewritePath=/api/hateoasusers/(?<segment>.*), /api/hateoasusers/${segment}
 
-        # Маршрут для Swagger UI
         - id: swagger-ui
-#          uri: http://user-service:8081
           uri: lb://user-service
           predicates:
             - Path=/swagger-ui/**,/v3/api-docs/**,/swagger-ui.html
