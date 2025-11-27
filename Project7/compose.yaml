@@ -121,8 +121,8 @@ services:
       - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka-server:8761/eureka/
       - EUREKA_CLIENT_ENABLED=true
 #      - SPRING_CLOUD_DISCOVERY_ENABLED=true
-      - SPRING_CLOUD_CONFIG_ENABLED=true
-      - SPRING_CLOUD_CONFIG_URI=http://config-server:8088
+#      - SPRING_CLOUD_CONFIG_ENABLED=true
+#      - SPRING_CLOUD_CONFIG_URI=http://config-server:8088
     depends_on:
       - eureka-server
     networks:
