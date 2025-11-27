@@ -1,6 +1,7 @@
 #!/bin/bash
 
-CONTAINER_NAMES=("gubenko-kafka" "gubenko-zookeeper" "gubenko-postgres" "gubenko-eureka-server" "gubenko-user-service" "gubenko-api-gateway")
+CONTAINER_NAMES=("gubenko-kafka" "gubenko-zookeeper" "gubenko-postgres"
+"gubenko-eureka-server" "gubenko-user-service" "gubenko-api-gateway" "gubenko-config-server")
 
 echo "Проверка существования контейнеров..."
 
