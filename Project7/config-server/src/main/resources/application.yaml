@@ -1,24 +1,18 @@
 server:
   port: 8088
 
-eureka:
-  client:
-    enabled: false
-    service-url:
-      defaultZone: http://eureka-server:8761/eureka/
-  instance:
-    hostname: config-server
-    prefer-ip-address: false
-
 spring:
-  application:
-    name: config-server
   cloud:
     config:
       server:
         git:
-          uri: https://github.com/my-org/config-repo
+          uri: https://github.com/anlikel/configs
           default-label: main
-          timeout: 5
+          search-paths: configs/*
           clone-on-start: true
-          force-pull: true
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info

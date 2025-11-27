@@ -13,6 +13,7 @@
 ```bash
 
 1. Запустить развертывание через контейнеры:
+docker-compose down
 mvn clean package -Dmaven.test.skip=true
 docker-compose -f compose.yaml up -d
 
@@ -175,3 +176,4 @@ project/
 Запуск тестов: mvn test
 Остановка/удаление контейнеров для послеждующего перезапуска в случае конфликта имен контейнеров
 скрипт DOCKER_IMAGES_DELETE.sh
+docker system prune -a -f

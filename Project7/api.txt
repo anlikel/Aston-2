@@ -1,0 +1,94 @@
+server:
+  port: 8080
+
+eureka:
+  client:
+    enabled: true
+    service-url:
+      defaultZone: http://eureka-server:8761/eureka/
+  instance:
+    hostname: api-gateway
+    prefer-ip-address: false
+
+spring:
+  application:
+    name: api-gateway
+  cloud:
+    gateway:
+      routes:
+        - id: user_service_basic
+          uri: lb://user-service
+          predicates:
+            - Path=/api/users/**
+          filters:
+            - RewritePath=/api/users/(?<segment>.*), /api/users/${segment}
+            - name: CircuitBreaker
+              args:
+                name: userServiceBasic
+                fallbackUri: forward:/fallback/user-service
+
+        - id: user_service_fake
+          uri: lb://user-service
+          predicates:
+            - Path=/api/fakeusers/**
+          filters:
+            - RewritePath=/api/fakeusers/(?<segment>.*), /api/fakeusers/${segment}
+            - name: CircuitBreaker
+              args:
+                name: userServiceFake
+                fallbackUri: forward:/fallback/user-service
+
+        - id: user_service_hateoas
+          uri: lb://user-service
+          predicates:
+            - Path=/api/hateoasusers/**
+          filters:
+            - RewritePath=/api/hateoasusers/(?<segment>.*), /api/hateoasusers/${segment}
+            - name: CircuitBreaker
+              args:
+                name: userServiceHateoas
+                fallbackUri: forward:/fallback/user-service
+
+        - id: swagger-ui
+          uri: lb://user-service
+          predicates:
+            - Path=/swagger-ui/**,/v3/api-docs/**,/swagger-ui.html
+          filters:
+            - RewritePath=/swagger-ui/(?<segment>.*), /swagger-ui/${segment}
+            - RewritePath=/v3/api-docs/(?<segment>.*), /v3/api-docs/${segment}
+            - name: CircuitBreaker
+              args:
+                name: swaggerService
+                fallbackUri: forward:/fallback/swagger
+
+# Конфигурация Resilience4j Circuit Breaker
+resilience4j:
+  circuitbreaker:
+    configs:
+      default:
+        slidingWindowSize: 10
+        failureRateThreshold: 50
+        waitDurationInOpenState: 10s
+        permittedNumberOfCallsInHalfOpenState: 3
+        automaticTransitionFromOpenToHalfOpenEnabled: true
+    instances:
+      userServiceBasic:
+        baseConfig: default
+      userServiceFake:
+        baseConfig: default
+      userServiceHateoas:
+        baseConfig: default
+      swaggerService:
+        baseConfig: default
+
+# Мониторинг
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,metrics,circuitbreakers,gateway
+  endpoint:
+    health:
+      show-details: always
+    gateway:
+      enabled: true
