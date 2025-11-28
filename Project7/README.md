@@ -177,3 +177,16 @@ project/
 Остановка/удаление контейнеров для послеждующего перезапуска в случае конфликта имен контейнеров
 скрипт DOCKER_IMAGES_DELETE.sh
 docker system prune -a -f
+
+# Смотреть логи user-service в реальном времени
+docker logs gubenko-user-service -f
+
+# Или через docker-compose
+docker-compose logs -f user-service
+
+# Только кафка-related логи
+docker logs gubenko-user-service | grep -i "kafka\|email\|user"
+
+# После создания пользователя посмотреть последние логи
+curl -X POST http://localhost:8080/api/users -H "Content-Type: application/json" -d '{"name":"Test", "email":"test@test.com"}'
+docker logs gubenko-user-service --tail=20
