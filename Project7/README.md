@@ -166,17 +166,21 @@ project/
     Все логи сохраняются в папку /logs в корне проекта.
 
 8. Тестирование.
+Запуск тестов: mvn test
 
 Реализованы тесты на валидацию вводимых данных для создание класса UserEntity,
 тесты Dao-слоя для проверки работы с бд, тесты сервис слоя с помощью Mockito,
 тесты слоя контрорллера.
 тесты KAFKA сервиса.
 
+
 9. Возможные проблемы
-Запуск тестов: mvn test
 Остановка/удаление контейнеров для послеждующего перезапуска в случае конфликта имен контейнеров
-скрипт DOCKER_IMAGES_DELETE.sh
-docker system prune -a -f
+скрипт DOCKER_IMAGES_DELETE.sh --удаление контейнеров
+docker system prune -a -f ---удаление образов и очистка всего
+docker-compose down
+mvn clean package -Dmaven.test.skip=true
+docker-compose -f compose.yaml up -d
 
 # Смотреть логи user-service в реальном времени
 docker logs gubenko-user-service -f

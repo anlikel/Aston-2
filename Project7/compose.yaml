@@ -8,10 +8,10 @@ services:
     ports:
       - "8088:8088"
     environment:
-          - SPRING_CLOUD_CONFIG_SERVER_GIT_URI=https://github.com/anlikel/configs
-          - SPRING_CLOUD_CONFIG_SERVER_GIT_DEFAULT-LABEL=main
-          - SPRING_CLOUD_CONFIG_SERVER_GIT_SEARCH-PATHS=configs
-          - SPRING_CLOUD_CONFIG_SERVER_GIT_SKIP-SSL-VALIDATION=true
+      - SPRING_CLOUD_CONFIG_SERVER_GIT_URI=https://github.com/anlikel/configs
+      - SPRING_CLOUD_CONFIG_SERVER_GIT_DEFAULT-LABEL=main
+      - SPRING_CLOUD_CONFIG_SERVER_GIT_SEARCH-PATHS=configs
+      - SPRING_CLOUD_CONFIG_SERVER_GIT_SKIP-SSL-VALIDATION=true
     networks:
       - app-network
     healthcheck:
@@ -98,7 +98,7 @@ services:
     environment:
       - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka-server:8761/eureka/
       - EUREKA_CLIENT_ENABLED=true
-#      - SPRING_CLOUD_DISCOVERY_ENABLED=true
+    #      - SPRING_CLOUD_DISCOVERY_ENABLED=true
     depends_on:
       postgres:
         condition: service_started
@@ -119,9 +119,6 @@ services:
     environment:
       - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka-server:8761/eureka/
       - EUREKA_CLIENT_ENABLED=true
-#      - SPRING_CLOUD_DISCOVERY_ENABLED=true
-#      - SPRING_CLOUD_CONFIG_ENABLED=true
-#      - SPRING_CLOUD_CONFIG_URI=http://config-server:8088
     depends_on:
       - eureka-server
     networks:
