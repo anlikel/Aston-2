@@ -1,8 +1,9 @@
 package com.example.service;
 
+import com.example.ServiceEventDto;
 import com.example.notificationhandlers.NotificationHandler;
 import com.example.notificationhandlers.NotificationHandlerFactory;
-import com.example.notificationhandlers.ServiceEventDto;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Service;

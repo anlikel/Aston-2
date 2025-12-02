@@ -1,5 +1,8 @@
 package com.example.notificationhandlers;
 
+import com.example.EventType;
+import com.example.ServiceEventDto;
+
 /**
  * Интерфейс для обработчиков уведомлений.
  * Определяет методы для отправки уведомлений и получения поддерживаемого типа события.

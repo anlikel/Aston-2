@@ -1,8 +1,6 @@
 package com.example.kafkatests;
 
 import com.example.entities.UserEntity;
-import com.example.notificationhandlers.EventType;
-import com.example.notificationhandlers.ServiceEventDto;
 import com.example.service.KafkaService;
 import org.apache.kafka.clients.consumer.Consumer;
 import org.apache.kafka.clients.consumer.ConsumerConfig;

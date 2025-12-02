@@ -15,8 +15,12 @@
 1. Запустить развертывание через контейнеры:
 docker-compose down
 mvn clean package -Dmaven.test.skip=true
+
+docker system prune -f
+или
 docker-compose build --no-cache
-docker-compose up -d
+и docker-compose up -d --build
+
 docker-compose -f compose.yaml up -d
 
 Происходит поднятие базы данных POSTGRESS 15 на базе докер-контейнера и автоматическая

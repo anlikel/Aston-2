@@ -1,7 +1,8 @@
 package com.example.serviceinterfaces;
 
+import com.example.EventType;
 import com.example.entities.UserEntity;
-import com.example.notificationhandlers.EventType;
+
 
 /**
  * Интерфейс сервиса для работы с Apache Kafka.
