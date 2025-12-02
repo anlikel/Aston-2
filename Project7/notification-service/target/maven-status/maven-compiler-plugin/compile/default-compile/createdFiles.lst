@@ -1,0 +1,12 @@
+com/example/service/EmailService.class
+com/example/service/FakeKafkaListenerEmailNotificationService.class
+com/example/notificationhandlers/NotificationHandlerFactory.class
+com/example/service/EmailServiceInterface.class
+com/example/service/KafkaListenerEmailNotificationService.class
+com/example/notificationhandlers/CreateUserNotificationHandler.class
+com/example/notificationhandlers/DeleteUserNotificationHandler.class
+com/example/NotificationServiceApplication.class
+com/example/notificationhandlers/EventType.class
+com/example/service/KafkaListenerEmailNotificationServiceInterface.class
+com/example/notificationhandlers/NotificationHandler.class
+com/example/notificationhandlers/ServiceEventDto.class
