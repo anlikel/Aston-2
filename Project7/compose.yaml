@@ -111,7 +111,6 @@ services:
     environment:
       - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka-server:8761/eureka/
       - EUREKA_CLIENT_ENABLED=true
-    #      - SPRING_CLOUD_DISCOVERY_ENABLED=true
     depends_on:
       postgres:
         condition: service_healthy
@@ -163,13 +162,8 @@ services:
     ports:
       - "8082:8082"
     environment:
-#      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka-server:8761/eureka/
-#      - EUREKA_CLIENT_ENABLED=true
-      - eureka.client.service-url.defaultZone=http://eureka-server:8761/eureka/
-      - eureka.client.enabled=true
-      - spring.application.name=notification-service
-      - spring.kafka.bootstrap-servers=kafka:9092
-      - spring.kafka.consumer.group-id=notification-service-group
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka-server:8761/eureka/
+      - EUREKA_CLIENT_ENABLED=true
     depends_on:
       kafka:
         condition: service_healthy
