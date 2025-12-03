@@ -1,5 +1,7 @@
 package com.example.notificationhandlers;
 
+import com.example.EventType;
+import com.example.ServiceEventDto;
 import com.example.service.EmailService;
 import org.springframework.stereotype.Component;
 

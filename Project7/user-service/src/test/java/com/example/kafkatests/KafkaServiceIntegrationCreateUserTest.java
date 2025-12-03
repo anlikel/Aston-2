@@ -1,8 +1,8 @@
 package com.example.kafkatests;
 
+import com.example.EventType;
+import com.example.ServiceEventDto;
 import com.example.entities.UserEntity;
-import com.example.notificationhandlers.EventType;
-import com.example.notificationhandlers.ServiceEventDto;
 import com.example.service.KafkaService;
 import org.apache.kafka.clients.consumer.Consumer;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
@@ -19,7 +19,7 @@ import org.springframework.kafka.test.EmbeddedKafkaBroker;
 import org.springframework.kafka.test.context.EmbeddedKafka;
 import org.springframework.kafka.test.utils.KafkaTestUtils;
 import org.springframework.test.annotation.DirtiesContext;
-import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.TestPropertySource;
 
 import java.time.Duration;
 import java.util.Comparator;
@@ -45,9 +45,15 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
  * </p>
  *
  */
-@SpringBootTest
+@SpringBootTest(
+        classes = {KafkaService.class, TestKafkaConfig.class}
+)
 @EmbeddedKafka(partitions = 1, topics = {"user-topic"})
-@ContextConfiguration(classes = {KafkaService.class, TestKafkaConfig.class})
+@TestPropertySource(properties = {
+        "spring.cloud.config.enabled=false",
+        "spring.cloud.config.fail-fast=false",
+        "spring.cloud.bootstrap.enabled=false"
+})
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 class KafkaServiceIntegrationCreateUserTest {
 
@@ -82,7 +88,7 @@ class KafkaServiceIntegrationCreateUserTest {
         consumerProps.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
         consumerProps.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, "org.springframework.kafka.support.serializer.JsonDeserializer");
         consumerProps.put("spring.json.trusted.packages", "*");
-        consumerProps.put("spring.json.value.default.type", "com.example.notificationhandlers.ServiceEventDto");
+        consumerProps.put("spring.json.value.default.type", "com.example.ServiceEventDto");
 
         DefaultKafkaConsumerFactory<String, ServiceEventDto> consumerFactory =
                 new DefaultKafkaConsumerFactory<>(consumerProps);

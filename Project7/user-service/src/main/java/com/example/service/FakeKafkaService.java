@@ -1,8 +1,9 @@
 package com.example.service;
 
+import com.example.EventType;
+import com.example.ServiceEventDto;
 import com.example.entities.UserEntity;
-import com.example.notificationhandlers.EventType;
-import com.example.notificationhandlers.ServiceEventDto;
+
 import com.example.serviceinterfaces.KafkaServiceInterface;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

@@ -1,4 +1,4 @@
-package com.example.notificationhandlers;
+package com.example;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -29,15 +29,15 @@ public class ServiceEventDto {
      */
     private final long timestamp;
 
-    /**
-     * Конструктор ServiceEventDto с указанным ID и временной меткой.
-     *
-     * @param id        уникальный идентификатор события
-     * @param timestamp временная метка, когда произошло событие, в миллисекундах с эпохи Unix
-     */
-    public ServiceEventDto(Long id, long timestamp) {
-        this.timestamp = timestamp;
-    }
+//    /**
+//     * Конструктор ServiceEventDto с указанным ID и временной меткой.
+//     *
+//     * @param id        уникальный идентификатор события
+//     * @param timestamp временная метка, когда произошло событие, в миллисекундах с эпохи Unix
+//     */
+//    public ServiceEventDto(Long id, long timestamp) {
+//        this.timestamp = timestamp;
+//    }
 
     /**
      * Конструктор ServiceEventDto с указанной почтой, именем и типом события.

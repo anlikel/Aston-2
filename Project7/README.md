@@ -13,9 +13,10 @@
 ```bash
 
 1. Запустить развертывание через контейнеры:
+
 docker-compose down
 mvn clean package -Dmaven.test.skip=true
-docker-compose -f compose.yaml up -d
+docker-compose build --no-cache && docker-compose up -d --force-recreate
 
 Происходит поднятие базы данных POSTGRESS 15 на базе докер-контейнера и автоматическая
 ее иниицализация скрипом из папки /resources/data.sql
@@ -178,9 +179,9 @@ project/
 Остановка/удаление контейнеров для послеждующего перезапуска в случае конфликта имен контейнеров
 скрипт DOCKER_IMAGES_DELETE.sh --удаление контейнеров
 docker system prune -a -f ---удаление образов и очистка всего
-docker-compose down
+docker-compose down - остановить контейнеры
 mvn clean package -Dmaven.test.skip=true
-docker-compose -f compose.yaml up -d
+docker-compose -f compose.yaml up -d 
 
 # Смотреть логи user-service в реальном времени
 docker logs gubenko-user-service -f

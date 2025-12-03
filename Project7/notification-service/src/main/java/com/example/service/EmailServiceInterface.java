@@ -1,4 +1,4 @@
-package com.example.serviceinterfaces;
+package com.example.service;
 
 /**
  * Интерфейс сервиса для отправки электронных писем.
