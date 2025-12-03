@@ -21,6 +21,8 @@ docker system prune -f
 docker-compose build --no-cache
 и docker-compose up -d --build
 
+docker-compose build --no-cache && docker-compose up -d --force-recreate
+
 docker-compose -f compose.yaml up -d
 
 Происходит поднятие базы данных POSTGRESS 15 на базе докер-контейнера и автоматическая
