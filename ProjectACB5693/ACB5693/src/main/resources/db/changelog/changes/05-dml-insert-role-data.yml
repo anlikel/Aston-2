@@ -1,0 +1,14 @@
+databaseChangeLog:
+  - changeSet:
+      id: insert_role_data
+      author: Anton_Gubenko
+      preConditions:
+        - onFail: MARK_RAN
+        - tableExists:
+            tableName: role
+      changes:
+        - sqlFile:
+            path: db/changelog/sql/add/02-dml-add-role-data.sql
+      rollback:
+        - sqlFile:
+            path: db/changelog/sql/drop/02-dml-drop-role-data.sql

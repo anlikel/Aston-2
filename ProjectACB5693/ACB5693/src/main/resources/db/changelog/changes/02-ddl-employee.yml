@@ -1,0 +1,78 @@
+databaseChangeLog:
+  - changeSet:
+      id: create_employee_table
+      author: Gubenko_Anton
+      preConditions:
+        - onFail: MARK_RAN
+        - not:
+            tableExists:
+              tableName: employee
+      changes:
+        - createTable:
+            tableName: employee
+            columns:
+              - column:
+                  name: id
+                  remarks: "Уникальный идентификатор сотрудника"
+                  type: uuid
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: role_id
+                  remarks: "Идентификатор роли сотрудника"
+                  type: uuid
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_employee_role_id
+                    references: role(id)
+              - column:
+                  name: first_name
+                  remarks: "Имя сотрудника"
+                  type: varchar(40)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: last_name
+                  remarks: "Фамилия сотрудника"
+                  type: varchar(40)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: middle_name
+                  remarks: "Отчество сотрудника"
+                  type: varchar(40)
+              - column:
+                  name: phone_number
+                  remarks: "Номер телефона сотрудника"
+                  type: char(11)
+                  constraints:
+                    nullable: false
+                    unique: true
+              - column:
+                  name: birth_date
+                  remarks: "Дата рождения сотрудника"
+                  type: date
+                  constraints:
+                    nullable: false
+              - column:
+                  name: is_active
+                  remarks: "Статус активности сотрудника"
+                  type: boolean
+                  defaultValueBoolean: true
+                  constraints:
+                    nullable: false
+              - column:
+                  name: created_at
+                  remarks: "Дата создания записи"
+                  type: timestamptz
+                  defaultValueComputed: now()
+                  constraints:
+                    nullable: false
+              - column:
+                  name: updated_at
+                  remarks: "Дата обновления записи"
+                  type: timestamptz
+                  defaultValueComputed: now()
+                  constraints:
+                    nullable: false

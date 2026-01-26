@@ -1,0 +1,14 @@
+databaseChangeLog:
+  - changeSet:
+      id: insert_employee_data
+      author: Anton_Gubenko
+      preConditions:
+        - onFail: MARK_RAN
+        - tableExists:
+            tableName: employee
+      changes:
+        - sqlFile:
+            path: db/changelog/sql/add/03-dml-add-employee-data.sql
+      rollback:
+        - sqlFile:
+            path: db/changelog/sql/drop/03-dml-drop-employee-data.sql

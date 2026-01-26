@@ -1,0 +1,14 @@
+databaseChangeLog:
+  - changeSet:
+      id: insert_permission_data
+      author: Anton_Gubenko
+      preConditions:
+        - onFail: MARK_RAN
+        - tableExists:
+            tableName: permission
+      changes:
+        - sqlFile:
+            path: db/changelog/sql/add/04-dml-add-permission-data.sql
+      rollback:
+        - sqlFile:
+            path: db/changelog/sql/drop/04-dml-drop-permission-data.sql

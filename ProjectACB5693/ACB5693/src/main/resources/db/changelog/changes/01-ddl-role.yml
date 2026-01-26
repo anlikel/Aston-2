@@ -1,0 +1,45 @@
+databaseChangeLog:
+  - changeSet:
+      id: create_role_table
+      author: Gubenko_Anton
+      preConditions:
+        - onFail: MARK_RAN
+        - not:
+            tableExists:
+              tableName: role
+      changes:
+        - createTable:
+            tableName: role
+            columns:
+              - column:
+                  name: id
+                  remarks: "Идентификатор роли"
+                  type: uuid
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: role_name
+                  remarks: "Название роли"
+                  type: varchar(50)
+                  constraints:
+                    nullable: false
+                    unique: true
+              - column:
+                  name: description
+                  remarks: "Описание роли"
+                  type: text
+              - column:
+                  name: created_at
+                  remarks: "Дата создания записи"
+                  type: timestamptz
+                  defaultValueComputed: now()
+                  constraints:
+                    nullable: false
+              - column:
+                  name: updated_at
+                  remarks: "Дата обновления записи"
+                  type: timestamptz
+                  defaultValueComputed: now()
+                  constraints:
+                    nullable: false

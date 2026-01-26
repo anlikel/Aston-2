@@ -1,0 +1,60 @@
+databaseChangeLog:
+  - changeSet:
+      id: create_permission_code_enums
+      author: Gubenko_Anton
+      preConditions:
+        - onFail: MARK_RAN
+        - not:
+            - tableExists:
+                tableName: permission
+      changes:
+        - sqlFile:
+            path: db/changelog/sql/add/01-ddl-add-permission-code.sql
+      rollback:
+        - sqlFile:
+            path: db/changelog/sql/add/01-ddl-drop-permission-code.sql
+
+  - changeSet:
+      id: create_permission_table
+      author: Gubenko_Anton
+      preConditions:
+        - onFail: MARK_RAN
+        - not:
+            tableExists:
+              tableName: permission
+      changes:
+        - createTable:
+            tableName: permission
+            columns:
+              - column:
+                  name: id
+                  remarks: "Идентификатор разрешения"
+                  type: uuid
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: code
+                  remarks: "Код разрешения"
+                  type: CODE
+                  constraints:
+                    nullable: false
+              - column:
+                  name: description
+                  remarks: "Описание разрешения"
+                  type: text
+                  constraints:
+              - column:
+                  name: created_at
+                  remarks: "Дата создания записи"
+                  type: timestamptz
+                  defaultValueComputed: now()
+                  constraints:
+                    nullable: false
+              - column:
+                  name: updated_at
+                  remarks: "Дата обновления записи"
+                  type: timestamptz
+                  defaultValueComputed: now()
+                  constraints:
+                    nullable: false

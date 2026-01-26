@@ -1,0 +1,14 @@
+databaseChangeLog:
+  - changeSet:
+      id: insert_role_permission_data
+      author: Anton_Gubenko
+      preConditions:
+        - onFail: MARK_RAN
+        - tableExists:
+            tableName: role_permission
+      changes:
+        - sqlFile:
+            path: db/changelog/sql/add/05-dml-add-role-permission-data.sql
+      rollback:
+        - sqlFile:
+            path: db/changelog/sql/drop/05-dml-drop-role-permission-data.sql

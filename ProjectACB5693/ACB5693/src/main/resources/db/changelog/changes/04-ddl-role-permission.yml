@@ -1,0 +1,50 @@
+databaseChangeLog:
+  - changeSet:
+      id: create_role_permission_table
+      author: Gubenko_Anton
+      preConditions:
+        - onFail: MARK_RAN
+        - not:
+            tableExists:
+              tableName: role_permission
+      changes:
+        - createTable:
+            tableName: role_permission
+            columns:
+              - column:
+                  name: id
+                  remarks: "Уникальный идентификатор записи"
+                  type: uuid
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: role_id
+                  remarks: "Идентификатор роли"
+                  type: uuid
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_role_id
+                    references: role(id)
+              - column:
+                  name: permission_id
+                  remarks: "Идентификатор разрешения"
+                  type: uuid
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_permission_id
+                    references: permission(id)
+              - column:
+                  name: created_at
+                  remarks: "Дата создания записи"
+                  type: timestamptz
+                  defaultValueComputed: now()
+                  constraints:
+                    nullable: false
+              - column:
+                  name: updated_at
+                  remarks: "Дата обновления записи"
+                  type: timestamptz
+                  defaultValueComputed: now()
+                  constraints:
+                    nullable: false
