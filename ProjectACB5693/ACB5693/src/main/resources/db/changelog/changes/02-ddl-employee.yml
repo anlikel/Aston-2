@@ -45,7 +45,7 @@ databaseChangeLog:
               - column:
                   name: phone_number
                   remarks: "Номер телефона сотрудника"
-                  type: char(11)
+                  type: char(12)
                   constraints:
                     nullable: false
                     unique: true
