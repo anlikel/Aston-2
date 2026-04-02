@@ -1,0 +1,18 @@
+version: "3.8"
+services:
+  # PostgreSQL
+  postgres:
+    image: postgres:16.3-alpine
+    container_name: test-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: test-hiber
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: admin
+    ports:
+      - "5556:5432"
+    healthcheck:
+      test: ["CMD", "pg_isready", "-d", "test", "-U", "admin"]
+      interval: 10s
+      timeout: 5s
+      retries: 3

@@ -1,10 +1,10 @@
-package com.example.acb5693;
+package ru.astondevs.output;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class Acb5693ApplicationTests {
+class OutputApplicationTests {
 
     @Test
     void contextLoads() {
