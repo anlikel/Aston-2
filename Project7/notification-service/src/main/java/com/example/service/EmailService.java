@@ -1,6 +1,5 @@
 package com.example.service;
 
-import com.example.serviceinterfaces.EmailServiceInterface;
 import org.springframework.stereotype.Service;
 
 /**

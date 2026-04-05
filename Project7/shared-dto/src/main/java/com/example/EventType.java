@@ -1,4 +1,4 @@
-package com.example.notificationhandlers;
+package com.example;
 
 /**
  * Перечисление, представляющее типы событий сервиса.

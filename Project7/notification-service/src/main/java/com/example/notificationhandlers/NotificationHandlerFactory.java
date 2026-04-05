@@ -1,5 +1,6 @@
 package com.example.notificationhandlers;
 
+import com.example.EventType;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
